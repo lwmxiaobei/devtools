@@ -6,6 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, Type, Move, Palette, CircleDot, Dr
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 type WatermarkPosition = 'top-left' | 'top-center' | 'top-right' |
     'middle-left' | 'middle-center' | 'middle-right' |
@@ -22,6 +24,16 @@ export default function ImageWatermarkPage() {
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
+
+    // Initial placeholder text in correct language
+    if (watermarkText === '水印文字' && language === 'en') {
+        setWatermarkText('Watermark');
+    } else if (watermarkText === 'Watermark' && language === 'zh') {
+        setWatermarkText('水印文字');
+    }
 
     const positions: { id: WatermarkPosition; label: string }[] = [
         { id: 'top-left', label: '↖' },
@@ -96,7 +108,7 @@ export default function ImageWatermarkPage() {
 
     const processImage = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
 
@@ -107,7 +119,7 @@ export default function ImageWatermarkPage() {
             applyWatermark(imgSrc, watermarkText, position, fontSize, opacity, color);
         };
         reader.readAsDataURL(file);
-    }, [showToast, watermarkText, position, fontSize, opacity, color, applyWatermark]);
+    }, [showToast, watermarkText, position, fontSize, opacity, color, applyWatermark, language]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -127,8 +139,8 @@ export default function ImageWatermarkPage() {
         link.download = `watermarked_${Date.now()}.png`;
         link.href = watermarkedImage;
         link.click();
-        showToast('图片已下载');
-    }, [watermarkedImage, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+    }, [watermarkedImage, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -180,7 +192,7 @@ export default function ImageWatermarkPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">图片加水印</h1>
+                    <h1 className="tool-title">{t('toolPages.imageWatermark.title')}</h1>
                 </div>
 
                 {!originalImage && (
@@ -201,8 +213,8 @@ export default function ImageWatermarkPage() {
                         <div className="watermark-upload-icon">
                             <Upload size={40} strokeWidth={1.5} />
                         </div>
-                        <p className="upload-text">点击或拖拽图片到此处上传</p>
-                        <p className="upload-hint">支持 JPG、PNG、GIF 等格式</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
                     </div>
                 )}
 
@@ -213,7 +225,7 @@ export default function ImageWatermarkPage() {
                             <div className="watermark-panel-header">
                                 <h3>
                                     <Settings size={20} />
-                                    水印设置
+                                    {t('toolPages.imageWatermark.settings')}
                                 </h3>
                             </div>
                             <div className="watermark-panel-body">
@@ -223,14 +235,14 @@ export default function ImageWatermarkPage() {
                                         <div className="watermark-setting-icon text">
                                             <Type size={18} />
                                         </div>
-                                        <span className="watermark-setting-label">水印文字</span>
+                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.text')}</span>
                                     </div>
                                     <input
                                         type="text"
                                         value={watermarkText}
                                         onChange={(e) => handleTextChange(e.target.value)}
                                         className="watermark-text-input"
-                                        placeholder="输入水印文字..."
+                                        placeholder={t('toolPages.imageWatermark.textPlaceholder')}
                                     />
                                 </div>
 
@@ -240,7 +252,7 @@ export default function ImageWatermarkPage() {
                                         <div className="watermark-setting-icon position">
                                             <Move size={18} />
                                         </div>
-                                        <span className="watermark-setting-label">水印位置</span>
+                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.position')}</span>
                                     </div>
                                     <div className="watermark-position-grid">
                                         {positions.map(pos => (
@@ -262,7 +274,7 @@ export default function ImageWatermarkPage() {
                                         <div className="watermark-setting-icon size">
                                             <CircleDot size={18} />
                                         </div>
-                                        <span className="watermark-setting-label">字体大小</span>
+                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.fontSize')}</span>
                                         <span className="watermark-setting-value">{fontSize}px</span>
                                     </div>
                                     <div className="watermark-slider-container">
@@ -291,7 +303,7 @@ export default function ImageWatermarkPage() {
                                         <div className="watermark-setting-icon opacity">
                                             <Droplets size={18} />
                                         </div>
-                                        <span className="watermark-setting-label">透明度</span>
+                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.opacity')}</span>
                                         <span className="watermark-setting-value">{opacity}%</span>
                                     </div>
                                     <div className="watermark-slider-container">
@@ -320,7 +332,7 @@ export default function ImageWatermarkPage() {
                                         <div className="watermark-setting-icon color">
                                             <Palette size={18} />
                                         </div>
-                                        <span className="watermark-setting-label">水印颜色</span>
+                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.color')}</span>
                                     </div>
                                     <div className="watermark-color-row">
                                         <div
@@ -352,15 +364,15 @@ export default function ImageWatermarkPage() {
                         {/* 右侧预览区域 */}
                         <div className="watermark-preview-panel">
                             <div className="watermark-preview-header">
-                                <h3>预览效果</h3>
+                                <h3>{t('toolPages.imageWatermark.preview')}</h3>
                                 <div className="watermark-action-buttons">
                                     <button className="watermark-action-btn secondary" onClick={clearAll}>
                                         <Trash2 size={16} />
-                                        重新选择
+                                        {t('toolPages.common.reselect')}
                                     </button>
                                     <button className="watermark-action-btn primary" onClick={downloadImage}>
                                         <Download size={16} />
-                                        下载图片
+                                        {t('toolPages.imageWatermark.download')}
                                     </button>
                                 </div>
                             </div>

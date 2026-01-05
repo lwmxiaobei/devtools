@@ -7,12 +7,17 @@ import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
 import CryptoJS from 'crypto-js';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function Md5Page() {
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
     const [uppercase, setUppercase] = useState(false);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const calculateMd5 = () => {
         const hash = CryptoJS.MD5(input).toString();
@@ -22,7 +27,7 @@ export default function Md5Page() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -40,16 +45,16 @@ export default function Md5Page() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">MD5 加密</h1>
+                    <h1 className="tool-title">{t('toolPages.md5.title')}</h1>
                 </div>
 
                 <div className="single-panel">
                     <div className="input-group">
-                        <label className="input-label">待加密文本</label>
+                        <label className="input-label">{t('toolPages.md5.textToEncrypt')}</label>
                         <textarea
                             className="editor-textarea"
                             style={{ minHeight: '150px', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
-                            placeholder="请输入要计算MD5的文本..."
+                            placeholder={t('toolPages.md5.inputPlaceholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -60,41 +65,41 @@ export default function Md5Page() {
                             className={`option-btn ${!uppercase ? 'active' : ''}`}
                             onClick={() => setUppercase(false)}
                         >
-                            小写
+                            {t('toolPages.common.lowercase')}
                         </button>
                         <button
                             className={`option-btn ${uppercase ? 'active' : ''}`}
                             onClick={() => setUppercase(true)}
                         >
-                            大写
+                            {t('toolPages.common.uppercase')}
                         </button>
                     </div>
 
                     <div className="action-row" style={{ marginBottom: '20px' }}>
                         <button className="action-btn primary" onClick={calculateMd5}>
                             <Hash size={18} />
-                            计算MD5
+                            {t('toolPages.md5.calculateMd5')}
                         </button>
                         <button className="action-btn secondary" onClick={clearAll}>
                             <Trash2 size={18} />
-                            清空
+                            {t('toolPages.common.clear')}
                         </button>
                     </div>
 
                     {output && (
                         <div className="input-group">
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                <label className="input-label" style={{ margin: 0 }}>MD5值 (32位)</label>
+                                <label className="input-label" style={{ margin: 0 }}>{t('toolPages.md5.md5Value32')}</label>
                                 <button className="editor-btn" onClick={copyToClipboard}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                             <div className="result-box" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
                                 {output}
                             </div>
                             <div style={{ marginTop: '12px' }}>
-                                <label className="input-label" style={{ marginBottom: '8px' }}>MD5值 (16位)</label>
+                                <label className="input-label" style={{ marginBottom: '8px' }}>{t('toolPages.md5.md5Value16')}</label>
                                 <div className="result-box" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
                                     {output.substring(8, 24)}
                                 </div>

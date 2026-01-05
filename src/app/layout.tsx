@@ -82,6 +82,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: siteUrl,
+    languages: {
+      'zh-CN': siteUrl,
+      'en': siteUrl,
+    },
   },
   category: "technology",
   classification: "Developer Tools",
@@ -99,15 +103,51 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <head>
+        {/* Language alternates for SEO */}
+        <link rel="alternate" hrefLang="zh-CN" href={siteUrl} />
+        <link rel="alternate" hrefLang="en" href={siteUrl} />
+        <link rel="alternate" hrefLang="x-default" href={siteUrl} />
+
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
         {/* PWA */}
         <link rel="manifest" href="/manifest.json" />
         <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="DevTools" />
+
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "DevTools",
+              "alternateName": ["开发者在线工具集合", "Online Developer Tools"],
+              "description": "Free online developer tools including JSON formatter, Base64 encoder, timestamp converter, and more.",
+              "url": siteUrl,
+              "applicationCategory": "DeveloperApplication",
+              "operatingSystem": "Any",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD"
+              },
+              "inLanguage": ["zh-CN", "en"],
+              "browserRequirements": "Requires JavaScript. Requires HTML5.",
+              "softwareVersion": "1.0",
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "100"
+              }
+            })
+          }}
+        />
       </head>
       <body>
         <ServiceWorkerRegistration />

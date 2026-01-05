@@ -6,6 +6,8 @@ import { ArrowLeft, ChevronRight, ChevronDown, Trash2, Copy } from 'lucide-react
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 interface TreeNodeProps {
     keyName: string | null;
@@ -96,6 +98,9 @@ export default function JsonViewerPage() {
     const [error, setError] = useState('');
     const [expandedPaths, setExpandedPaths] = useState<Set<string>>(new Set(['$']));
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     useEffect(() => {
         if (!input.trim()) {
@@ -109,7 +114,7 @@ export default function JsonViewerPage() {
             setParsedData(parsed);
             setError('');
         } catch (e) {
-            setError(`JSON 格式错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.jsonFormatter.jsonError')}: ${(e as Error).message}`);
             setParsedData(null);
         }
     }, [input]);
@@ -147,7 +152,7 @@ export default function JsonViewerPage() {
     const copyToClipboard = async () => {
         if (parsedData) {
             await navigator.clipboard.writeText(JSON.stringify(parsedData, null, 2));
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -167,23 +172,23 @@ export default function JsonViewerPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSON 视图</h1>
+                    <h1 className="tool-title">{t('toolPages.jsonViewer.title')}</h1>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 JSON</span>
+                            <span className="editor-title">{t('toolPages.jsonViewer.inputJson')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder='请输入 JSON'
+                            placeholder={t('toolPages.jsonFormatter.inputPlaceholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -191,17 +196,17 @@ export default function JsonViewerPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">树形视图</span>
+                            <span className="editor-title">{t('toolPages.jsonViewer.treeView')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={expandAll} disabled={!parsedData}>
-                                    展开全部
+                                    {t('toolPages.jsonViewer.expandAll')}
                                 </button>
                                 <button className="editor-btn" onClick={collapseAll} disabled={!parsedData}>
-                                    折叠全部
+                                    {t('toolPages.jsonViewer.collapseAll')}
                                 </button>
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!parsedData}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -230,7 +235,7 @@ export default function JsonViewerPage() {
                                 />
                             ) : (
                                 <span style={{ color: 'var(--text-muted)' }}>
-                                    树形结构将显示在这里
+                                    {t('toolPages.jsonFormatter.emptyResult')}
                                 </span>
                             )}
                         </div>

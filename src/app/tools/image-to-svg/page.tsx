@@ -6,6 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, FileImage, Settings } from 'lucide
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function ImageToSvgPage() {
     const [originalImage, setOriginalImage] = useState<string | null>(null);
@@ -16,6 +18,9 @@ export default function ImageToSvgPage() {
     const [blur, setBlur] = useState(0);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const imageToSvg = useCallback((imageSrc: string, thresholdValue: number, blurValue: number) => {
         setIsProcessing(true);
@@ -80,7 +85,7 @@ export default function ImageToSvgPage() {
 
     const handleFileSelect = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
         const reader = new FileReader();
@@ -90,7 +95,7 @@ export default function ImageToSvgPage() {
             imageToSvg(result, threshold, blur);
         };
         reader.readAsDataURL(file);
-    }, [imageToSvg, threshold, blur, showToast]);
+    }, [imageToSvg, threshold, blur, showToast, language]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -122,8 +127,8 @@ export default function ImageToSvgPage() {
         link.href = url;
         link.click();
         URL.revokeObjectURL(url);
-        showToast('SVG已下载');
-    }, [svgOutput, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'SVG'));
+    }, [svgOutput, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -140,7 +145,7 @@ export default function ImageToSvgPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">图片转SVG</h1>
+                    <h1 className="tool-title">{t('toolPages.imageToSvg.title')}</h1>
                 </div>
 
                 {!originalImage ? (
@@ -161,8 +166,8 @@ export default function ImageToSvgPage() {
                         <div className="image-tool-upload-icon svg">
                             <FileImage size={40} strokeWidth={1.5} />
                         </div>
-                        <p className="upload-text">点击或拖拽图片到此处上传</p>
-                        <p className="upload-hint">支持 JPG、PNG 格式，建议使用简单线条图片</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.imageToSvg.uploadHint')}</p>
                     </div>
                 ) : (
                     <div className="image-tool-layout">
@@ -171,13 +176,13 @@ export default function ImageToSvgPage() {
                             <div className="image-tool-panel-header svg">
                                 <h3>
                                     <Settings size={20} />
-                                    转换设置
+                                    {t('toolPages.imageToSvg.settings')}
                                 </h3>
                             </div>
                             <div className="image-tool-panel-body">
                                 {/* 阈值设置 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">黑白阈值</div>
+                                    <div className="image-tool-card-title">{t('toolPages.imageToSvg.threshold')}</div>
                                     <div className="svg-slider-header">
                                         <span className="svg-slider-value">{threshold}</span>
                                     </div>
@@ -203,7 +208,7 @@ export default function ImageToSvgPage() {
 
                                 {/* 模糊设置 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">平滑程度</div>
+                                    <div className="image-tool-card-title">{t('toolPages.imageToSvg.smoothness')}</div>
                                     <div className="svg-slider-header">
                                         <span className="svg-slider-value">{blur}px</span>
                                     </div>
@@ -223,14 +228,14 @@ export default function ImageToSvgPage() {
                                         />
                                     </div>
                                     <div className="svg-slider-labels">
-                                        <span>锐利</span>
-                                        <span>平滑</span>
+                                        <span>{t('toolPages.imageToSvg.sharp')}</span>
+                                        <span>{t('toolPages.imageToSvg.smooth')}</span>
                                     </div>
                                 </div>
 
                                 {/* 原图预览 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">原图</div>
+                                    <div className="image-tool-card-title">{t('toolPages.imageToSvg.original')}</div>
                                     <div className="svg-original-preview">
                                         <img src={originalImage} alt="Original" />
                                     </div>
@@ -241,15 +246,15 @@ export default function ImageToSvgPage() {
                         {/* 右侧预览区域 */}
                         <div className="image-tool-preview">
                             <div className="image-tool-preview-header">
-                                <h3>SVG预览</h3>
+                                <h3>{t('toolPages.imageToSvg.preview')}</h3>
                                 <div className="image-tool-actions">
                                     <button className="image-tool-btn secondary" onClick={clearAll}>
                                         <Trash2 size={16} />
-                                        重新选择
+                                        {t('toolPages.common.reselect')}
                                     </button>
                                     <button className="image-tool-btn primary svg" onClick={downloadSvg} disabled={isProcessing}>
                                         <Download size={16} />
-                                        下载SVG
+                                        {t('toolPages.imageToSvg.download')}
                                     </button>
                                 </div>
                             </div>
@@ -257,7 +262,7 @@ export default function ImageToSvgPage() {
                                 {isProcessing ? (
                                     <div className="svg-loading">
                                         <div className="spinner"></div>
-                                        <p>正在转换...</p>
+                                        <p>{t('toolPages.imageToSvg.converting')}</p>
                                     </div>
                                 ) : (
                                     <div className="svg-preview-container">

@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, Play } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 function sqlTypeToJavaType(sqlType: string): string {
     const type = sqlType.toUpperCase();
@@ -119,10 +121,13 @@ export default function SqlToJavaPage() {
     const [useLombok, setUseLombok] = useState(true);
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const convert = () => {
         if (!input.trim()) {
-            setError('请输入 CREATE TABLE 语句');
+            setError(t('toolPages.sqlToJava.inputSql'));
             setOutput('');
             return;
         }
@@ -132,7 +137,7 @@ export default function SqlToJavaPage() {
             setOutput(java);
             setError('');
         } catch (e) {
-            setError(`转换错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.common.convert')}${t('toolPages.common.error')}: ${(e as Error).message}`);
             setOutput('');
         }
     };
@@ -140,7 +145,7 @@ export default function SqlToJavaPage() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -159,7 +164,7 @@ export default function SqlToJavaPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">SQL 转 Java</h1>
+                    <h1 className="tool-title">{t('toolPages.sqlToJava.title')}</h1>
                 </div>
 
                 <div style={{
@@ -170,7 +175,7 @@ export default function SqlToJavaPage() {
                     alignItems: 'center',
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>类名:</label>
+                        <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{t('toolPages.common.className')}:</label>
                         <input
                             type="text"
                             value={className}
@@ -188,40 +193,40 @@ export default function SqlToJavaPage() {
                         className={`action-btn ${useLombok ? 'primary' : 'secondary'}`}
                         onClick={() => setUseLombok(!useLombok)}
                     >
-                        {useLombok ? 'Lombok 已启用' : 'Lombok 已关闭'}
+                        {useLombok ? t('toolPages.common.lombokEnabled') : t('toolPages.common.lombokDisabled')}
                     </button>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 SQL</span>
+                            <span className="editor-title">{t('toolPages.sqlToJava.input')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder={"请输入 CREATE TABLE 语句，例如：\n\nCREATE TABLE users (\n    id INT PRIMARY KEY,\n    user_name VARCHAR(50),\n    email VARCHAR(100),\n    created_at DATETIME\n);"}
+                            placeholder={t('toolPages.sqlToJava.placeholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
                         <button className="action-btn primary" onClick={convert} style={{ margin: '16px' }}>
                             <Play size={18} />
-                            转换
+                            {t('toolPages.common.convert')}
                         </button>
                     </div>
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">Java 实体类</span>
+                            <span className="editor-title">{t('toolPages.sqlToJava.output')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -233,7 +238,7 @@ export default function SqlToJavaPage() {
                                 color: error ? '#ef4444' : 'inherit',
                             }}
                         >
-                            {error || output || 'Java 实体类代码将显示在这里'}
+                            {error || output || t('toolPages.sqlToJava.outputPlaceholder')}
                         </pre>
                     </div>
                 </div>

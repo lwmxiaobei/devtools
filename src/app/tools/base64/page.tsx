@@ -1,11 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Copy, Trash2, ArrowRightLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function Base64Page() {
     const [input, setInput] = useState('');
@@ -13,6 +15,9 @@ export default function Base64Page() {
     const [mode, setMode] = useState<'encode' | 'decode'>('encode');
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const encode = () => {
         try {
@@ -20,7 +25,7 @@ export default function Base64Page() {
             setOutput(encoded);
             setError('');
         } catch (e) {
-            setError(`编码错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.common.encodeError')}: ${(e as Error).message}`);
             setOutput('');
         }
     };
@@ -31,23 +36,29 @@ export default function Base64Page() {
             setOutput(decoded);
             setError('');
         } catch (e) {
-            setError(`解码错误: 无效的Base64字符串`);
+            setError(`${t('toolPages.common.decodeError')}: ${t('toolPages.common.invalidBase64')}`);
             setOutput('');
         }
     };
 
-    const handleAction = () => {
+    // 实时编解码
+    useEffect(() => {
+        if (!input) {
+            setOutput('');
+            setError('');
+            return;
+        }
         if (mode === 'encode') {
             encode();
         } else {
             decode();
         }
-    };
+    }, [input, mode]);
 
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -72,77 +83,79 @@ export default function Base64Page() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">Base64 编解码</h1>
+                    <h1 className="tool-title">{t('toolPages.base64.title')}</h1>
                 </div>
 
-                <div className="single-panel">
-                    <div className="options-grid">
+                <div className="action-row" style={{ marginBottom: '20px' }}>
+                    <div className="options-grid" style={{ margin: 0 }}>
                         <button
                             className={`option-btn ${mode === 'encode' ? 'active' : ''}`}
                             onClick={() => setMode('encode')}
                         >
-                            编码
+                            {t('toolPages.common.encode')}
                         </button>
                         <button
                             className={`option-btn ${mode === 'decode' ? 'active' : ''}`}
                             onClick={() => setMode('decode')}
                         >
-                            解码
+                            {t('toolPages.common.decode')}
                         </button>
                     </div>
+                    <button className="action-btn secondary" onClick={swapInputOutput} disabled={!output}>
+                        <ArrowRightLeft size={18} />
+                        {t('toolPages.common.swap')}
+                    </button>
+                    <button className="action-btn secondary" onClick={clearAll}>
+                        <Trash2 size={18} />
+                        {t('toolPages.common.clear')}
+                    </button>
+                </div>
 
-                    <div className="input-group">
-                        <label className="input-label">
-                            {mode === 'encode' ? '待编码文本' : '待解码的Base64'}
-                        </label>
+                {error && (
+                    <div style={{
+                        padding: '12px 16px',
+                        background: '#fef2f2',
+                        color: '#dc2626',
+                        borderRadius: 'var(--radius)',
+                        fontSize: '0.85rem',
+                        marginBottom: '20px',
+                    }}>
+                        {error}
+                    </div>
+                )}
+
+                <div className="editor-container">
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">
+                                {mode === 'encode' ? t('toolPages.base64.textBeforeEncode') : t('toolPages.base64.base64ToDecode')}
+                            </span>
+                        </div>
                         <textarea
                             className="editor-textarea"
-                            style={{ minHeight: '150px', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
-                            placeholder={mode === 'encode' ? '请输入要编码的文本...' : '请输入Base64字符串...'}
+                            placeholder={mode === 'encode' ? t('toolPages.base64.inputPlaceholder') : t('toolPages.base64.base64Placeholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
                     </div>
 
-                    <div className="action-row" style={{ marginBottom: '20px' }}>
-                        <button className="action-btn primary" onClick={handleAction}>
-                            {mode === 'encode' ? '编码' : '解码'}
-                        </button>
-                        <button className="action-btn secondary" onClick={swapInputOutput} disabled={!output}>
-                            <ArrowRightLeft size={18} />
-                            交换
-                        </button>
-                        <button className="action-btn secondary" onClick={clearAll}>
-                            <Trash2 size={18} />
-                            清空
-                        </button>
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">
+                                {mode === 'encode' ? t('toolPages.base64.encodedBase64') : t('toolPages.base64.decodedText')}
+                            </span>
+                            <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
+                                <Copy size={14} />
+                                {t('toolPages.common.copy')}
+                            </button>
+                        </div>
+                        <textarea
+                            className="editor-textarea"
+                            readOnly
+                            value={output}
+                            placeholder={t('toolPages.base64.resultPlaceholder')}
+                        />
                     </div>
-
-                    {error && (
-                        <div style={{
-                            padding: '12px 16px',
-                            background: '#fef2f2',
-                            color: '#dc2626',
-                            borderRadius: 'var(--radius)',
-                            fontSize: '0.85rem',
-                            marginBottom: '20px',
-                        }}>
-                            {error}
-                        </div>
-                    )}
-
-                    {output && (
-                        <div className="input-group">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                <label className="input-label" style={{ margin: 0 }}>结果</label>
-                                <button className="editor-btn" onClick={copyToClipboard}>
-                                    <Copy size={14} />
-                                    复制
-                                </button>
-                            </div>
-                            <div className="result-box">{output}</div>
-                        </div>
-                    )}
                 </div>
             </div>
             <Toast message={toast.message} show={toast.show} onClose={hideToast} />

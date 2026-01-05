@@ -7,6 +7,8 @@ import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
 import QRCode from 'qrcode';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function QRCodeGeneratePage() {
     const [text, setText] = useState('https://example.com');
@@ -16,6 +18,9 @@ export default function QRCodeGeneratePage() {
     const [lightColor, setLightColor] = useState('#FFFFFF');
     const [errorLevel, setErrorLevel] = useState<'L' | 'M' | 'Q' | 'H'>('M');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const generateQRCode = useCallback(async () => {
         if (!text.trim()) {
@@ -34,9 +39,9 @@ export default function QRCodeGeneratePage() {
             });
             setQrCodeUrl(url);
         } catch {
-            showToast('生成二维码失败');
+            showToast(t('toolPages.qrCodeGenerate.generateError'));
         }
-    }, [text, size, darkColor, lightColor, errorLevel, showToast]);
+    }, [text, size, darkColor, lightColor, errorLevel, showToast, language]);
 
     useEffect(() => {
         generateQRCode();
@@ -48,8 +53,8 @@ export default function QRCodeGeneratePage() {
         link.download = `qrcode_${Date.now()}.png`;
         link.href = qrCodeUrl;
         link.click();
-        showToast('二维码已下载');
-    }, [qrCodeUrl, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'QR code'));
+    }, [qrCodeUrl, showToast, language]);
 
     const copyQRCode = useCallback(async () => {
         if (!qrCodeUrl) return;
@@ -59,11 +64,11 @@ export default function QRCodeGeneratePage() {
             await navigator.clipboard.write([
                 new ClipboardItem({ 'image/png': blob })
             ]);
-            showToast('二维码已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         } catch {
-            showToast('复制失败，请手动保存');
+            showToast(t('toolPages.common.copyError'));
         }
-    }, [qrCodeUrl, showToast]);
+    }, [qrCodeUrl, showToast, language]);
 
     return (
         <>
@@ -74,7 +79,7 @@ export default function QRCodeGeneratePage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">二维码生成</h1>
+                    <h1 className="tool-title">{t('toolPages.qrCodeGenerate.title')}</h1>
                 </div>
 
                 <div className="image-tool-layout">
@@ -83,17 +88,17 @@ export default function QRCodeGeneratePage() {
                         <div className="image-tool-panel-header qrcode">
                             <h3>
                                 <Settings size={20} />
-                                生成设置
+                                {t('toolPages.qrCodeGenerate.settings')}
                             </h3>
                         </div>
                         <div className="image-tool-panel-body">
                             {/* 内容输入 */}
                             <div className="image-tool-card">
-                                <div className="image-tool-card-title">输入内容</div>
+                                <div className="image-tool-card-title">{t('toolPages.qrCodeGenerate.content')}</div>
                                 <textarea
                                     value={text}
                                     onChange={(e) => setText(e.target.value)}
-                                    placeholder="输入网址、文本或其他内容..."
+                                    placeholder={t('toolPages.qrCodeGenerate.placeholder')}
                                     className="qrcode-textarea"
                                     rows={4}
                                 />
@@ -101,7 +106,7 @@ export default function QRCodeGeneratePage() {
 
                             {/* 尺寸设置 */}
                             <div className="image-tool-card">
-                                <div className="image-tool-card-title">尺寸大小</div>
+                                <div className="image-tool-card-title">{t('toolPages.qrCodeGenerate.size')}</div>
                                 <div className="qrcode-size-btns">
                                     {[128, 256, 384, 512].map((s) => (
                                         <button
@@ -117,10 +122,10 @@ export default function QRCodeGeneratePage() {
 
                             {/* 颜色设置 */}
                             <div className="image-tool-card">
-                                <div className="image-tool-card-title">颜色设置</div>
+                                <div className="image-tool-card-title">{t('toolPages.qrCodeGenerate.color')}</div>
                                 <div className="qrcode-color-row">
                                     <div className="qrcode-color-item">
-                                        <span>前景色</span>
+                                        <span>{t('toolPages.qrCodeGenerate.foreground')}</span>
                                         <div className="qrcode-color-picker" style={{ backgroundColor: darkColor }}>
                                             <input
                                                 type="color"
@@ -130,7 +135,7 @@ export default function QRCodeGeneratePage() {
                                         </div>
                                     </div>
                                     <div className="qrcode-color-item">
-                                        <span>背景色</span>
+                                        <span>{t('toolPages.qrCodeGenerate.background')}</span>
                                         <div className="qrcode-color-picker" style={{ backgroundColor: lightColor }}>
                                             <input
                                                 type="color"
@@ -144,7 +149,7 @@ export default function QRCodeGeneratePage() {
 
                             {/* 容错级别 */}
                             <div className="image-tool-card">
-                                <div className="image-tool-card-title">容错级别</div>
+                                <div className="image-tool-card-title">{t('toolPages.qrCodeGenerate.errorLevel')}</div>
                                 <div className="qrcode-error-btns">
                                     {[
                                         { value: 'L', label: 'L - 7%' },
@@ -168,15 +173,15 @@ export default function QRCodeGeneratePage() {
                     {/* 右侧预览区域 */}
                     <div className="image-tool-preview">
                         <div className="image-tool-preview-header">
-                            <h3>预览</h3>
+                            <h3>{t('toolPages.qrCodeGenerate.preview')}</h3>
                             <div className="image-tool-actions">
                                 <button className="image-tool-btn secondary" onClick={copyQRCode} disabled={!qrCodeUrl}>
                                     <Copy size={16} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                                 <button className="image-tool-btn primary qrcode" onClick={downloadQRCode} disabled={!qrCodeUrl}>
                                     <Download size={16} />
-                                    下载
+                                    {t('toolPages.common.download')}
                                 </button>
                             </div>
                         </div>
@@ -187,7 +192,7 @@ export default function QRCodeGeneratePage() {
                                 ) : (
                                     <div className="qrcode-placeholder">
                                         <QrCode size={48} strokeWidth={1} />
-                                        <p>输入内容生成二维码</p>
+                                        <p>{t('toolPages.qrCodeGenerate.placeholder')}</p>
                                     </div>
                                 )}
                             </div>

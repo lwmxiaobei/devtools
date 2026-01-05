@@ -1,0 +1,231 @@
+src/app/tools/image-compress/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-compress/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-compress/page.tsx:        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+src/app/tools/image-compress/page.tsx:                const canvas = document.createElement('canvas');
+src/app/tools/image-compress/page.tsx:                const ctx = canvas.getContext('2d');
+src/app/tools/image-compress/page.tsx:                    const base64Str = compressedDataUrl.split(',')[1];
+src/app/tools/image-compress/page.tsx:            showToast(t('toolPages.common.uploadError'));
+src/app/tools/image-compress/page.tsx:        e.preventDefault();
+src/app/tools/image-compress/page.tsx:        e.preventDefault();
+src/app/tools/image-compress/page.tsx:        e.preventDefault();
+src/app/tools/image-compress/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-compress/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+src/app/tools/image-compress/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageCompress.title')}</h1>
+src/app/tools/image-compress/page.tsx:                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+src/app/tools/image-compress/page.tsx:                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
+src/app/tools/image-compress/page.tsx:                        <p>{t('toolPages.imageCompress.compressing')}</p>
+src/app/tools/image-compress/page.tsx:                                    {t('toolPages.imageCompress.quality')}: {quality}%
+src/app/tools/image-compress/page.tsx:                                <span className="stat-label">{t('toolPages.imageCompress.originalSize')}</span>
+src/app/tools/image-compress/page.tsx:                                <span className="stat-label">{t('toolPages.imageCompress.compressedSize')}</span>
+src/app/tools/image-compress/page.tsx:                                <span className="stat-label">{t('toolPages.imageCompress.saved')}</span>
+src/app/tools/image-compress/page.tsx:                                <h3>{t('toolPages.imageCompress.preview')}</h3>
+src/app/tools/image-compress/page.tsx:                                {t('toolPages.common.reselect')}
+src/app/tools/image-compress/page.tsx:                                {t('toolPages.imageCompress.download')}
+src/app/tools/image-crop/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-crop/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-crop/page.tsx:        { id: 'free', label: t('toolPages.imageCrop.free'), ratio: null },
+src/app/tools/image-crop/page.tsx:            showToast(t('toolPages.common.uploadError'));
+src/app/tools/image-crop/page.tsx:        e.preventDefault();
+src/app/tools/image-crop/page.tsx:            const canvas = document.createElement('canvas');
+src/app/tools/image-crop/page.tsx:            const ctx = canvas.getContext('2d');
+src/app/tools/image-crop/page.tsx:                showToast(t('toolPages.imageCrop.cropped'));
+src/app/tools/image-crop/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-crop/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+src/app/tools/image-crop/page.tsx:        e.preventDefault();
+src/app/tools/image-crop/page.tsx:        setDragStart({ x: e.clientX, y: e.clientY });
+src/app/tools/image-crop/page.tsx:        setCropStart({ ...cropArea });
+src/app/tools/image-crop/page.tsx:        e.preventDefault();
+src/app/tools/image-crop/page.tsx:        setDragStart({ x: e.clientX, y: e.clientY });
+src/app/tools/image-crop/page.tsx:        setCropStart({ ...cropArea });
+src/app/tools/image-crop/page.tsx:    useEffect(() => {
+src/app/tools/image-crop/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageCrop.title')}</h1>
+src/app/tools/image-crop/page.tsx:                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+src/app/tools/image-crop/page.tsx:                        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+src/app/tools/image-crop/page.tsx:                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+src/app/tools/image-crop/page.tsx:                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
+src/app/tools/image-crop/page.tsx:                            <span>{t('toolPages.imageCrop.cropArea')}: {Math.round(cropArea.width)} × {Math.round(cropArea.height)} px</span>
+src/app/tools/image-crop/page.tsx:                                {t('toolPages.common.reselect')}
+src/app/tools/image-crop/page.tsx:                                {t('toolPages.imageCrop.confirmCrop')}
+src/app/tools/image-crop/page.tsx:                            <h3>{t('toolPages.imageCrop.preview')}</h3>
+src/app/tools/image-crop/page.tsx:                                {t('toolPages.imageCrop.reCrop')}
+src/app/tools/image-crop/page.tsx:                                {t('toolPages.imageCrop.download')}
+src/app/tools/image-flip/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-flip/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-flip/page.tsx:            const canvas = document.createElement('canvas');
+src/app/tools/image-flip/page.tsx:            const ctx = canvas.getContext('2d');
+src/app/tools/image-flip/page.tsx:            showToast(t('toolPages.common.uploadError'));
+src/app/tools/image-flip/page.tsx:        e.preventDefault();
+src/app/tools/image-flip/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-flip/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+src/app/tools/image-flip/page.tsx:        if (!flipH && !flipV) return t('toolPages.imageFlip.noFlip');
+src/app/tools/image-flip/page.tsx:        if (flipH) parts.push(t('toolPages.imageFlip.horizontal'));
+src/app/tools/image-flip/page.tsx:        if (flipV) parts.push(t('toolPages.imageFlip.vertical'));
+src/app/tools/image-flip/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageFlip.title')}</h1>
+src/app/tools/image-flip/page.tsx:                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+src/app/tools/image-flip/page.tsx:                        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+src/app/tools/image-flip/page.tsx:                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+src/app/tools/image-flip/page.tsx:                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
+src/app/tools/image-flip/page.tsx:                                    {t('toolPages.imageFlip.controls')}
+src/app/tools/image-flip/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageFlip.direction')}</div>
+src/app/tools/image-flip/page.tsx:                                            {t('toolPages.imageFlip.horizontal')}
+src/app/tools/image-flip/page.tsx:                                            {t('toolPages.imageFlip.vertical')}
+src/app/tools/image-flip/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageFlip.status')}</div>
+src/app/tools/image-flip/page.tsx:                                        {getStatusText()}
+src/app/tools/image-flip/page.tsx:                                <h3>{t('toolPages.imageFlip.preview')}</h3>
+src/app/tools/image-flip/page.tsx:                                        {t('toolPages.common.reselect')}
+src/app/tools/image-flip/page.tsx:                                        {t('toolPages.imageFlip.download')}
+src/app/tools/image-grid/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-grid/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-grid/page.tsx:            showToast(t('toolPages.common.uploadError'));
+src/app/tools/image-grid/page.tsx:                        const canvas = document.createElement('canvas');
+src/app/tools/image-grid/page.tsx:                        const ctx = canvas.getContext('2d');
+src/app/tools/image-grid/page.tsx:        e.preventDefault();
+src/app/tools/image-grid/page.tsx:        e.preventDefault();
+src/app/tools/image-grid/page.tsx:        e.preventDefault();
+src/app/tools/image-grid/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-grid/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', `grid_${cell.index}.png`));
+src/app/tools/image-grid/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-grid/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', 'grid_images.zip'));
+src/app/tools/image-grid/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageGrid.title')}</h1>
+src/app/tools/image-grid/page.tsx:                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+src/app/tools/image-grid/page.tsx:                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
+src/app/tools/image-grid/page.tsx:                        <p>{t('toolPages.common.processing')}</p>
+src/app/tools/image-grid/page.tsx:                                            title={t('toolPages.imageGrid.downloadSingle')}
+src/app/tools/image-grid/page.tsx:                                {t('toolPages.common.reselect')}
+src/app/tools/image-grid/page.tsx:                                {t('toolPages.imageGrid.downloadAll')}
+src/app/tools/image-resize/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-resize/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-resize/page.tsx:            showToast(t('toolPages.common.uploadError'));
+src/app/tools/image-resize/page.tsx:                setNewHeight(img.height);
+src/app/tools/image-resize/page.tsx:                setActivePreset(1);
+src/app/tools/image-resize/page.tsx:            const canvas = document.createElement('canvas');
+src/app/tools/image-resize/page.tsx:            const ctx = canvas.getContext('2d');
+src/app/tools/image-resize/page.tsx:        setActivePreset(null);
+src/app/tools/image-resize/page.tsx:            setNewHeight(calculatedHeight);
+src/app/tools/image-resize/page.tsx:        setNewHeight(value);
+src/app/tools/image-resize/page.tsx:        setActivePreset(null);
+src/app/tools/image-resize/page.tsx:        setNewHeight(height);
+src/app/tools/image-resize/page.tsx:        setActivePreset(factor);
+src/app/tools/image-resize/page.tsx:        e.preventDefault();
+src/app/tools/image-resize/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-resize/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+src/app/tools/image-resize/page.tsx:        setNewHeight(0);
+src/app/tools/image-resize/page.tsx:        setActivePreset(null);
+src/app/tools/image-resize/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageResize.title')}</h1>
+src/app/tools/image-resize/page.tsx:                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+src/app/tools/image-resize/page.tsx:                        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+src/app/tools/image-resize/page.tsx:                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+src/app/tools/image-resize/page.tsx:                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
+src/app/tools/image-resize/page.tsx:                                    {t('toolPages.imageResize.settings')}
+src/app/tools/image-resize/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageResize.originalSize')}</div>
+src/app/tools/image-resize/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageResize.quickScale')}</div>
+src/app/tools/image-resize/page.tsx:                                            <label className="resize-size-label">{t('toolPages.imageResize.width')} (px)</label>
+src/app/tools/image-resize/page.tsx:                                                title={lockRatio ? t('toolPages.imageResize.unlockRatio') : t('toolPages.imageResize.lockRatio')}
+src/app/tools/image-resize/page.tsx:                                            <label className="resize-size-label">{t('toolPages.imageResize.height')} (px)</label>
+src/app/tools/image-resize/page.tsx:                                        <span className="resize-new-size-label">{t('toolPages.imageResize.outputSize')}</span>
+src/app/tools/image-resize/page.tsx:                                        {t('toolPages.imageResize.currentScale')}: <span className="resize-scale-percent">{getScalePercent()}%</span>
+src/app/tools/image-resize/page.tsx:                                <h3>{t('toolPages.imageResize.preview')}</h3>
+src/app/tools/image-resize/page.tsx:                                        {t('toolPages.common.reselect')}
+src/app/tools/image-resize/page.tsx:                                        {t('toolPages.imageResize.download')}
+src/app/tools/image-rotate/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-rotate/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-rotate/page.tsx:            const canvas = document.createElement('canvas');
+src/app/tools/image-rotate/page.tsx:            const ctx = canvas.getContext('2d');
+src/app/tools/image-rotate/page.tsx:            showToast(t('toolPages.common.uploadError'));
+src/app/tools/image-rotate/page.tsx:        e.preventDefault();
+src/app/tools/image-rotate/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-rotate/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+src/app/tools/image-rotate/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageRotate.title')}</h1>
+src/app/tools/image-rotate/page.tsx:                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+src/app/tools/image-rotate/page.tsx:                        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+src/app/tools/image-rotate/page.tsx:                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+src/app/tools/image-rotate/page.tsx:                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
+src/app/tools/image-rotate/page.tsx:                                    {t('toolPages.imageRotate.controls')}
+src/app/tools/image-rotate/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageRotate.quickRotate')}</div>
+src/app/tools/image-rotate/page.tsx:                                            {t('toolPages.imageRotate.ccw')}
+src/app/tools/image-rotate/page.tsx:                                            {t('toolPages.imageRotate.cw')}
+src/app/tools/image-rotate/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageRotate.preset')}</div>
+src/app/tools/image-rotate/page.tsx:                                            <span className="angle-slider-label">{t('toolPages.imageRotate.custom')}</span>
+src/app/tools/image-rotate/page.tsx:                                <h3>{t('toolPages.imageRotate.preview')}</h3>
+src/app/tools/image-rotate/page.tsx:                                        {t('toolPages.common.reselect')}
+src/app/tools/image-rotate/page.tsx:                                        {t('toolPages.imageRotate.download')}
+src/app/tools/image-to-pdf/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-to-pdf/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-to-pdf/page.tsx:        e.preventDefault();
+src/app/tools/image-to-pdf/page.tsx:            showToast(t('toolPages.imageToPdf.noImages'));
+src/app/tools/image-to-pdf/page.tsx:                        const pageHeight = pdf.internal.pageSize.getHeight();
+src/app/tools/image-to-pdf/page.tsx:            showToast(t('toolPages.imageToPdf.success'));
+src/app/tools/image-to-pdf/page.tsx:            showToast(t('toolPages.imageToPdf.error'));
+src/app/tools/image-to-pdf/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageToPdf.title')}</h1>
+src/app/tools/image-to-pdf/page.tsx:                                {t('toolPages.imageToPdf.settings')}
+src/app/tools/image-to-pdf/page.tsx:                                <div className="image-tool-card-title">{t('toolPages.imageToPdf.pageSize')}</div>
+src/app/tools/image-to-pdf/page.tsx:                                        { value: 'fit', label: t('toolPages.imageToPdf.fit') },
+src/app/tools/image-to-pdf/page.tsx:                                <div className="image-tool-card-title">{t('toolPages.imageToPdf.orientation')}</div>
+src/app/tools/image-to-pdf/page.tsx:                                        {t('toolPages.imageToPdf.portrait')}
+src/app/tools/image-to-pdf/page.tsx:                                        {t('toolPages.imageToPdf.landscape')}
+src/app/tools/image-to-pdf/page.tsx:                                    {t('toolPages.imageToPdf.addImages')}
+src/app/tools/image-to-pdf/page.tsx:                                        {t('toolPages.common.clearAll')}
+src/app/tools/image-to-pdf/page.tsx:                            <h3>{t('toolPages.imageToPdf.imageList')} {images.length > 0 && `(${images.length})`}</h3>
+src/app/tools/image-to-pdf/page.tsx:                                            {t('toolPages.imageToPdf.generating')}
+src/app/tools/image-to-pdf/page.tsx:                                            {t('toolPages.imageToPdf.downloadPdf')}
+src/app/tools/image-to-pdf/page.tsx:                                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+src/app/tools/image-to-pdf/page.tsx:                                    onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+src/app/tools/image-to-pdf/page.tsx:                                    <p>{t('toolPages.imageToPdf.dropzoneText')}</p>
+src/app/tools/image-to-pdf/page.tsx:                                    <span>{t('toolPages.imageToPdf.dropzoneHint')}</span>
+src/app/tools/image-to-pdf/page.tsx:                                    onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+src/app/tools/image-to-pdf/page.tsx:                                    onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+src/app/tools/image-to-svg/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-to-svg/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-to-svg/page.tsx:            const canvas = document.createElement('canvas');
+src/app/tools/image-to-svg/page.tsx:            const ctx = canvas.getContext('2d');
+src/app/tools/image-to-svg/page.tsx:                setSvgOutput(svg);
+src/app/tools/image-to-svg/page.tsx:            showToast(t('toolPages.common.uploadError'));
+src/app/tools/image-to-svg/page.tsx:        e.preventDefault();
+src/app/tools/image-to-svg/page.tsx:        if (file) handleFileSelect(file);
+src/app/tools/image-to-svg/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-to-svg/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', 'SVG'));
+src/app/tools/image-to-svg/page.tsx:        setSvgOutput('');
+src/app/tools/image-to-svg/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageToSvg.title')}</h1>
+src/app/tools/image-to-svg/page.tsx:                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+src/app/tools/image-to-svg/page.tsx:                        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+src/app/tools/image-to-svg/page.tsx:                            onChange={(e) => e.target.files?.[0] && handleFileSelect(e.target.files[0])}
+src/app/tools/image-to-svg/page.tsx:                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+src/app/tools/image-to-svg/page.tsx:                        <p className="upload-hint">{t('toolPages.imageToSvg.uploadHint')}</p>
+src/app/tools/image-to-svg/page.tsx:                                    {t('toolPages.imageToSvg.settings')}
+src/app/tools/image-to-svg/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageToSvg.threshold')}</div>
+src/app/tools/image-to-svg/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageToSvg.smoothness')}</div>
+src/app/tools/image-to-svg/page.tsx:                                        <span>{t('toolPages.imageToSvg.sharp')}</span>
+src/app/tools/image-to-svg/page.tsx:                                        <span>{t('toolPages.imageToSvg.smooth')}</span>
+src/app/tools/image-to-svg/page.tsx:                                    <div className="image-tool-card-title">{t('toolPages.imageToSvg.original')}</div>
+src/app/tools/image-to-svg/page.tsx:                                <h3>{t('toolPages.imageToSvg.preview')}</h3>
+src/app/tools/image-to-svg/page.tsx:                                        {t('toolPages.common.reselect')}
+src/app/tools/image-to-svg/page.tsx:                                        {t('toolPages.imageToSvg.download')}
+src/app/tools/image-to-svg/page.tsx:                                        <p>{t('toolPages.imageToSvg.converting')}</p>
+src/app/tools/image-watermark/layout.tsx:export default function Layout({ children }: { children: React.ReactNode }) {
+src/app/tools/image-watermark/page.tsx:    const { toast, showToast, hideToast } = useToast();
+src/app/tools/image-watermark/page.tsx:        setWatermarkText('Watermark');
+src/app/tools/image-watermark/page.tsx:        setWatermarkText('水印文字');
+src/app/tools/image-watermark/page.tsx:            const canvas = document.createElement('canvas');
+src/app/tools/image-watermark/page.tsx:            const ctx = canvas.getContext('2d');
+src/app/tools/image-watermark/page.tsx:                const textMetrics = ctx.measureText(text);
+src/app/tools/image-watermark/page.tsx:                ctx.fillText(text, x, y);
+src/app/tools/image-watermark/page.tsx:            showToast(t('toolPages.common.uploadError'));
+src/app/tools/image-watermark/page.tsx:        e.preventDefault();
+src/app/tools/image-watermark/page.tsx:        const link = document.createElement('a');
+src/app/tools/image-watermark/page.tsx:        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+src/app/tools/image-watermark/page.tsx:        setWatermarkText(value);
+src/app/tools/image-watermark/page.tsx:                    <h1 className="tool-title">{t('toolPages.imageWatermark.title')}</h1>
+src/app/tools/image-watermark/page.tsx:                        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+src/app/tools/image-watermark/page.tsx:                        onDragLeave={(e) => { e.preventDefault(); setIsDragging(false); }}
+src/app/tools/image-watermark/page.tsx:                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+src/app/tools/image-watermark/page.tsx:                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
+src/app/tools/image-watermark/page.tsx:                                    {t('toolPages.imageWatermark.settings')}
+src/app/tools/image-watermark/page.tsx:                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.text')}</span>
+src/app/tools/image-watermark/page.tsx:                                        placeholder={t('toolPages.imageWatermark.textPlaceholder')}
+src/app/tools/image-watermark/page.tsx:                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.position')}</span>
+src/app/tools/image-watermark/page.tsx:                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.fontSize')}</span>
+src/app/tools/image-watermark/page.tsx:                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.opacity')}</span>
+src/app/tools/image-watermark/page.tsx:                                        <span className="watermark-setting-label">{t('toolPages.imageWatermark.color')}</span>
+src/app/tools/image-watermark/page.tsx:                                <h3>{t('toolPages.imageWatermark.preview')}</h3>
+src/app/tools/image-watermark/page.tsx:                                        {t('toolPages.common.reselect')}
+src/app/tools/image-watermark/page.tsx:                                        {t('toolPages.imageWatermark.download')}

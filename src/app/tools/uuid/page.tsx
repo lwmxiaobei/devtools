@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, RefreshCw } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function UuidPage() {
     const [uuids, setUuids] = useState<string[]>([]);
@@ -13,6 +15,9 @@ export default function UuidPage() {
     const [uppercase, setUppercase] = useState(false);
     const [withHyphens, setWithHyphens] = useState(true);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const generateUUID = () => {
         let uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
@@ -37,12 +42,12 @@ export default function UuidPage() {
 
     const copyToClipboard = async (text: string) => {
         await navigator.clipboard.writeText(text);
-        showToast('已复制到剪贴板');
+        showToast(t('toolPages.common.copied'));
     };
 
     const copyAll = async () => {
         await navigator.clipboard.writeText(uuids.join('\n'));
-        showToast('已复制全部UUID');
+        showToast(t('toolPages.common.copiedAll'));
     };
 
     const clearAll = () => {
@@ -58,12 +63,12 @@ export default function UuidPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">UUID 生成器</h1>
+                    <h1 className="tool-title">{t('toolPages.uuid.title')}</h1>
                 </div>
 
                 <div className="single-panel">
                     <div className="input-group">
-                        <label className="input-label">生成数量</label>
+                        <label className="input-label">{t('toolPages.uuid.generateCount')}</label>
                         <input
                             type="number"
                             className="input-field"
@@ -80,48 +85,48 @@ export default function UuidPage() {
                             className={`option-btn ${!uppercase ? 'active' : ''}`}
                             onClick={() => setUppercase(false)}
                         >
-                            小写
+                            {t('toolPages.common.lowercase')}
                         </button>
                         <button
                             className={`option-btn ${uppercase ? 'active' : ''}`}
                             onClick={() => setUppercase(true)}
                         >
-                            大写
+                            {t('toolPages.common.uppercase')}
                         </button>
                         <button
                             className={`option-btn ${withHyphens ? 'active' : ''}`}
                             onClick={() => setWithHyphens(true)}
                         >
-                            带连字符
+                            {t('toolPages.common.withHyphens')}
                         </button>
                         <button
                             className={`option-btn ${!withHyphens ? 'active' : ''}`}
                             onClick={() => setWithHyphens(false)}
                         >
-                            无连字符
+                            {t('toolPages.common.withoutHyphens')}
                         </button>
                     </div>
 
                     <div className="action-row" style={{ marginBottom: '20px' }}>
                         <button className="action-btn primary" onClick={generate}>
                             <RefreshCw size={18} />
-                            生成UUID
+                            {t('toolPages.uuid.generateUuid')}
                         </button>
                         {uuids.length > 1 && (
                             <button className="action-btn secondary" onClick={copyAll}>
                                 <Copy size={18} />
-                                复制全部
+                                {t('toolPages.common.copyAll')}
                             </button>
                         )}
                         <button className="action-btn secondary" onClick={clearAll}>
                             <Trash2 size={18} />
-                            清空
+                            {t('toolPages.common.clear')}
                         </button>
                     </div>
 
                     {uuids.length > 0 && (
                         <div className="input-group">
-                            <label className="input-label">生成结果</label>
+                            <label className="input-label">{t('toolPages.uuid.generateResult')}</label>
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                 {uuids.map((uuid, index) => (
                                     <div

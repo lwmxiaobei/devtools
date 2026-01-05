@@ -6,6 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, Lock, Unlock } from 'lucide-react'
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 interface CropArea {
     x: number;
@@ -25,12 +27,16 @@ export default function ImageCropPage() {
     const [resizeHandle, setResizeHandle] = useState<string>('');
     const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
     const [cropStart, setCropStart] = useState<CropArea>({ x: 0, y: 0, width: 100, height: 100 });
+    const [displayScale, setDisplayScale] = useState(1);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const imageContainerRef = useRef<HTMLDivElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const aspectRatios = [
-        { id: 'free', label: '自由', ratio: null },
+        { id: 'free', label: t('toolPages.imageCrop.free'), ratio: null },
         { id: '1:1', label: '1:1', ratio: 1 },
         { id: '4:3', label: '4:3', ratio: 4 / 3 },
         { id: '16:9', label: '16:9', ratio: 16 / 9 },
@@ -40,7 +46,7 @@ export default function ImageCropPage() {
 
     const processImage = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
 
@@ -61,7 +67,7 @@ export default function ImageCropPage() {
             img.src = e.target?.result as string;
         };
         reader.readAsDataURL(file);
-    }, [showToast]);
+    }, [showToast, language]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -108,11 +114,11 @@ export default function ImageCropPage() {
                     cropArea.width, cropArea.height
                 );
                 setCroppedImage(canvas.toDataURL('image/png'));
-                showToast('裁剪完成');
+                showToast(t('toolPages.imageCrop.cropped'));
             }
         };
         img.src = originalImage;
-    }, [originalImage, cropArea, showToast]);
+    }, [originalImage, cropArea, showToast, language]);
 
     const downloadImage = useCallback(() => {
         if (!croppedImage) return;
@@ -120,8 +126,8 @@ export default function ImageCropPage() {
         link.download = `cropped_${Date.now()}.png`;
         link.href = croppedImage;
         link.click();
-        showToast('图片已下载');
-    }, [croppedImage, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+    }, [croppedImage, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -129,17 +135,26 @@ export default function ImageCropPage() {
         if (fileInputRef.current) fileInputRef.current.value = '';
     }, []);
 
-    // Calculate display scale
-    const getDisplayScale = () => {
-        if (!imageContainerRef.current || imageSize.width === 0) return 1;
-        const containerWidth = imageContainerRef.current.offsetWidth - 40;
-        const maxHeight = 400;
-        const scaleX = containerWidth / imageSize.width;
-        const scaleY = maxHeight / imageSize.height;
-        return Math.min(scaleX, scaleY, 1);
-    };
+    // Calculate display scale only when image loads or window resizes
+    useEffect(() => {
+        const calculateScale = () => {
+            if (!imageContainerRef.current || imageSize.width === 0) return;
+            const containerWidth = imageContainerRef.current.offsetWidth - 40;
+            const maxHeight = 400;
+            const scaleX = containerWidth / imageSize.width;
+            const scaleY = maxHeight / imageSize.height;
+            setDisplayScale(Math.min(scaleX, scaleY, 1));
+        };
 
-    const scale = getDisplayScale();
+        // Calculate on mount and when image size changes
+        calculateScale();
+
+        // Recalculate on window resize
+        window.addEventListener('resize', calculateScale);
+        return () => window.removeEventListener('resize', calculateScale);
+    }, [imageSize.width, imageSize.height, originalImage]);
+
+    const scale = displayScale;
 
     // Handle crop box drag start
     const handleCropMouseDown = (e: React.MouseEvent) => {
@@ -236,7 +251,7 @@ export default function ImageCropPage() {
             document.removeEventListener('mousemove', handleMouseMove);
             document.removeEventListener('mouseup', handleMouseUp);
         };
-    }, [isDragging, isResizing, dragStart, cropStart, scale, imageSize, aspectRatio, aspectRatios, resizeHandle]);
+    }, [isDragging, isResizing, dragStart, cropStart, displayScale, imageSize, aspectRatio, aspectRatios, resizeHandle]);
 
     return (
         <>
@@ -247,7 +262,7 @@ export default function ImageCropPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">图片裁剪</h1>
+                    <h1 className="tool-title">{t('toolPages.imageCrop.title')}</h1>
                 </div>
 
                 {!originalImage && (
@@ -266,8 +281,8 @@ export default function ImageCropPage() {
                             style={{ display: 'none' }}
                         />
                         <Upload size={48} strokeWidth={1.5} />
-                        <p className="upload-text">点击或拖拽图片到此处上传</p>
-                        <p className="upload-hint">支持 JPG、PNG、GIF 等格式</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
                     </div>
                 )}
 
@@ -315,17 +330,17 @@ export default function ImageCropPage() {
                         </div>
 
                         <div className="crop-info">
-                            <span>裁剪区域: {Math.round(cropArea.width)} × {Math.round(cropArea.height)} px</span>
+                            <span>{t('toolPages.imageCrop.cropArea')}: {Math.round(cropArea.width)} × {Math.round(cropArea.height)} px</span>
                         </div>
 
                         <div className="action-row">
                             <button className="action-btn secondary" onClick={clearAll}>
                                 <Trash2 size={18} />
-                                重新选择
+                                {t('toolPages.common.reselect')}
                             </button>
                             <button className="action-btn primary" onClick={cropImage}>
                                 <Download size={18} />
-                                确认裁剪
+                                {t('toolPages.imageCrop.confirmCrop')}
                             </button>
                         </div>
                     </>
@@ -334,17 +349,17 @@ export default function ImageCropPage() {
                 {croppedImage && (
                     <>
                         <div className="preview-container">
-                            <h3>裁剪结果</h3>
+                            <h3>{t('toolPages.imageCrop.preview')}</h3>
                             <img src={croppedImage} alt="Cropped" className="cropped-preview" />
                         </div>
                         <div className="action-row">
                             <button className="action-btn secondary" onClick={() => setCroppedImage(null)}>
                                 <Trash2 size={18} />
-                                重新裁剪
+                                {t('toolPages.imageCrop.reCrop')}
                             </button>
                             <button className="action-btn primary" onClick={downloadImage}>
                                 <Download size={18} />
-                                下载图片
+                                {t('toolPages.imageCrop.download')}
                             </button>
                         </div>
                     </>

@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2 } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 // 简单的 JSON5 解析器
 function parseJSON5(text: string): unknown {
@@ -34,6 +36,9 @@ export default function Json5Page() {
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     useEffect(() => {
         if (!input.trim()) {
@@ -47,7 +52,7 @@ export default function Json5Page() {
             setOutput(JSON.stringify(parsed, null, 2));
             setError('');
         } catch (e) {
-            setError(`JSON5 解析错误: ${(e as Error).message}`);
+            setError(`JSON5 ${t('toolPages.common.formatError')}: ${(e as Error).message}`);
             setOutput('');
         }
     }, [input]);
@@ -55,7 +60,7 @@ export default function Json5Page() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -67,16 +72,16 @@ export default function Json5Page() {
 
     const loadExample = () => {
         setInput(`{
-  // 这是注释
-  name: 'JSON5 示例',
+  // This is a comment
+  name: 'JSON5 Example',
   version: 5,
   features: [
-    '无引号键名',
-    '单引号字符串',
-    '尾随逗号',
+    'Unquoted keys',
+    'Single quoted strings',
+    'Trailing commas',
   ],
-  /* 多行注释
-     也支持 */
+  /* Multi-line comments
+     are also supported */
   hex: 0xFF,
 }`);
     };
@@ -90,7 +95,7 @@ export default function Json5Page() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSON5 解析</h1>
+                    <h1 className="tool-title">{t('toolPages.json5.title')}</h1>
                     <span style={{
                         padding: '4px 12px',
                         background: 'var(--primary-light)',
@@ -99,27 +104,27 @@ export default function Json5Page() {
                         fontSize: '0.75rem',
                         fontWeight: 500,
                     }}>
-                        实时
+                        {t('toolPages.common.realtime')}
                     </span>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 JSON5</span>
+                            <span className="editor-title">{t('toolPages.json5.inputJson5')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={loadExample}>
-                                    示例
+                                    Example
                                 </button>
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder={"请输入 JSON5，支持：\n- 无引号键名\n- 单引号字符串\n- 尾随逗号\n- 注释"}
+                            placeholder={"Enter JSON5, supports:\n- Unquoted keys\n- Single quoted strings\n- Trailing commas\n- Comments"}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -127,11 +132,11 @@ export default function Json5Page() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">标准 JSON 输出</span>
+                            <span className="editor-title">{t('toolPages.json5.parseResult')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -143,7 +148,7 @@ export default function Json5Page() {
                                 color: error ? '#ef4444' : 'inherit',
                             }}
                         >
-                            {error || output || '转换为标准 JSON 后将显示在这里'}
+                            {error || output || t('toolPages.jsonFormatter.emptyResult')}
                         </pre>
                     </div>
                 </div>
@@ -155,18 +160,18 @@ export default function Json5Page() {
                     borderRadius: 'var(--radius)',
                     border: '1px solid var(--border)',
                 }}>
-                    <h3 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>JSON5 特性</h3>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>JSON5 Features</h3>
                     <ul style={{
                         margin: 0,
                         paddingLeft: '20px',
                         fontSize: '0.85rem',
                         color: 'var(--text-secondary)',
                     }}>
-                        <li>对象键名可以不加引号（如果是合法标识符）</li>
-                        <li>字符串可以使用单引号</li>
-                        <li>允许尾随逗号</li>
-                        <li>支持单行和多行注释</li>
-                        <li>支持十六进制数字</li>
+                        <li>Object keys can be unquoted if they are valid identifiers</li>
+                        <li>Strings can use single quotes</li>
+                        <li>Trailing commas are allowed</li>
+                        <li>Single and multi-line comments are allowed</li>
+                        <li>Hexadecimal numbers are allowed</li>
                     </ul>
                 </div>
             </div>

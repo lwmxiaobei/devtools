@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, Lock, Unlock } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 function base64UrlEncode(str: string): string {
     return btoa(str)
@@ -62,15 +64,18 @@ export default function JwtPage() {
     const [mode, setMode] = useState<'decode' | 'encode'>('decode');
     const [token, setToken] = useState('');
     const [header, setHeader] = useState('{\n  "alg": "HS256",\n  "typ": "JWT"\n}');
-    const [payload, setPayload] = useState('{\n  "sub": "1234567890",\n  "name": "测试用户",\n  "iat": 1516239022\n}');
+    const [payload, setPayload] = useState('{\n  "sub": "1234567890",\n  "name": "User",\n  "iat": 1516239022\n}');
     const [secret, setSecret] = useState('your-secret-key');
     const [decodedParts, setDecodedParts] = useState<JwtParts | null>(null);
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const handleDecode = () => {
         if (!token.trim()) {
-            setError('请输入 JWT Token');
+            setError(t('toolPages.jwt.inputToken'));
             return;
         }
         const parts = decodeJwt(token);
@@ -78,7 +83,7 @@ export default function JwtPage() {
             setDecodedParts(parts);
             setError('');
         } else {
-            setError('无效的 JWT Token 格式');
+            setError(t('toolPages.jwt.invalidToken'));
             setDecodedParts(null);
         }
     };
@@ -88,15 +93,15 @@ export default function JwtPage() {
         if (result) {
             setToken(result);
             setError('');
-            showToast('JWT 已生成');
+            showToast(t('toolPages.jwt.generated'));
         } else {
-            setError('Header 或 Payload 格式错误');
+            setError(t('toolPages.jwt.formatError'));
         }
     };
 
     const copyToClipboard = async (text: string) => {
         await navigator.clipboard.writeText(text);
-        showToast('已复制到剪贴板');
+        showToast(t('toolPages.common.copied'));
     };
 
     const clearAll = () => {
@@ -114,7 +119,7 @@ export default function JwtPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JWT 加解密</h1>
+                    <h1 className="tool-title">{t('toolPages.jwt.title')}</h1>
                 </div>
 
                 <div className="action-row" style={{ marginBottom: '16px' }}>
@@ -123,14 +128,14 @@ export default function JwtPage() {
                         onClick={() => setMode('decode')}
                     >
                         <Unlock size={18} />
-                        解密
+                        {t('toolPages.jwt.decode')}
                     </button>
                     <button
                         className={`action-btn ${mode === 'encode' ? 'primary' : 'secondary'}`}
                         onClick={() => setMode('encode')}
                     >
                         <Lock size={18} />
-                        生成
+                        {t('toolPages.jwt.generate')}
                     </button>
                 </div>
 
@@ -142,24 +147,24 @@ export default function JwtPage() {
                                 <div className="editor-actions">
                                     <button className="editor-btn" onClick={clearAll}>
                                         <Trash2 size={14} />
-                                        清空
+                                        {t('toolPages.common.clear')}
                                     </button>
                                 </div>
                             </div>
                             <textarea
                                 className="editor-textarea"
-                                placeholder="请输入 JWT Token"
+                                placeholder={t('toolPages.jwt.inputToken')}
                                 value={token}
                                 onChange={(e) => setToken(e.target.value)}
                             />
                             <button className="action-btn primary" onClick={handleDecode} style={{ margin: '16px' }}>
-                                解密 Token
+                                {t('toolPages.jwt.decodeToken')}
                             </button>
                         </div>
 
                         <div className="editor-panel">
                             <div className="editor-header">
-                                <span className="editor-title">解密结果</span>
+                                <span className="editor-title">{t('toolPages.jwt.decodeResult')}</span>
                             </div>
                             <div style={{ flex: 1, overflow: 'auto', padding: '16px' }}>
                                 {error ? (
@@ -229,7 +234,7 @@ export default function JwtPage() {
                                     </div>
                                 ) : (
                                     <span style={{ color: 'var(--text-muted)' }}>
-                                        解密结果将显示在这里
+                                        {t('toolPages.jsonFormatter.emptyResult')}
                                     </span>
                                 )}
                             </div>
@@ -258,7 +263,7 @@ export default function JwtPage() {
                             />
                             <div style={{ padding: '16px' }}>
                                 <label style={{ display: 'block', marginBottom: '8px', fontSize: '0.85rem' }}>
-                                    Secret (密钥)
+                                    {t('toolPages.jwt.secret')}
                                 </label>
                                 <input
                                     type="text"
@@ -275,17 +280,17 @@ export default function JwtPage() {
                                 />
                             </div>
                             <button className="action-btn primary" onClick={handleEncode} style={{ margin: '0 16px 16px' }}>
-                                生成 JWT
+                                {t('toolPages.jwt.confirmGenerate')}
                             </button>
                         </div>
 
                         <div className="editor-panel">
                             <div className="editor-header">
-                                <span className="editor-title">生成的 JWT Token</span>
+                                <span className="editor-title">{t('toolPages.jwt.generatedToken')}</span>
                                 <div className="editor-actions">
                                     <button className="editor-btn" onClick={() => copyToClipboard(token)} disabled={!token}>
                                         <Copy size={14} />
-                                        复制
+                                        {t('toolPages.common.copy')}
                                     </button>
                                 </div>
                             </div>
@@ -293,7 +298,7 @@ export default function JwtPage() {
                                 className="editor-textarea"
                                 value={token}
                                 readOnly
-                                placeholder="生成的 JWT Token 将显示在这里"
+                                placeholder={t('toolPages.jwt.generatedDisplay')}
                             />
                             {error && (
                                 <div style={{

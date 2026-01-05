@@ -6,6 +6,8 @@ import { ArrowLeft, Play, Pause, RotateCcw, Upload } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 // 使用 CDN 加载 Lottie
 declare global {
@@ -40,6 +42,9 @@ export default function LottiePreviewPage() {
     const containerRef = useRef<HTMLDivElement>(null);
     const animationRef = useRef<ReturnType<typeof window.lottie.loadAnimation> | null>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     // 加载 Lottie 库
     useEffect(() => {
@@ -79,7 +84,7 @@ export default function LottiePreviewPage() {
             setIsPlaying(true);
             setError('');
         } catch (e) {
-            setError(`JSON 格式错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.jsonFormatter.formatError')}: ${(e as Error).message}`);
         }
 
         return () => {
@@ -87,7 +92,7 @@ export default function LottiePreviewPage() {
                 animationRef.current.destroy();
             }
         };
-    }, [input, lottieLoaded]);
+    }, [input, lottieLoaded, language]);
 
     // 更新速度
     useEffect(() => {
@@ -180,7 +185,7 @@ export default function LottiePreviewPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">Lottie 动画预览</h1>
+                    <h1 className="tool-title">{t('toolPages.lottie.title')}</h1>
                 </div>
 
                 <div className="editor-container">
@@ -190,7 +195,7 @@ export default function LottiePreviewPage() {
                             <div className="editor-actions">
                                 <label className="editor-btn" style={{ cursor: 'pointer' }}>
                                     <Upload size={14} />
-                                    上传文件
+                                    {t('toolPages.lottie.upload')}
                                     <input
                                         type="file"
                                         accept=".json"
@@ -199,13 +204,13 @@ export default function LottiePreviewPage() {
                                     />
                                 </label>
                                 <button className="editor-btn" onClick={loadExample}>
-                                    示例
+                                    {t('toolPages.lottie.example')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder="请输入 Lottie JSON 动画数据，或上传 .json 文件"
+                            placeholder={t('toolPages.lottie.placeholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -213,7 +218,7 @@ export default function LottiePreviewPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">预览</span>
+                            <span className="editor-title">{t('toolPages.lottie.preview')}</span>
                             <div className="editor-actions">
                                 <button
                                     className="editor-btn"
@@ -221,7 +226,7 @@ export default function LottiePreviewPage() {
                                     disabled={!animationRef.current}
                                 >
                                     {isPlaying ? <Pause size={14} /> : <Play size={14} />}
-                                    {isPlaying ? '暂停' : '播放'}
+                                    {isPlaying ? t('toolPages.lottie.pause') : t('toolPages.lottie.play')}
                                 </button>
                                 <button
                                     className="editor-btn"
@@ -229,7 +234,7 @@ export default function LottiePreviewPage() {
                                     disabled={!animationRef.current}
                                 >
                                     <RotateCcw size={14} />
-                                    重播
+                                    {t('toolPages.lottie.replay')}
                                 </button>
                             </div>
                         </div>
@@ -247,10 +252,10 @@ export default function LottiePreviewPage() {
                             {error ? (
                                 <div style={{ color: '#ef4444', padding: '16px' }}>{error}</div>
                             ) : !lottieLoaded ? (
-                                <div style={{ color: 'var(--text-muted)' }}>加载 Lottie 库中...</div>
+                                <div style={{ color: 'var(--text-muted)' }}>{t('toolPages.lottie.loadingLib')}</div>
                             ) : !input.trim() ? (
                                 <div style={{ color: 'var(--text-muted)' }}>
-                                    输入 Lottie JSON 后预览动画
+                                    {t('toolPages.lottie.emptyPreview')}
                                 </div>
                             ) : null}
                             <div
@@ -271,7 +276,7 @@ export default function LottiePreviewPage() {
                             gap: '16px',
                         }}>
                             <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                                速度: {speed}x
+                                {t('toolPages.lottie.speed')}: {speed}x
                             </span>
                             <input
                                 type="range"

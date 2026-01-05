@@ -7,6 +7,8 @@ import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
 import CryptoJS from 'crypto-js';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 type HashType = 'md5' | 'sha1' | 'sha256' | 'sha512';
 
@@ -20,6 +22,9 @@ export default function HashPage() {
     });
     const [uppercase, setUppercase] = useState(false);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const calculateHashes = () => {
         const md5 = CryptoJS.MD5(input).toString();
@@ -39,7 +44,7 @@ export default function HashPage() {
 
     const copyToClipboard = async (text: string) => {
         await navigator.clipboard.writeText(text);
-        showToast('已复制到剪贴板');
+        showToast(t('toolPages.common.copied'));
     };
 
     const clearAll = () => {
@@ -48,10 +53,10 @@ export default function HashPage() {
     };
 
     const hashTypes: { id: HashType; name: string; bits: string }[] = [
-        { id: 'md5', name: 'MD5', bits: '128位' },
-        { id: 'sha1', name: 'SHA-1', bits: '160位' },
-        { id: 'sha256', name: 'SHA-256', bits: '256位' },
-        { id: 'sha512', name: 'SHA-512', bits: '512位' },
+        { id: 'md5', name: 'MD5', bits: `128${t('toolPages.hash.bits')}` },
+        { id: 'sha1', name: 'SHA-1', bits: `160${t('toolPages.hash.bits')}` },
+        { id: 'sha256', name: 'SHA-256', bits: `256${t('toolPages.hash.bits')}` },
+        { id: 'sha512', name: 'SHA-512', bits: `512${t('toolPages.hash.bits')}` },
     ];
 
     return (
@@ -63,16 +68,16 @@ export default function HashPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">哈希计算</h1>
+                    <h1 className="tool-title">{t('toolPages.hash.title')}</h1>
                 </div>
 
                 <div className="single-panel">
                     <div className="input-group">
-                        <label className="input-label">待计算文本</label>
+                        <label className="input-label">{t('toolPages.hash.textToCalculate')}</label>
                         <textarea
                             className="editor-textarea"
                             style={{ minHeight: '150px', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
-                            placeholder="请输入要计算哈希值的文本..."
+                            placeholder={t('toolPages.hash.inputPlaceholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -83,24 +88,24 @@ export default function HashPage() {
                             className={`option-btn ${!uppercase ? 'active' : ''}`}
                             onClick={() => setUppercase(false)}
                         >
-                            小写
+                            {t('toolPages.common.lowercase')}
                         </button>
                         <button
                             className={`option-btn ${uppercase ? 'active' : ''}`}
                             onClick={() => setUppercase(true)}
                         >
-                            大写
+                            {t('toolPages.common.uppercase')}
                         </button>
                     </div>
 
                     <div className="action-row" style={{ marginBottom: '24px' }}>
                         <button className="action-btn primary" onClick={calculateHashes}>
                             <Hash size={18} />
-                            计算哈希
+                            {t('toolPages.hash.calculateHash')}
                         </button>
                         <button className="action-btn secondary" onClick={clearAll}>
                             <Trash2 size={18} />
-                            清空
+                            {t('toolPages.common.clear')}
                         </button>
                     </div>
 

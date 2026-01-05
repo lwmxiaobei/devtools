@@ -6,6 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, Settings } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function ImageCompressPage() {
     const [originalImage, setOriginalImage] = useState<string | null>(null);
@@ -17,6 +19,9 @@ export default function ImageCompressPage() {
     const [isProcessing, setIsProcessing] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const formatFileSize = (bytes: number): string => {
         if (bytes === 0) return '0 B';
@@ -60,11 +65,11 @@ export default function ImageCompressPage() {
 
     const processImage = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
         compressImage(file, quality);
-    }, [compressImage, quality, showToast]);
+    }, [compressImage, quality, showToast, language]);
 
     const handleQualityChange = useCallback((newQuality: number) => {
         setQuality(newQuality);
@@ -111,8 +116,8 @@ export default function ImageCompressPage() {
         link.download = `compressed_${Date.now()}.jpg`;
         link.href = compressedImage;
         link.click();
-        showToast('图片已下载');
-    }, [compressedImage, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+    }, [compressedImage, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -137,7 +142,7 @@ export default function ImageCompressPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">图片压缩</h1>
+                    <h1 className="tool-title">{t('toolPages.imageCompress.title')}</h1>
                 </div>
 
                 {!originalImage && (
@@ -156,15 +161,15 @@ export default function ImageCompressPage() {
                             style={{ display: 'none' }}
                         />
                         <Upload size={48} strokeWidth={1.5} />
-                        <p className="upload-text">点击或拖拽图片到此处上传</p>
-                        <p className="upload-hint">支持 JPG、PNG、GIF 等格式</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
                     </div>
                 )}
 
                 {isProcessing && (
                     <div className="processing-indicator">
                         <div className="spinner"></div>
-                        <p>正在压缩图片...</p>
+                        <p>{t('toolPages.imageCompress.compressing')}</p>
                     </div>
                 )}
 
@@ -174,7 +179,7 @@ export default function ImageCompressPage() {
                             <div className="quality-control">
                                 <label>
                                     <Settings size={16} />
-                                    压缩质量: {quality}%
+                                    {t('toolPages.imageCompress.quality')}: {quality}%
                                 </label>
                                 <input
                                     type="range"
@@ -189,22 +194,22 @@ export default function ImageCompressPage() {
 
                         <div className="compress-stats">
                             <div className="stat-item">
-                                <span className="stat-label">原始大小</span>
+                                <span className="stat-label">{t('toolPages.imageCompress.originalSize')}</span>
                                 <span className="stat-value">{formatFileSize(originalSize)}</span>
                             </div>
                             <div className="stat-item">
-                                <span className="stat-label">压缩后</span>
+                                <span className="stat-label">{t('toolPages.imageCompress.compressedSize')}</span>
                                 <span className="stat-value">{formatFileSize(compressedSize)}</span>
                             </div>
                             <div className="stat-item highlight">
-                                <span className="stat-label">节省</span>
+                                <span className="stat-label">{t('toolPages.imageCompress.saved')}</span>
                                 <span className="stat-value">{compressionRatio}%</span>
                             </div>
                         </div>
 
                         <div className="image-preview-container">
                             <div className="image-preview">
-                                <h3>压缩后预览</h3>
+                                <h3>{t('toolPages.imageCompress.preview')}</h3>
                                 <img src={compressedImage} alt="Compressed" />
                             </div>
                         </div>
@@ -212,11 +217,11 @@ export default function ImageCompressPage() {
                         <div className="action-row">
                             <button className="action-btn secondary" onClick={clearAll}>
                                 <Trash2 size={18} />
-                                重新选择
+                                {t('toolPages.common.reselect')}
                             </button>
                             <button className="action-btn primary" onClick={downloadImage}>
                                 <Download size={18} />
-                                下载压缩图片
+                                {t('toolPages.imageCompress.download')}
                             </button>
                         </div>
                     </>
@@ -244,12 +249,14 @@ export default function ImageCompressPage() {
                     color: var(--text-primary);
                 }
                 .quality-slider {
-                    width: 100%;
+                    width: 50%;
+                    max-width: 400px;
                     height: 8px;
                     border-radius: 4px;
                     background: var(--bg-tertiary);
                     outline: none;
                     -webkit-appearance: none;
+                    margin: 0;
                 }
                 .quality-slider::-webkit-slider-thumb {
                     -webkit-appearance: none;

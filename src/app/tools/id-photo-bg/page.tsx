@@ -6,14 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, User, Settings, Palette } from 'lu
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
-
-const bgColors = [
-    { name: '白色', value: '#FFFFFF' },
-    { name: '蓝色', value: '#438EDB' },
-    { name: '红色', value: '#D03B39' },
-    { name: '渐变蓝', value: '#1E90FF' },
-    { name: '灰色', value: '#CCCCCC' },
-];
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function IdPhotoBgPage() {
     const [originalImage, setOriginalImage] = useState<string | null>(null);
@@ -23,6 +17,17 @@ export default function IdPhotoBgPage() {
     const [tolerance, setTolerance] = useState(30);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
+
+    const bgColors = [
+        { name: t('toolPages.idPhotoBg.colorWhite'), value: '#FFFFFF' },
+        { name: t('toolPages.idPhotoBg.colorBlue'), value: '#438EDB' },
+        { name: t('toolPages.idPhotoBg.colorRed'), value: '#D03B39' },
+        { name: t('toolPages.idPhotoBg.colorGradientBlue'), value: '#1E90FF' },
+        { name: t('toolPages.idPhotoBg.colorGray'), value: '#CCCCCC' },
+    ];
 
     const processImage = useCallback((imageSrc: string, bgColor: string, toleranceValue: number) => {
         const img = new window.Image();
@@ -72,7 +77,7 @@ export default function IdPhotoBgPage() {
 
     const handleFileSelect = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
         const reader = new FileReader();
@@ -82,7 +87,7 @@ export default function IdPhotoBgPage() {
             processImage(result, selectedColor, tolerance);
         };
         reader.readAsDataURL(file);
-    }, [processImage, selectedColor, tolerance, showToast]);
+    }, [processImage, selectedColor, tolerance, showToast, language]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -111,8 +116,8 @@ export default function IdPhotoBgPage() {
         link.download = `id_photo_${Date.now()}.png`;
         link.href = processedImage;
         link.click();
-        showToast('图片已下载');
-    }, [processedImage, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+    }, [processedImage, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -129,7 +134,7 @@ export default function IdPhotoBgPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">证件照背景</h1>
+                    <h1 className="tool-title">{t('toolPages.idPhotoBg.title')}</h1>
                 </div>
 
                 {!originalImage && (
@@ -150,8 +155,8 @@ export default function IdPhotoBgPage() {
                         <div className="image-tool-upload-icon idphoto">
                             <User size={40} strokeWidth={1.5} />
                         </div>
-                        <p className="upload-text">点击或拖拽证件照到此处上传</p>
-                        <p className="upload-hint">支持 JPG、PNG 格式，建议使用白色背景的证件照</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
                     </div>
                 )}
 
@@ -162,13 +167,13 @@ export default function IdPhotoBgPage() {
                             <div className="image-tool-panel-header idphoto">
                                 <h3>
                                     <Settings size={20} />
-                                    背景设置
+                                    {t('toolPages.idPhotoBg.bgSettings')}
                                 </h3>
                             </div>
                             <div className="image-tool-panel-body">
                                 {/* 背景颜色 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">选择背景颜色</div>
+                                    <div className="image-tool-card-title">{t('toolPages.idPhotoBg.selectColor')}</div>
                                     <div className="idphoto-color-grid">
                                         {bgColors.map((color) => (
                                             <button
@@ -187,7 +192,7 @@ export default function IdPhotoBgPage() {
                                                 type="color"
                                                 value={selectedColor}
                                                 onChange={(e) => handleColorChange(e.target.value)}
-                                                title="自定义颜色"
+                                                title={t('toolPages.imageWatermark.color')}
                                             />
                                         </div>
                                     </div>
@@ -195,7 +200,7 @@ export default function IdPhotoBgPage() {
 
                                 {/* 容差调节 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">背景识别容差</div>
+                                    <div className="image-tool-card-title">{t('toolPages.idPhotoBg.tolerance')}</div>
                                     <div className="idphoto-slider-header">
                                         <span className="idphoto-slider-value">{tolerance}</span>
                                     </div>
@@ -214,8 +219,8 @@ export default function IdPhotoBgPage() {
                                         />
                                     </div>
                                     <div className="idphoto-slider-labels">
-                                        <span>精确</span>
-                                        <span>宽松</span>
+                                        <span>{t('toolPages.idPhotoBg.precise')}</span>
+                                        <span>{t('toolPages.idPhotoBg.loose')}</span>
                                     </div>
                                 </div>
                             </div>
@@ -224,15 +229,15 @@ export default function IdPhotoBgPage() {
                         {/* 右侧预览区域 */}
                         <div className="image-tool-preview">
                             <div className="image-tool-preview-header">
-                                <h3>预览效果</h3>
+                                <h3>{t('toolPages.idPhotoBg.preview')}</h3>
                                 <div className="image-tool-actions">
                                     <button className="image-tool-btn secondary" onClick={clearAll}>
                                         <Trash2 size={16} />
-                                        重新选择
+                                        {t('toolPages.common.reselect')}
                                     </button>
                                     <button className="image-tool-btn primary idphoto" onClick={downloadImage}>
                                         <Download size={16} />
-                                        下载图片
+                                        {t('toolPages.idPhotoBg.download')}
                                     </button>
                                 </div>
                             </div>

@@ -13,12 +13,12 @@ export interface Tool {
 export const categories = [
     { id: 'all', name: '全部工具', icon: Braces },
     { id: 'json', name: 'JSON工具', icon: FileJson },
+    { id: 'image', name: '图片工具', icon: Image },
+    { id: 'time', name: '时间日期', icon: Clock },
     { id: 'jwt', name: 'JWT工具', icon: KeyRound },
     { id: 'encode', name: '编码加密', icon: Lock },
-    { id: 'time', name: '时间日期', icon: Clock },
     { id: 'format', name: '代码格式化', icon: Code },
     { id: 'text', name: '文本处理', icon: FileText },
-    { id: 'image', name: '图片工具', icon: Image },
 ];
 
 export const tools: Tool[] = [
@@ -166,15 +166,7 @@ export const tools: Tool[] = [
         category: 'json',
         path: '/tools/json-to-objc',
     },
-    {
-        id: 'lottie-preview',
-        name: 'Lottie动画预览',
-        description: '预览Lottie JSON动画',
-        icon: Play,
-        iconType: 'image',
-        category: 'image',
-        path: '/tools/lottie-preview',
-    },
+
     {
         id: 'base64',
         name: 'Base64编解码',
@@ -229,15 +221,7 @@ export const tools: Tool[] = [
         category: 'format',
         path: '/tools/code-formatter',
     },
-    {
-        id: 'color-converter',
-        name: '颜色转换',
-        description: 'HEX/RGB/HSL颜色格式互转',
-        icon: Palette,
-        iconType: 'image',
-        category: 'image',
-        path: '/tools/color-converter',
-    },
+
     {
         id: 'hash',
         name: '哈希计算',
@@ -264,6 +248,15 @@ export const tools: Tool[] = [
         iconType: 'text',
         category: 'text',
         path: '/tools/case-converter',
+    },
+    {
+        id: 'gemini-watermark',
+        name: '去Gemini水印',
+        description: '去除Gemini AI生成图片的水印',
+        icon: Droplets,
+        iconType: 'image',
+        category: 'image',
+        path: '/tools/gemini-watermark',
     },
     {
         id: 'image-grid',
@@ -320,6 +313,15 @@ export const tools: Tool[] = [
         path: '/tools/image-resize',
     },
     {
+        id: 'lottie-preview',
+        name: 'Lottie动画预览',
+        description: '预览Lottie JSON动画',
+        icon: Play,
+        iconType: 'image',
+        category: 'image',
+        path: '/tools/lottie-preview',
+    },
+    {
         id: 'image-watermark',
         name: '图片加水印',
         description: '给图片添加文字水印',
@@ -327,6 +329,15 @@ export const tools: Tool[] = [
         iconType: 'image',
         category: 'image',
         path: '/tools/image-watermark',
+    },
+    {
+        id: 'color-converter',
+        name: '颜色转换',
+        description: 'HEX/RGB/HSL颜色格式互转',
+        icon: Palette,
+        iconType: 'image',
+        category: 'image',
+        path: '/tools/color-converter',
     },
     {
         id: 'id-photo-bg',
@@ -382,13 +393,5 @@ export const tools: Tool[] = [
         category: 'image',
         path: '/tools/image-to-pdf',
     },
-    {
-        id: 'gemini-watermark',
-        name: '去Gemini水印',
-        description: '去除Gemini AI生成图片的水印',
-        icon: Droplets,
-        iconType: 'image',
-        category: 'image',
-        path: '/tools/gemini-watermark',
-    },
+
 ];

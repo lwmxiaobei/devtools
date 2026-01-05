@@ -7,6 +7,8 @@ import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
 import jsQR from 'jsqr';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function QRCodeScanPage() {
     const [result, setResult] = useState<string | null>(null);
@@ -15,6 +17,9 @@ export default function QRCodeScanPage() {
     const [isProcessing, setIsProcessing] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const scanQRCode = useCallback((imageSrc: string) => {
         setIsProcessing(true);
@@ -34,24 +39,24 @@ export default function QRCodeScanPage() {
 
                 if (code) {
                     setResult(code.data);
-                    showToast('二维码解析成功');
+                    showToast(t('toolPages.qrCodeScan.success'));
                 } else {
                     setResult(null);
-                    showToast('未能识别到二维码');
+                    showToast(t('toolPages.qrCodeScan.notFound'));
                 }
             }
             setIsProcessing(false);
         };
         img.onerror = () => {
-            showToast('图片加载失败');
+            showToast(t('toolPages.common.uploadError'));
             setIsProcessing(false);
         };
         img.src = imageSrc;
-    }, [showToast]);
+    }, [showToast, language]);
 
     const handleFileSelect = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
         const reader = new FileReader();
@@ -59,7 +64,7 @@ export default function QRCodeScanPage() {
             scanQRCode(e.target?.result as string);
         };
         reader.readAsDataURL(file);
-    }, [scanQRCode, showToast]);
+    }, [scanQRCode, showToast, language]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -71,8 +76,8 @@ export default function QRCodeScanPage() {
     const copyResult = useCallback(() => {
         if (!result) return;
         navigator.clipboard.writeText(result);
-        showToast('已复制到剪贴板');
-    }, [result, showToast]);
+        showToast(t('toolPages.common.copied'));
+    }, [result, showToast, language]);
 
     const openLink = useCallback(() => {
         if (!result) return;
@@ -80,9 +85,9 @@ export default function QRCodeScanPage() {
             const url = new URL(result);
             window.open(url.href, '_blank');
         } catch {
-            showToast('不是有效的链接');
+            showToast(t('toolPages.qrCodeScan.invalidLink'));
         }
-    }, [result, showToast]);
+    }, [result, showToast, language]);
 
     const isValidUrl = (text: string) => {
         try {
@@ -108,7 +113,7 @@ export default function QRCodeScanPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">二维码解析识别</h1>
+                    <h1 className="tool-title">{t('toolPages.qrCodeScan.title')}</h1>
                 </div>
 
                 {!previewImage ? (
@@ -129,8 +134,8 @@ export default function QRCodeScanPage() {
                         <div className="image-tool-upload-icon qrscan">
                             <ScanLine size={40} strokeWidth={1.5} />
                         </div>
-                        <p className="upload-text">点击或拖拽二维码图片到此处</p>
-                        <p className="upload-hint">支持 JPG、PNG 格式，也可以 Ctrl+V 粘贴图片</p>
+                        <p className="upload-text">{t('toolPages.qrCodeScan.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.qrCodeScan.uploadHint')}</p>
                     </div>
                 ) : (
                     <div className="image-tool-layout">
@@ -139,7 +144,7 @@ export default function QRCodeScanPage() {
                             <div className="image-tool-panel-header qrscan">
                                 <h3>
                                     <ScanLine size={20} />
-                                    二维码图片
+                                    {t('toolPages.qrCodeScan.image')}
                                 </h3>
                             </div>
                             <div className="image-tool-panel-body">
@@ -148,7 +153,7 @@ export default function QRCodeScanPage() {
                                 </div>
                                 <button className="qrscan-rescan-btn" onClick={clearAll}>
                                     <Trash2 size={16} />
-                                    重新识别
+                                    {t('toolPages.qrCodeScan.rescan')}
                                 </button>
                             </div>
                         </div>
@@ -156,17 +161,17 @@ export default function QRCodeScanPage() {
                         {/* 右侧结果 */}
                         <div className="image-tool-preview">
                             <div className="image-tool-preview-header">
-                                <h3>识别结果</h3>
+                                <h3>{t('toolPages.qrCodeScan.result')}</h3>
                                 {result && (
                                     <div className="image-tool-actions">
                                         <button className="image-tool-btn secondary" onClick={copyResult}>
                                             <Copy size={16} />
-                                            复制
+                                            {t('toolPages.common.copy')}
                                         </button>
                                         {isValidUrl(result) && (
                                             <button className="image-tool-btn primary qrscan" onClick={openLink}>
                                                 <ExternalLink size={16} />
-                                                打开链接
+                                                {t('toolPages.qrCodeScan.openLink')}
                                             </button>
                                         )}
                                     </div>
@@ -176,7 +181,7 @@ export default function QRCodeScanPage() {
                                 {isProcessing ? (
                                     <div className="qrscan-loading">
                                         <div className="spinner"></div>
-                                        <p>正在识别...</p>
+                                        <p>{t('toolPages.qrCodeScan.scanning')}</p>
                                     </div>
                                 ) : result ? (
                                     <div className="qrscan-result-box">
@@ -185,7 +190,7 @@ export default function QRCodeScanPage() {
                                 ) : (
                                     <div className="qrscan-no-result">
                                         <ScanLine size={48} strokeWidth={1} />
-                                        <p>未能识别到二维码内容</p>
+                                        <p>{t('toolPages.qrCodeScan.notFound')}</p>
                                     </div>
                                 )}
                             </div>

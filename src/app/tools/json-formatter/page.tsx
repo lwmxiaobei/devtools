@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, Wand2, Minimize2, Hash } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function JsonFormatterPage() {
     const [input, setInput] = useState('');
@@ -14,6 +16,9 @@ export default function JsonFormatterPage() {
     const [mode, setMode] = useState<'format' | 'compress'>('format');
     const [showLineNumbers, setShowLineNumbers] = useState(true);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     // 实时格式化
     useEffect(() => {
@@ -32,7 +37,7 @@ export default function JsonFormatterPage() {
             }
             setError('');
         } catch (e) {
-            setError(`JSON格式错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.jsonFormatter.jsonError')}: ${(e as Error).message}`);
             setOutput('');
         }
     }, [input, mode]);
@@ -40,7 +45,7 @@ export default function JsonFormatterPage() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -59,7 +64,7 @@ export default function JsonFormatterPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSON 格式化</h1>
+                    <h1 className="tool-title">{t('toolPages.jsonFormatter.title')}</h1>
                     <span style={{
                         padding: '4px 12px',
                         background: 'var(--primary-light)',
@@ -68,19 +73,19 @@ export default function JsonFormatterPage() {
                         fontSize: '0.75rem',
                         fontWeight: 500,
                     }}>
-                        实时
+                        {t('toolPages.common.realtime')}
                     </span>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 JSON</span>
+                            <span className="editor-title">{t('toolPages.jsonFormatter.inputJson')}</span>
                             <div className="editor-actions">
                                 <button
                                     className={`editor-btn ${showLineNumbers ? 'active' : ''}`}
                                     onClick={() => setShowLineNumbers(!showLineNumbers)}
-                                    title={showLineNumbers ? '隐藏行号' : '显示行号'}
+                                    title={showLineNumbers ? t('toolPages.common.hideLineNumbers') : t('toolPages.common.showLineNumbers')}
                                     style={showLineNumbers ? {
                                         background: 'var(--primary-light)',
                                         borderColor: 'var(--primary)',
@@ -88,11 +93,11 @@ export default function JsonFormatterPage() {
                                     } : {}}
                                 >
                                     <Hash size={14} />
-                                    行号
+                                    {t('toolPages.common.lineNumbers')}
                                 </button>
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
@@ -133,7 +138,7 @@ export default function JsonFormatterPage() {
                             )}
                             <textarea
                                 className="editor-textarea"
-                                placeholder='请输入 JSON，例如：{"name": "张三", "age": 25}'
+                                placeholder={t('toolPages.jsonFormatter.inputPlaceholder')}
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
                                 onScroll={(e) => {
@@ -153,12 +158,12 @@ export default function JsonFormatterPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输出结果</span>
+                            <span className="editor-title">{t('toolPages.jsonFormatter.outputResult')}</span>
                             <div className="editor-actions">
                                 <button
                                     className={`editor-btn ${showLineNumbers ? 'active' : ''}`}
                                     onClick={() => setShowLineNumbers(!showLineNumbers)}
-                                    title={showLineNumbers ? '隐藏行号' : '显示行号'}
+                                    title={showLineNumbers ? t('toolPages.common.hideLineNumbers') : t('toolPages.common.showLineNumbers')}
                                     style={showLineNumbers ? {
                                         background: 'var(--primary-light)',
                                         borderColor: 'var(--primary)',
@@ -166,11 +171,11 @@ export default function JsonFormatterPage() {
                                     } : {}}
                                 >
                                     <Hash size={14} />
-                                    行号
+                                    {t('toolPages.common.lineNumbers')}
                                 </button>
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -221,7 +226,7 @@ export default function JsonFormatterPage() {
                                     background: 'transparent',
                                 }}
                             >
-                                {output || <span style={{ color: 'var(--text-muted)' }}>格式化或压缩后的结果将显示在这里</span>}
+                                {output || <span style={{ color: 'var(--text-muted)' }}>{t('toolPages.jsonFormatter.emptyResult')}</span>}
                             </pre>
                         </div>
                         {error && (
@@ -244,14 +249,14 @@ export default function JsonFormatterPage() {
                         onClick={() => setMode('format')}
                     >
                         <Wand2 size={18} />
-                        格式化
+                        {t('toolPages.jsonFormatter.format')}
                     </button>
                     <button
                         className={`action-btn ${mode === 'compress' ? 'primary' : 'secondary'}`}
                         onClick={() => setMode('compress')}
                     >
                         <Minimize2 size={18} />
-                        压缩
+                        {t('toolPages.jsonFormatter.compress')}
                     </button>
                 </div>
             </div>

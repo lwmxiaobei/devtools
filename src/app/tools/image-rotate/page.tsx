@@ -6,6 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, RotateCw, RotateCcw, Settings } fr
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function ImageRotatePage() {
     const [originalImage, setOriginalImage] = useState<string | null>(null);
@@ -14,6 +16,9 @@ export default function ImageRotatePage() {
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const presetAngles = [
         { label: '90°', value: 90 },
@@ -48,7 +53,7 @@ export default function ImageRotatePage() {
 
     const processImage = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
 
@@ -60,7 +65,7 @@ export default function ImageRotatePage() {
             setRotation(0);
         };
         reader.readAsDataURL(file);
-    }, [showToast]);
+    }, [showToast, language]);
 
     const handleRotate = useCallback((degrees: number) => {
         if (!originalImage) return;
@@ -93,8 +98,8 @@ export default function ImageRotatePage() {
         link.download = `rotated_${rotation}deg_${Date.now()}.png`;
         link.href = rotatedImage;
         link.click();
-        showToast('图片已下载');
-    }, [rotatedImage, rotation, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+    }, [rotatedImage, rotation, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -112,7 +117,7 @@ export default function ImageRotatePage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">图片旋转</h1>
+                    <h1 className="tool-title">{t('toolPages.imageRotate.title')}</h1>
                 </div>
 
                 {!originalImage && (
@@ -133,8 +138,8 @@ export default function ImageRotatePage() {
                         <div className="image-tool-upload-icon rotate">
                             <RotateCw size={40} strokeWidth={1.5} />
                         </div>
-                        <p className="upload-text">点击或拖拽图片到此处上传</p>
-                        <p className="upload-hint">支持 JPG、PNG、GIF 等格式</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
                     </div>
                 )}
 
@@ -145,34 +150,34 @@ export default function ImageRotatePage() {
                             <div className="image-tool-panel-header rotate">
                                 <h3>
                                     <Settings size={20} />
-                                    旋转控制
+                                    {t('toolPages.imageRotate.controls')}
                                 </h3>
                             </div>
                             <div className="image-tool-panel-body">
                                 {/* 快速旋转 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">快速旋转</div>
+                                    <div className="image-tool-card-title">{t('toolPages.imageRotate.quickRotate')}</div>
                                     <div className="rotate-button-group">
                                         <button
                                             className="rotate-button"
                                             onClick={() => handleRotate(-90)}
                                         >
                                             <RotateCcw size={24} />
-                                            逆时针 90°
+                                            {t('toolPages.imageRotate.ccw')}
                                         </button>
                                         <button
                                             className="rotate-button cw"
                                             onClick={() => handleRotate(90)}
                                         >
                                             <RotateCw size={24} />
-                                            顺时针 90°
+                                            {t('toolPages.imageRotate.cw')}
                                         </button>
                                     </div>
                                 </div>
 
                                 {/* 预设角度 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">预设角度</div>
+                                    <div className="image-tool-card-title">{t('toolPages.imageRotate.preset')}</div>
                                     <div className="preset-angle-group">
                                         {presetAngles.map(angle => (
                                             <button
@@ -188,7 +193,7 @@ export default function ImageRotatePage() {
                                     {/* 自定义角度滑块 */}
                                     <div className="angle-slider-container">
                                         <div className="angle-slider-header">
-                                            <span className="angle-slider-label">自定义角度</span>
+                                            <span className="angle-slider-label">{t('toolPages.imageRotate.custom')}</span>
                                             <span className="angle-slider-value">{rotation}°</span>
                                         </div>
                                         <div className="angle-slider-wrap">
@@ -220,15 +225,15 @@ export default function ImageRotatePage() {
                         {/* 右侧预览区域 */}
                         <div className="image-tool-preview">
                             <div className="image-tool-preview-header">
-                                <h3>预览效果</h3>
+                                <h3>{t('toolPages.imageRotate.preview')}</h3>
                                 <div className="image-tool-actions">
                                     <button className="image-tool-btn secondary" onClick={clearAll}>
                                         <Trash2 size={16} />
-                                        重新选择
+                                        {t('toolPages.common.reselect')}
                                     </button>
                                     <button className="image-tool-btn primary rotate" onClick={downloadImage}>
                                         <Download size={16} />
-                                        下载图片
+                                        {t('toolPages.imageRotate.download')}
                                     </button>
                                 </div>
                             </div>

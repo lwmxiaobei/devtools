@@ -6,12 +6,17 @@ import { ArrowLeft, Copy, Palette } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function ColorConverterPage() {
     const [hex, setHex] = useState('#10b981');
     const [rgb, setRgb] = useState({ r: 16, g: 185, b: 129 });
     const [hsl, setHsl] = useState({ h: 160, s: 84, l: 39 });
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const hexToRgb = (hex: string) => {
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -116,7 +121,7 @@ export default function ColorConverterPage() {
 
     const copyToClipboard = async (text: string) => {
         await navigator.clipboard.writeText(text);
-        showToast('已复制到剪贴板');
+        showToast(t('toolPages.common.copied'));
     };
 
     return (
@@ -128,7 +133,7 @@ export default function ColorConverterPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">颜色转换</h1>
+                    <h1 className="tool-title">{t('toolPages.colorConverter.title')}</h1>
                 </div>
 
                 <div className="single-panel">
@@ -147,7 +152,7 @@ export default function ColorConverterPage() {
 
                     {/* 颜色选择器 */}
                     <div className="input-group">
-                        <label className="input-label">颜色选择器</label>
+                        <label className="input-label">{t('toolPages.colorConverter.colorPreview')}</label>
                         <input
                             type="color"
                             value={hex}

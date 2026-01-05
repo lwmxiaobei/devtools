@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, Wand2 } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 type Language = 'javascript' | 'css' | 'html' | 'sql';
 
@@ -15,6 +17,9 @@ export default function CodeFormatterPage() {
     const [language, setLanguage] = useState<Language>('javascript');
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language: userLanguage } = useLanguage();
+
+    const t = (key: string) => getTranslation(userLanguage, key);
 
     const formatCode = () => {
         try {
@@ -38,7 +43,7 @@ export default function CodeFormatterPage() {
             setOutput(formatted);
             setError('');
         } catch (e) {
-            setError(`格式化错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.codeFormatter.formatError')}: ${(e as Error).message}`);
             setOutput('');
         }
     };
@@ -110,7 +115,7 @@ export default function CodeFormatterPage() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -136,7 +141,7 @@ export default function CodeFormatterPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">代码格式化</h1>
+                    <h1 className="tool-title">{t('toolPages.codeFormatter.title')}</h1>
                 </div>
 
                 <div className="options-grid" style={{ marginBottom: '20px' }}>
@@ -154,17 +159,17 @@ export default function CodeFormatterPage() {
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入代码</span>
+                            <span className="editor-title">{t('toolPages.codeFormatter.inputCode')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder={`请输入 ${language.toUpperCase()} 代码...`}
+                            placeholder={t('toolPages.codeFormatter.inputPlaceholder').replace('{language}', language.toUpperCase())}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -172,17 +177,17 @@ export default function CodeFormatterPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">格式化结果</span>
+                            <span className="editor-title">{t('toolPages.codeFormatter.formatResult')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder="格式化后的代码将显示在这里"
+                            placeholder={t('toolPages.codeFormatter.resultPlaceholder')}
                             value={output}
                             readOnly
                         />
@@ -203,7 +208,7 @@ export default function CodeFormatterPage() {
                 <div className="action-row">
                     <button className="action-btn primary" onClick={formatCode}>
                         <Wand2 size={18} />
-                        格式化
+                        {t('toolPages.codeFormatter.format')}
                     </button>
                 </div>
             </div>

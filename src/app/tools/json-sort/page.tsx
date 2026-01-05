@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 type SortOrder = 'asc' | 'desc';
 
@@ -35,6 +37,9 @@ export default function JsonSortPage() {
     const [sortOrder, setSortOrder] = useState<SortOrder>('asc');
     const [recursive, setRecursive] = useState(true);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     useEffect(() => {
         if (!input.trim()) {
@@ -49,7 +54,7 @@ export default function JsonSortPage() {
             setOutput(JSON.stringify(sorted, null, 2));
             setError('');
         } catch (e) {
-            setError(`JSON格式错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.jsonFormatter.jsonError')}: ${(e as Error).message}`);
             setOutput('');
         }
     }, [input, sortOrder, recursive]);
@@ -57,7 +62,7 @@ export default function JsonSortPage() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -76,7 +81,7 @@ export default function JsonSortPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSON 排序</h1>
+                    <h1 className="tool-title">{t('toolPages.jsonSort.title')}</h1>
                     <span style={{
                         padding: '4px 12px',
                         background: 'var(--primary-light)',
@@ -85,24 +90,24 @@ export default function JsonSortPage() {
                         fontSize: '0.75rem',
                         fontWeight: 500,
                     }}>
-                        实时
+                        {t('toolPages.common.realtime')}
                     </span>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 JSON</span>
+                            <span className="editor-title">{t('toolPages.jsonSort.inputJson')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder='请输入 JSON，例如：{"b": 2, "a": 1, "c": 3}'
+                            placeholder={t('toolPages.jsonFormatter.inputPlaceholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -110,11 +115,11 @@ export default function JsonSortPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">排序结果</span>
+                            <span className="editor-title">{t('toolPages.jsonSort.sortResult')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -126,7 +131,7 @@ export default function JsonSortPage() {
                                 color: error ? '#ef4444' : 'inherit',
                             }}
                         >
-                            {error || output || '排序后的结果将显示在这里'}
+                            {error || output || t('toolPages.jsonFormatter.emptyResult')}
                         </pre>
                     </div>
                 </div>
@@ -137,21 +142,21 @@ export default function JsonSortPage() {
                         onClick={() => setSortOrder('asc')}
                     >
                         <ArrowUp size={18} />
-                        升序 A-Z
+                        {t('toolPages.jsonSort.ascending')} A-Z
                     </button>
                     <button
                         className={`action-btn ${sortOrder === 'desc' ? 'primary' : 'secondary'}`}
                         onClick={() => setSortOrder('desc')}
                     >
                         <ArrowDown size={18} />
-                        降序 Z-A
+                        {t('toolPages.jsonSort.descending')} Z-A
                     </button>
                     <button
                         className={`action-btn ${recursive ? 'primary' : 'secondary'}`}
                         onClick={() => setRecursive(!recursive)}
                     >
                         <ArrowUpDown size={18} />
-                        {recursive ? '递归排序已开启' : '递归排序已关闭'}
+                        {recursive ? 'Recursion: ON' : 'Recursion: OFF'}
                     </button>
                 </div>
             </div>

@@ -6,6 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, Lock, Unlock, Maximize2, Settings,
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function ImageResizePage() {
     const [originalImage, setOriginalImage] = useState<string | null>(null);
@@ -18,6 +20,9 @@ export default function ImageResizePage() {
     const [isDragging, setIsDragging] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const presetSizes = [
         { label: '50%', factor: 0.5 },
@@ -29,7 +34,7 @@ export default function ImageResizePage() {
 
     const processImage = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
 
@@ -47,7 +52,7 @@ export default function ImageResizePage() {
             img.src = e.target?.result as string;
         };
         reader.readAsDataURL(file);
-    }, [showToast]);
+    }, [showToast, language]);
 
     const applyResize = useCallback((width: number, height: number) => {
         if (!originalImage) return;
@@ -120,8 +125,8 @@ export default function ImageResizePage() {
         link.download = `resized_${newWidth}x${newHeight}_${Date.now()}.png`;
         link.href = resizedImage;
         link.click();
-        showToast('图片已下载');
-    }, [resizedImage, newWidth, newHeight, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+    }, [resizedImage, newWidth, newHeight, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -147,7 +152,7 @@ export default function ImageResizePage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">缩放图片</h1>
+                    <h1 className="tool-title">{t('toolPages.imageResize.title')}</h1>
                 </div>
 
                 {!originalImage && (
@@ -168,8 +173,8 @@ export default function ImageResizePage() {
                         <div className="image-tool-upload-icon resize">
                             <Maximize2 size={40} strokeWidth={1.5} />
                         </div>
-                        <p className="upload-text">点击或拖拽图片到此处上传</p>
-                        <p className="upload-hint">支持 JPG、PNG、GIF 等格式</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
                     </div>
                 )}
 
@@ -180,13 +185,13 @@ export default function ImageResizePage() {
                             <div className="image-tool-panel-header resize-panel-header">
                                 <h3>
                                     <Settings size={20} />
-                                    尺寸调整
+                                    {t('toolPages.imageResize.settings')}
                                 </h3>
                             </div>
                             <div className="image-tool-panel-body">
                                 {/* 原始尺寸 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">原始尺寸</div>
+                                    <div className="image-tool-card-title">{t('toolPages.imageResize.originalSize')}</div>
                                     <div className="resize-original-size">
                                         <span className="resize-original-size-value">
                                             {originalSize.width} × {originalSize.height} px
@@ -196,7 +201,7 @@ export default function ImageResizePage() {
 
                                 {/* 预设比例 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">快速缩放</div>
+                                    <div className="image-tool-card-title">{t('toolPages.imageResize.quickScale')}</div>
                                     <div className="resize-preset-group">
                                         {presetSizes.map((preset, index) => (
                                             <button
@@ -212,7 +217,7 @@ export default function ImageResizePage() {
                                     {/* 自定义尺寸 */}
                                     <div className="resize-size-controls">
                                         <div className="resize-size-input-group">
-                                            <label className="resize-size-label">宽度 (px)</label>
+                                            <label className="resize-size-label">{t('toolPages.imageResize.width')} (px)</label>
                                             <input
                                                 type="number"
                                                 value={newWidth}
@@ -226,14 +231,14 @@ export default function ImageResizePage() {
                                             <button
                                                 className={`resize-lock-btn ${lockRatio ? 'active' : ''}`}
                                                 onClick={() => setLockRatio(!lockRatio)}
-                                                title={lockRatio ? '解锁比例' : '锁定比例'}
+                                                title={lockRatio ? t('toolPages.imageResize.unlockRatio') : t('toolPages.imageResize.lockRatio')}
                                             >
                                                 {lockRatio ? <Lock size={18} /> : <Unlock size={18} />}
                                             </button>
                                         </div>
 
                                         <div className="resize-size-input-group">
-                                            <label className="resize-size-label">高度 (px)</label>
+                                            <label className="resize-size-label">{t('toolPages.imageResize.height')} (px)</label>
                                             <input
                                                 type="number"
                                                 value={newHeight}
@@ -246,7 +251,7 @@ export default function ImageResizePage() {
 
                                     {/* 新尺寸显示 */}
                                     <div className="resize-new-size">
-                                        <span className="resize-new-size-label">输出尺寸</span>
+                                        <span className="resize-new-size-label">{t('toolPages.imageResize.outputSize')}</span>
                                         <ArrowRight size={16} className="resize-new-size-arrow" />
                                         <span className="resize-new-size-value">
                                             {newWidth} × {newHeight} px
@@ -254,7 +259,7 @@ export default function ImageResizePage() {
                                     </div>
 
                                     <div className="resize-scale-info">
-                                        当前缩放比例: <span className="resize-scale-percent">{getScalePercent()}%</span>
+                                        {t('toolPages.imageResize.currentScale')}: <span className="resize-scale-percent">{getScalePercent()}%</span>
                                     </div>
                                 </div>
                             </div>
@@ -263,15 +268,15 @@ export default function ImageResizePage() {
                         {/* 右侧预览区域 */}
                         <div className="image-tool-preview">
                             <div className="image-tool-preview-header">
-                                <h3>预览效果</h3>
+                                <h3>{t('toolPages.imageResize.preview')}</h3>
                                 <div className="image-tool-actions">
                                     <button className="image-tool-btn secondary" onClick={clearAll}>
                                         <Trash2 size={16} />
-                                        重新选择
+                                        {t('toolPages.common.reselect')}
                                     </button>
                                     <button className="image-tool-btn primary resize" onClick={downloadImage}>
                                         <Download size={16} />
-                                        下载图片
+                                        {t('toolPages.imageResize.download')}
                                     </button>
                                 </div>
                             </div>

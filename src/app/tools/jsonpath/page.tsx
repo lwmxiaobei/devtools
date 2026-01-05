@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, Search, Play } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 // 简单的 JSONPath 实现
 function evaluateJSONPath(obj: unknown, path: string): unknown[] {
@@ -55,10 +57,13 @@ export default function JsonPathPage() {
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const executeQuery = () => {
         if (!jsonInput.trim()) {
-            setError('请输入 JSON');
+            setError(t('toolPages.jsonFormatter.inputPlaceholder'));
             setOutput('');
             return;
         }
@@ -69,7 +74,7 @@ export default function JsonPathPage() {
             setOutput(JSON.stringify(results, null, 2));
             setError('');
         } catch (e) {
-            setError(`错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.common.invalidInput')}: ${(e as Error).message}`);
             setOutput('');
         }
     };
@@ -77,7 +82,7 @@ export default function JsonPathPage() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -89,9 +94,9 @@ export default function JsonPathPage() {
     };
 
     const examples = [
-        { path: '$.store.book[*].title', desc: '所有书籍标题' },
-        { path: '$.store.book[0]', desc: '第一本书' },
-        { path: '$.*', desc: '根级别所有属性' },
+        { path: '$.store.book[*].title', desc: 'Book Titles' },
+        { path: '$.store.book[0]', desc: 'First Book' },
+        { path: '$.*', desc: 'Root Properties' },
     ];
 
     return (
@@ -103,7 +108,7 @@ export default function JsonPathPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSONPath 查询</h1>
+                    <h1 className="tool-title">{t('toolPages.jsonpath.title')}</h1>
                 </div>
 
                 <div style={{ marginBottom: '16px' }}>
@@ -115,7 +120,7 @@ export default function JsonPathPage() {
                     }}>
                         <Search size={16} style={{ color: 'var(--text-muted)' }} />
                         <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-                            JSONPath 表达式：
+                            {t('toolPages.jsonpath.jsonpathExpression')}：
                         </span>
                     </div>
                     <div style={{ display: 'flex', gap: '8px' }}>
@@ -137,7 +142,7 @@ export default function JsonPathPage() {
                         />
                         <button className="action-btn primary" onClick={executeQuery}>
                             <Play size={18} />
-                            执行查询
+                            {t('toolPages.jsonpath.query')}
                         </button>
                     </div>
                     <div style={{
@@ -169,17 +174,17 @@ export default function JsonPathPage() {
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 JSON</span>
+                            <span className="editor-title">{t('toolPages.jsonpath.inputJson')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder={'请输入 JSON，例如：\n{\n  "store": {\n    "book": [\n      {"title": "书籍A"},\n      {"title": "书籍B"}\n    ]\n  }\n}'}
+                            placeholder={t('toolPages.jsonFormatter.inputPlaceholder')}
                             value={jsonInput}
                             onChange={(e) => setJsonInput(e.target.value)}
                         />
@@ -187,11 +192,11 @@ export default function JsonPathPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">查询结果</span>
+                            <span className="editor-title">{t('toolPages.jsonpath.queryResult')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -203,7 +208,7 @@ export default function JsonPathPage() {
                                 color: error ? '#ef4444' : 'inherit',
                             }}
                         >
-                            {error || output || '查询结果将显示在这里'}
+                            {error || output || t('toolPages.jsonFormatter.emptyResult')}
                         </pre>
                     </div>
                 </div>

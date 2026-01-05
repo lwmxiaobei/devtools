@@ -5,10 +5,15 @@ import Link from 'next/link';
 import { ArrowLeft, Trash2, GitCompare } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function TextDiffPage() {
     const [text1, setText1] = useState('');
     const [text2, setText2] = useState('');
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const diff = useMemo(() => {
         if (!text1 && !text2) return [];
@@ -84,23 +89,23 @@ export default function TextDiffPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">文本对比</h1>
+                    <h1 className="tool-title">{t('toolPages.textDiff.title')}</h1>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">原始文本</span>
+                            <span className="editor-title">{t('toolPages.textDiff.originalText')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder="请输入原始文本..."
+                            placeholder={language === 'zh' ? '请输入原始文本...' : 'Enter original text...'}
                             value={text1}
                             onChange={(e) => setText1(e.target.value)}
                         />
@@ -108,11 +113,11 @@ export default function TextDiffPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">对比文本</span>
+                            <span className="editor-title">{t('toolPages.textDiff.modifiedText')}</span>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder="请输入要对比的文本..."
+                            placeholder={language === 'zh' ? '请输入要对比的文本...' : 'Enter text to compare...'}
                             value={text2}
                             onChange={(e) => setText2(e.target.value)}
                         />
@@ -134,19 +139,19 @@ export default function TextDiffPage() {
                         }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                                 <GitCompare size={20} color="var(--primary)" />
-                                <span style={{ fontWeight: 600 }}>对比结果:</span>
+                                <span style={{ fontWeight: 600 }}>{t('toolPages.textDiff.diffResult')}:</span>
                             </div>
                             <div style={{ color: 'var(--text-secondary)' }}>
-                                相同 <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{stats.same}</span> 行
+                                {t('toolPages.textDiff.unchanged')} <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{stats.same}</span> {language === 'zh' ? '行' : 'lines'}
                             </div>
                             <div style={{ color: '#22c55e' }}>
-                                新增 <span style={{ fontWeight: 600 }}>{stats.added}</span> 行
+                                {t('toolPages.textDiff.added')} <span style={{ fontWeight: 600 }}>{stats.added}</span> {language === 'zh' ? '行' : 'lines'}
                             </div>
                             <div style={{ color: '#ef4444' }}>
-                                删除 <span style={{ fontWeight: 600 }}>{stats.removed}</span> 行
+                                {t('toolPages.textDiff.removed')} <span style={{ fontWeight: 600 }}>{stats.removed}</span> {language === 'zh' ? '行' : 'lines'}
                             </div>
                             <div style={{ color: '#f59e0b' }}>
-                                修改 <span style={{ fontWeight: 600 }}>{stats.changed}</span> 行
+                                {language === 'zh' ? '修改' : 'Changed'} <span style={{ fontWeight: 600 }}>{stats.changed}</span> {language === 'zh' ? '行' : 'lines'}
                             </div>
                         </div>
 
@@ -166,8 +171,8 @@ export default function TextDiffPage() {
                                 fontWeight: 600,
                                 fontSize: '0.9rem',
                             }}>
-                                <div>原始文本</div>
-                                <div>对比文本</div>
+                                <div>{t('toolPages.textDiff.originalText')}</div>
+                                <div>{t('toolPages.textDiff.modifiedText')}</div>
                             </div>
                             <div style={{ maxHeight: '400px', overflow: 'auto' }}>
                                 {diff.map((d, i) => (

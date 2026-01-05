@@ -6,12 +6,17 @@ import { ArrowLeft, Copy, Trash2, Minimize2, Maximize2 } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function JsonCompressPage() {
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const escapeJson = () => {
         try {
@@ -40,7 +45,7 @@ export default function JsonCompressPage() {
             }
             setError('');
         } catch (e) {
-            setError(`解析错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.common.decodeError')}: ${(e as Error).message}`);
             setOutput('');
         }
     };
@@ -51,7 +56,7 @@ export default function JsonCompressPage() {
             setOutput(JSON.stringify(parsed));
             setError('');
         } catch (e) {
-            setError(`JSON格式错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.jsonFormatter.jsonError')}: ${(e as Error).message}`);
             setOutput('');
         }
     };
@@ -59,7 +64,7 @@ export default function JsonCompressPage() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -78,23 +83,23 @@ export default function JsonCompressPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSON 压缩转义</h1>
+                    <h1 className="tool-title">{t('toolPages.jsonCompress.title')}</h1>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入</span>
+                            <span className="editor-title">{t('toolPages.jsonCompress.inputJson')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder="请输入JSON或需要转义/反转义的字符串"
+                            placeholder={t('toolPages.jsonFormatter.inputPlaceholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -102,17 +107,17 @@ export default function JsonCompressPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输出结果</span>
+                            <span className="editor-title">{t('toolPages.common.outputResult')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder="处理结果将显示在这里"
+                            placeholder={t('toolPages.jsonFormatter.emptyResult')}
                             value={output}
                             readOnly
                         />
@@ -133,14 +138,14 @@ export default function JsonCompressPage() {
                 <div className="action-row">
                     <button className="action-btn primary" onClick={compressJson}>
                         <Minimize2 size={18} />
-                        压缩JSON
+                        {t('toolPages.jsonCompress.compress')}
                     </button>
                     <button className="action-btn secondary" onClick={escapeJson}>
-                        转义
+                        {t('toolPages.jsonCompress.escape')}
                     </button>
                     <button className="action-btn secondary" onClick={unescapeJson}>
                         <Maximize2 size={18} />
-                        反转义
+                        {t('toolPages.jsonCompress.unescape')}
                     </button>
                 </div>
             </div>

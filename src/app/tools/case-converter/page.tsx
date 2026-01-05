@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, RotateCw } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 type CaseType = 'camel' | 'snake' | 'pascal' | 'kebab' | 'upper' | 'lower' | 'constant';
 
@@ -21,6 +23,9 @@ export default function CaseConverterPage() {
         constant: '',
     });
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const splitWords = (str: string): string[] => {
         // 处理各种格式的输入
@@ -83,7 +88,7 @@ export default function CaseConverterPage() {
 
     const copyToClipboard = async (text: string) => {
         await navigator.clipboard.writeText(text);
-        showToast('已复制到剪贴板');
+        showToast(t('toolPages.common.copied'));
     };
 
     const clearAll = () => {
@@ -100,13 +105,13 @@ export default function CaseConverterPage() {
     };
 
     const caseTypes: { id: CaseType; name: string; example: string }[] = [
-        { id: 'camel', name: '驼峰命名', example: 'helloWorld' },
-        { id: 'pascal', name: '帕斯卡命名', example: 'HelloWorld' },
-        { id: 'snake', name: '下划线命名', example: 'hello_world' },
-        { id: 'kebab', name: '短横线命名', example: 'hello-world' },
-        { id: 'constant', name: '常量命名', example: 'HELLO_WORLD' },
-        { id: 'upper', name: '全大写', example: 'HELLO WORLD' },
-        { id: 'lower', name: '全小写', example: 'hello world' },
+        { id: 'camel', name: t('toolPages.caseConverter.camelCase'), example: 'helloWorld' },
+        { id: 'pascal', name: t('toolPages.caseConverter.pascalCase'), example: 'HelloWorld' },
+        { id: 'snake', name: t('toolPages.caseConverter.snakeCase'), example: 'hello_world' },
+        { id: 'kebab', name: t('toolPages.caseConverter.kebabCase'), example: 'hello-world' },
+        { id: 'constant', name: t('toolPages.caseConverter.upperCase'), example: 'HELLO_WORLD' },
+        { id: 'upper', name: t('toolPages.caseConverter.upperCase'), example: 'HELLO WORLD' },
+        { id: 'lower', name: t('toolPages.caseConverter.lowerCase'), example: 'hello world' },
     ];
 
     return (
@@ -118,16 +123,16 @@ export default function CaseConverterPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">大小写转换</h1>
+                    <h1 className="tool-title">{t('toolPages.caseConverter.title')}</h1>
                 </div>
 
                 <div className="single-panel">
                     <div className="input-group">
-                        <label className="input-label">输入文本</label>
+                        <label className="input-label">{t('toolPages.caseConverter.inputText')}</label>
                         <input
                             type="text"
                             className="input-field"
-                            placeholder="例如: hello_world, helloWorld, HelloWorld..."
+                            placeholder={language === 'zh' ? '例如: hello_world, helloWorld, HelloWorld...' : 'e.g.: hello_world, helloWorld, HelloWorld...'}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -136,11 +141,11 @@ export default function CaseConverterPage() {
                     <div className="action-row" style={{ marginBottom: '24px' }}>
                         <button className="action-btn primary" onClick={convert}>
                             <RotateCw size={18} />
-                            转换
+                            {t('toolPages.common.convert')}
                         </button>
                         <button className="action-btn secondary" onClick={clearAll}>
                             <Trash2 size={18} />
-                            清空
+                            {t('toolPages.common.clear')}
                         </button>
                     </div>
 

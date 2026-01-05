@@ -6,22 +6,27 @@ import { ArrowLeft } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function TimestampPage() {
     const [currentTimestamp, setCurrentTimestamp] = useState(0);
     const [isRunning, setIsRunning] = useState(true);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     // 第一行：时间戳转日期
     const [timestamp1, setTimestamp1] = useState('');
-    const [unit1, setUnit1] = useState('秒');
+    const [unit1, setUnit1] = useState('seconds');
     const [result1, setResult1] = useState('');
 
     // 第二行：日期转时间戳
     const [datetime2, setDatetime2] = useState('');
     const [result2, setResult2] = useState('');
-    const [unit2, setUnit2] = useState('秒');
+    const [unit2, setUnit2] = useState('seconds');
 
     // 第三行：年月日时分秒转时间戳
     const [year, setYear] = useState(new Date().getFullYear().toString());
@@ -31,7 +36,7 @@ export default function TimestampPage() {
     const [minute, setMinute] = useState('');
     const [second, setSecond] = useState('');
     const [result3, setResult3] = useState('');
-    const [unit3, setUnit3] = useState('秒');
+    const [unit3, setUnit3] = useState('seconds');
 
     useEffect(() => {
         const updateCurrentTime = () => {
@@ -75,27 +80,27 @@ export default function TimestampPage() {
         try {
             const input = timestamp1.trim();
             if (!input) {
-                setResult1('请输入时间戳');
+                setResult1(t('toolPages.common.enterTimestamp'));
                 return;
             }
             let ts = parseInt(input, 10);
             if (isNaN(ts)) {
-                setResult1('无效的时间戳');
+                setResult1(t('toolPages.common.invalidTimestamp'));
                 return;
             }
             // 如果选择的是秒，转换为毫秒
-            if (unit1 === '秒') {
+            if (unit1 === 'seconds') {
                 ts = ts * 1000;
             }
             const date = new Date(ts);
             // 检查日期是否有效
             if (isNaN(date.getTime())) {
-                setResult1('无效的时间戳');
+                setResult1(t('toolPages.common.invalidTimestamp'));
                 return;
             }
             setResult1(formatDate(date));
         } catch {
-            setResult1('无效的时间戳');
+            setResult1(t('toolPages.common.invalidTimestamp'));
         }
     };
 
@@ -126,13 +131,13 @@ export default function TimestampPage() {
         try {
             const date = parseDateTime(datetime2);
             if (!date) {
-                setResult2('无效的日期时间');
+                setResult2(t('toolPages.common.invalidDatetime'));
                 return;
             }
-            const ts = unit2 === '秒' ? Math.floor(date.getTime() / 1000) : date.getTime();
+            const ts = unit2 === 'seconds' ? Math.floor(date.getTime() / 1000) : date.getTime();
             setResult2(ts.toString());
         } catch {
-            setResult2('无效的日期时间');
+            setResult2(t('toolPages.common.invalidDatetime'));
         }
     };
 
@@ -147,13 +152,13 @@ export default function TimestampPage() {
             const s = parseInt(second) || 0;
             const date = new Date(y, m - 1, d, h, min, s);
             if (isNaN(date.getTime())) {
-                setResult3('无效的日期时间');
+                setResult3(t('toolPages.common.invalidDatetime'));
                 return;
             }
-            const ts = unit3 === '秒' ? Math.floor(date.getTime() / 1000) : date.getTime();
+            const ts = unit3 === 'seconds' ? Math.floor(date.getTime() / 1000) : date.getTime();
             setResult3(ts.toString());
         } catch {
-            setResult3('无效的日期时间');
+            setResult3(t('toolPages.common.invalidDatetime'));
         }
     };
 
@@ -218,10 +223,10 @@ export default function TimestampPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">Unix 时间戳转换</h1>
+                    <h1 className="tool-title">{t('toolPages.timestamp.title')}</h1>
                 </div>
 
-                <div className="single-panel">
+                <div className="single-panel" style={{ maxWidth: '100%' }}>
                     {/* 当前时间戳显示 */}
                     <div style={{
                         display: 'flex',
@@ -232,7 +237,7 @@ export default function TimestampPage() {
                         flexWrap: 'wrap',
                     }}>
                         <span style={{ color: 'var(--text-secondary)', fontSize: '14px' }}>
-                            现在的Unix时间戳(Unix timestamp)是：
+                            {t('toolPages.timestamp.currentTimestamp')}
                         </span>
                         <span style={{
                             fontFamily: 'JetBrains Mono, monospace',
@@ -243,15 +248,15 @@ export default function TimestampPage() {
                             {currentTimestamp}
                         </span>
                         <div style={{ display: 'flex', gap: '8px' }}>
-                            <button style={btnStyle} onClick={handleStart}>开始</button>
-                            <button style={btnStyle} onClick={handleStop}>停止</button>
-                            <button style={btnStyle} onClick={handleRefresh}>刷新</button>
+                            <button style={btnStyle} onClick={handleStart}>{t('toolPages.timestamp.start')}</button>
+                            <button style={btnStyle} onClick={handleStop}>{t('toolPages.timestamp.stop')}</button>
+                            <button style={btnStyle} onClick={handleRefresh}>{t('toolPages.timestamp.refresh')}</button>
                         </div>
                     </div>
 
                     {/* 第一行：时间戳转日期 */}
                     <div style={rowStyle}>
-                        <span style={labelStyle}>Unix时间戳（Unix timestamp）</span>
+                        <span style={labelStyle}>{t('toolPages.timestamp.timestampLabel')}</span>
                         <input
                             type="text"
                             style={{ ...inputStyle, width: '180px' }}
@@ -260,22 +265,22 @@ export default function TimestampPage() {
                             placeholder={currentTimestamp.toString()}
                         />
                         <select style={selectStyle} value={unit1} onChange={(e) => setUnit1(e.target.value)}>
-                            <option value="秒">秒</option>
-                            <option value="毫秒">毫秒</option>
+                            <option value="seconds">{t('toolPages.common.seconds')}</option>
+                            <option value="milliseconds">{t('toolPages.common.milliseconds')}</option>
                         </select>
-                        <button style={btnStyle} onClick={convertTimestampToDate}>转换</button>
+                        <button style={btnStyle} onClick={convertTimestampToDate}>{t('toolPages.timestamp.convertToDate')}</button>
                         <input
                             type="text"
                             style={{ ...inputStyle, width: '200px' }}
                             value={result1}
                             readOnly
-                            placeholder="转换结果"
+                            placeholder={t('toolPages.timestamp.convertResult')}
                         />
                     </div>
 
                     {/* 第二行：日期转时间戳 */}
                     <div style={rowStyle}>
-                        <span style={labelStyle}>时间（年/月/日 时:分:秒）</span>
+                        <span style={labelStyle}>{t('toolPages.timestamp.datetimeLabel')}</span>
                         <input
                             type="text"
                             style={{ ...inputStyle, width: '180px' }}
@@ -283,88 +288,88 @@ export default function TimestampPage() {
                             onChange={(e) => setDatetime2(e.target.value)}
                             placeholder="2026-01-04 12:00:00"
                         />
-                        <button style={btnStyle} onClick={convertDateToTimestamp}>转换成Unix时间戳</button>
+                        <button style={btnStyle} onClick={convertDateToTimestamp}>{t('toolPages.timestamp.convertToTimestamp')}</button>
                         <input
                             type="text"
                             style={{ ...inputStyle, width: '180px' }}
                             value={result2}
                             readOnly
-                            placeholder="转换结果"
+                            placeholder={t('toolPages.timestamp.convertResult')}
                         />
                         <select style={selectStyle} value={unit2} onChange={(e) => setUnit2(e.target.value)}>
-                            <option value="秒">秒</option>
-                            <option value="毫秒">毫秒</option>
+                            <option value="seconds">{t('toolPages.common.seconds')}</option>
+                            <option value="milliseconds">{t('toolPages.common.milliseconds')}</option>
                         </select>
                     </div>
 
                     {/* 第三行：年月日时分秒转时间戳 */}
                     <div style={rowStyle}>
-                        <span style={labelStyle}>时间</span>
+                        <span style={labelStyle}>{t('toolPages.timestamp.timeLabel')}</span>
                         <input
                             type="text"
                             style={smallInputStyle}
                             value={year}
                             onChange={(e) => setYear(e.target.value)}
-                            placeholder="年"
+                            placeholder={t('toolPages.timestamp.year')}
                         />
-                        <span>年</span>
+                        <span>{t('toolPages.timestamp.year')}</span>
                         <input
                             type="text"
                             style={smallInputStyle}
                             value={month}
                             onChange={(e) => setMonth(e.target.value)}
-                            placeholder="月"
+                            placeholder={t('toolPages.timestamp.month')}
                         />
-                        <span>月</span>
+                        <span>{t('toolPages.timestamp.month')}</span>
                         <input
                             type="text"
                             style={smallInputStyle}
                             value={day}
                             onChange={(e) => setDay(e.target.value)}
-                            placeholder="日"
+                            placeholder={t('toolPages.timestamp.day')}
                         />
-                        <span>日</span>
+                        <span>{t('toolPages.timestamp.day')}</span>
                         <input
                             type="text"
                             style={smallInputStyle}
                             value={hour}
                             onChange={(e) => setHour(e.target.value)}
-                            placeholder="时"
+                            placeholder={t('toolPages.timestamp.hour')}
                         />
-                        <span>时</span>
+                        <span>{t('toolPages.timestamp.hour')}</span>
                         <input
                             type="text"
                             style={smallInputStyle}
                             value={minute}
                             onChange={(e) => setMinute(e.target.value)}
-                            placeholder="分"
+                            placeholder={t('toolPages.timestamp.minute')}
                         />
-                        <span>分</span>
+                        <span>{t('toolPages.timestamp.minute')}</span>
                         <input
                             type="text"
                             style={smallInputStyle}
                             value={second}
                             onChange={(e) => setSecond(e.target.value)}
-                            placeholder="秒"
+                            placeholder={t('toolPages.timestamp.second')}
                         />
-                        <span>秒</span>
-                        <button style={btnStyle} onClick={convertFieldsToTimestamp}>转换Unix时间戳</button>
+                        <span>{t('toolPages.timestamp.second')}</span>
+                        <button style={btnStyle} onClick={convertFieldsToTimestamp}>{t('toolPages.timestamp.convertToTimestampShort')}</button>
                         <input
                             type="text"
                             style={{ ...inputStyle, width: '180px' }}
                             value={result3}
                             readOnly
-                            placeholder="转换结果"
+                            placeholder={t('toolPages.timestamp.convertResult')}
                         />
                         <select style={selectStyle} value={unit3} onChange={(e) => setUnit3(e.target.value)}>
-                            <option value="秒">秒</option>
-                            <option value="毫秒">毫秒</option>
+                            <option value="seconds">{t('toolPages.common.seconds')}</option>
+                            <option value="milliseconds">{t('toolPages.common.milliseconds')}</option>
                         </select>
                     </div>
                 </div>
 
                 {/* 编程语言代码示例 */}
-                <div className="single-panel" style={{ marginTop: '24px' }}>
+                <div className="single-panel" style={{ marginTop: '24px', maxWidth: '100%' }}>
                     {/* 获取当前时间戳 */}
                     <h3 style={{
                         color: 'var(--primary)',
@@ -372,7 +377,7 @@ export default function TimestampPage() {
                         marginBottom: '16px',
                         fontWeight: 600
                     }}>
-                        如何在不同编程语言中获取现在的Unix时间戳(Unix timestamp)?
+                        {t('toolPages.timestamp.getTimestampTitle')}
                     </h3>
                     <table style={{
                         width: '100%',
@@ -395,7 +400,7 @@ export default function TimestampPage() {
                                 { lang: 'SQL Server', code: "SELECT DATEDIFF(s, '1970-01-01 00:00:00', GETUTCDATE())" },
                                 { lang: 'Unix / Linux', code: 'date +%s' },
                                 { lang: 'VBScript / ASP', code: 'DateDiff("s", "01/01/1970 00:00:00", Now())' },
-                                { lang: '其他操作系统\n(如果Perl被安装在系统中)', code: '命令行状态：perl -e "print time"' },
+                                { lang: t('toolPages.timestamp.otherOS'), code: `${t('toolPages.timestamp.commandLine')}perl -e "print time"` },
                             ].map((item, i) => (
                                 <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                                     <td style={{
@@ -424,7 +429,7 @@ export default function TimestampPage() {
                         marginBottom: '16px',
                         fontWeight: 600
                     }}>
-                        如何在不同编程语言中实现Unix时间戳(Unix timestamp) → 普通时间?
+                        {t('toolPages.timestamp.timestampToDateTitle')}
                     </h3>
                     <table style={{
                         width: '100%',
@@ -445,7 +450,7 @@ export default function TimestampPage() {
                                 { lang: 'Ruby', code: 'Time.at(Unix timestamp)' },
                                 { lang: 'SQL Server', code: "DATEADD(s, Unix timestamp, '1970-01-01 00:00:00')" },
                                 { lang: 'VBScript / ASP', code: 'DateAdd("s", Unix timestamp, "01/01/1970 00:00:00")' },
-                                { lang: '其他操作系统\n(如果Perl被安装在系统中)', code: '命令行状态：perl -e "print scalar(localtime(Unix timestamp))"' },
+                                { lang: t('toolPages.timestamp.otherOS'), code: `${t('toolPages.timestamp.commandLine')}perl -e "print scalar(localtime(Unix timestamp))"` },
                             ].map((item, i) => (
                                 <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                                     <td style={{
@@ -474,7 +479,7 @@ export default function TimestampPage() {
                         marginBottom: '16px',
                         fontWeight: 600
                     }}>
-                        如何在不同编程语言中实现普通时间 → Unix时间戳(Unix timestamp)?
+                        {t('toolPages.timestamp.dateToTimestampTitle')}
                     </h3>
                     <table style={{
                         width: '100%',

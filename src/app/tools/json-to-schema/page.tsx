@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2 } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 interface JsonSchema {
     $schema?: string;
@@ -86,6 +88,9 @@ export default function JsonToSchemaPage() {
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     useEffect(() => {
         if (!input.trim()) {
@@ -100,15 +105,15 @@ export default function JsonToSchemaPage() {
             setOutput(JSON.stringify(schema, null, 2));
             setError('');
         } catch (e) {
-            setError(`JSON 格式错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.jsonFormatter.formatError')}: ${(e as Error).message}`);
             setOutput('');
         }
-    }, [input]);
+    }, [input, language]);
 
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -127,7 +132,7 @@ export default function JsonToSchemaPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSON 转 JSON Schema</h1>
+                    <h1 className="tool-title">{t('toolPages.jsonToSchema.title')}</h1>
                     <span style={{
                         padding: '4px 12px',
                         background: 'var(--primary-light)',
@@ -136,24 +141,24 @@ export default function JsonToSchemaPage() {
                         fontSize: '0.75rem',
                         fontWeight: 500,
                     }}>
-                        实时
+                        {t('toolPages.common.realtime')}
                     </span>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 JSON</span>
+                            <span className="editor-title">{t('toolPages.jsonToSchema.input')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder={'请输入 JSON，例如：\n{\n  "name": "张三",\n  "age": 25,\n  "email": "test@example.com",\n  "tags": ["developer", "designer"]\n}'}
+                            placeholder={t('toolPages.jsonToSchema.placeholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -161,11 +166,11 @@ export default function JsonToSchemaPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">JSON Schema</span>
+                            <span className="editor-title">{t('toolPages.jsonToSchema.output')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -177,7 +182,7 @@ export default function JsonToSchemaPage() {
                                 color: error ? '#ef4444' : 'inherit',
                             }}
                         >
-                            {error || output || 'JSON Schema 将显示在这里'}
+                            {error || output || t('toolPages.jsonToSchema.outputPlaceholder')}
                         </pre>
                     </div>
                 </div>
@@ -189,17 +194,17 @@ export default function JsonToSchemaPage() {
                     borderRadius: 'var(--radius)',
                     border: '1px solid var(--border)',
                 }}>
-                    <h3 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>关于 JSON Schema</h3>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>{t('toolPages.jsonToSchema.aboutTitle')}</h3>
                     <ul style={{
                         margin: 0,
                         paddingLeft: '20px',
                         fontSize: '0.85rem',
                         color: 'var(--text-secondary)',
                     }}>
-                        <li>JSON Schema 是用于验证 JSON 数据结构的规范</li>
-                        <li>自动检测字符串格式（日期、邮箱、URL等）</li>
-                        <li>支持嵌套对象和数组</li>
-                        <li>生成的 Schema 遵循 draft-07 规范</li>
+                        <li>{t('toolPages.jsonToSchema.aboutItem1')}</li>
+                        <li>{t('toolPages.jsonToSchema.aboutItem2')}</li>
+                        <li>{t('toolPages.jsonToSchema.aboutItem3')}</li>
+                        <li>{t('toolPages.jsonToSchema.aboutItem4')}</li>
                     </ul>
                 </div>
             </div>

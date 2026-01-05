@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2, Play } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 function sqlToJson(sql: string): string {
     const lines = sql.trim().split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('--'));
@@ -88,10 +90,13 @@ export default function SqlToJsonPage() {
     const [output, setOutput] = useState('');
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const convert = () => {
         if (!input.trim()) {
-            setError('请输入 SQL');
+            setError(t('toolPages.sqlToJson.inputSql'));
             setOutput('');
             return;
         }
@@ -101,7 +106,7 @@ export default function SqlToJsonPage() {
             setOutput(json);
             setError('');
         } catch (e) {
-            setError(`转换错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.common.convert')}${t('toolPages.common.error')}: ${(e as Error).message}`);
             setOutput('');
         }
     };
@@ -109,7 +114,7 @@ export default function SqlToJsonPage() {
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -128,39 +133,39 @@ export default function SqlToJsonPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">SQL 转 JSON</h1>
+                    <h1 className="tool-title">{t('toolPages.sqlToJson.title')}</h1>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 SQL</span>
+                            <span className="editor-title">{t('toolPages.sqlToJson.input')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder={"请输入 SQL 语句，支持：\n\n1. INSERT 语句：\nINSERT INTO users (name, age) VALUES ('张三', 25);\n\n2. CREATE TABLE 语句：\nCREATE TABLE users (id INT, name VARCHAR(50));\n\n3. 查询结果表格格式：\n| id | name  |\n|----|-------|\n| 1  | 张三  |"}
+                            placeholder={t('toolPages.sqlToJson.placeholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
                         <button className="action-btn primary" onClick={convert} style={{ margin: '16px' }}>
                             <Play size={18} />
-                            转换
+                            {t('toolPages.common.convert')}
                         </button>
                     </div>
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">JSON 输出</span>
+                            <span className="editor-title">{t('toolPages.sqlToJson.output')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -172,7 +177,7 @@ export default function SqlToJsonPage() {
                                 color: error ? '#ef4444' : 'inherit',
                             }}
                         >
-                            {error || output || 'JSON 结果将显示在这里'}
+                            {error || output || t('toolPages.sqlToJson.outputPlaceholder')}
                         </pre>
                     </div>
                 </div>

@@ -7,6 +7,8 @@ import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
 import { jsPDF } from 'jspdf';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 interface ImageItem {
     id: string;
@@ -22,6 +24,9 @@ export default function ImageToPdfPage() {
     const [orientation, setOrientation] = useState<'portrait' | 'landscape'>('portrait');
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const addImages = useCallback((files: FileList) => {
         const validFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
@@ -62,7 +67,7 @@ export default function ImageToPdfPage() {
 
     const generatePdf = useCallback(async () => {
         if (images.length === 0) {
-            showToast('请先添加图片');
+            showToast(t('toolPages.imageToPdf.noImages'));
             return;
         }
 
@@ -108,14 +113,14 @@ export default function ImageToPdfPage() {
             }
 
             pdf.save(`images_${Date.now()}.pdf`);
-            showToast('PDF已生成');
+            showToast(t('toolPages.imageToPdf.success'));
         } catch (error) {
-            showToast('PDF生成失败');
+            showToast(t('toolPages.imageToPdf.error'));
             console.error(error);
         }
 
         setIsProcessing(false);
-    }, [images, pageSize, orientation, showToast]);
+    }, [images, pageSize, orientation, showToast, language]);
 
     const clearAll = useCallback(() => {
         setImages([]);
@@ -131,7 +136,7 @@ export default function ImageToPdfPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">图片转PDF</h1>
+                    <h1 className="tool-title">{t('toolPages.imageToPdf.title')}</h1>
                 </div>
 
                 <div className="image-tool-layout">
@@ -140,18 +145,18 @@ export default function ImageToPdfPage() {
                         <div className="image-tool-panel-header imgpdf">
                             <h3>
                                 <Settings size={20} />
-                                PDF设置
+                                {t('toolPages.imageToPdf.settings')}
                             </h3>
                         </div>
                         <div className="image-tool-panel-body">
                             {/* 页面尺寸 */}
                             <div className="image-tool-card">
-                                <div className="image-tool-card-title">页面尺寸</div>
+                                <div className="image-tool-card-title">{t('toolPages.imageToPdf.pageSize')}</div>
                                 <div className="imgpdf-option-btns">
                                     {[
                                         { value: 'a4', label: 'A4' },
                                         { value: 'letter', label: 'Letter' },
-                                        { value: 'fit', label: '适应' },
+                                        { value: 'fit', label: t('toolPages.imageToPdf.fit') },
                                     ].map((item) => (
                                         <button
                                             key={item.value}
@@ -166,19 +171,19 @@ export default function ImageToPdfPage() {
 
                             {/* 页面方向 */}
                             <div className="image-tool-card">
-                                <div className="image-tool-card-title">页面方向</div>
+                                <div className="image-tool-card-title">{t('toolPages.imageToPdf.orientation')}</div>
                                 <div className="imgpdf-option-btns">
                                     <button
                                         className={`imgpdf-option-btn ${orientation === 'portrait' ? 'active' : ''}`}
                                         onClick={() => setOrientation('portrait')}
                                     >
-                                        纵向
+                                        {t('toolPages.imageToPdf.portrait')}
                                     </button>
                                     <button
                                         className={`imgpdf-option-btn ${orientation === 'landscape' ? 'active' : ''}`}
                                         onClick={() => setOrientation('landscape')}
                                     >
-                                        横向
+                                        {t('toolPages.imageToPdf.landscape')}
                                     </button>
                                 </div>
                             </div>
@@ -190,7 +195,7 @@ export default function ImageToPdfPage() {
                                     onClick={() => fileInputRef.current?.click()}
                                 >
                                     <Plus size={18} />
-                                    添加图片
+                                    {t('toolPages.imageToPdf.addImages')}
                                 </button>
                                 <input
                                     ref={fileInputRef}
@@ -206,7 +211,7 @@ export default function ImageToPdfPage() {
                                 <div className="image-tool-card">
                                     <button className="imgpdf-clear-btn" onClick={clearAll}>
                                         <Trash2 size={16} />
-                                        清空全部
+                                        {t('toolPages.common.clearAll')}
                                     </button>
                                 </div>
                             )}
@@ -216,7 +221,7 @@ export default function ImageToPdfPage() {
                     {/* 右侧预览区域 */}
                     <div className="image-tool-preview">
                         <div className="image-tool-preview-header">
-                            <h3>图片列表 {images.length > 0 && `(${images.length}张)`}</h3>
+                            <h3>{t('toolPages.imageToPdf.imageList')} {images.length > 0 && `(${images.length})`}</h3>
                             <div className="image-tool-actions">
                                 <button
                                     className="image-tool-btn primary imgpdf"
@@ -226,12 +231,12 @@ export default function ImageToPdfPage() {
                                     {isProcessing ? (
                                         <>
                                             <div className="btn-spinner"></div>
-                                            生成中...
+                                            {t('toolPages.imageToPdf.generating')}
                                         </>
                                     ) : (
                                         <>
                                             <Download size={16} />
-                                            生成PDF
+                                            {t('toolPages.imageToPdf.downloadPdf')}
                                         </>
                                     )}
                                 </button>
@@ -247,8 +252,8 @@ export default function ImageToPdfPage() {
                                     onClick={() => fileInputRef.current?.click()}
                                 >
                                     <Upload size={40} strokeWidth={1.5} />
-                                    <p>点击或拖拽图片到此处添加</p>
-                                    <span>支持多张图片，可以拖动调整顺序</span>
+                                    <p>{t('toolPages.imageToPdf.dropzoneText')}</p>
+                                    <span>{t('toolPages.imageToPdf.dropzoneHint')}</span>
                                 </div>
                             ) : (
                                 <div
@@ -264,7 +269,12 @@ export default function ImageToPdfPage() {
                                             </div>
                                             <div className="imgpdf-item-info">
                                                 <span className="imgpdf-item-name">{img.name}</span>
-                                                <span className="imgpdf-item-page">第 {index + 1} 页</span>
+                                                <span className="imgpdf-item-page">
+                                                    {language === 'zh'
+                                                        ? `第 ${index + 1} 页`
+                                                        : `Page ${index + 1}`
+                                                    }
+                                                </span>
                                             </div>
                                             <div className="imgpdf-item-actions">
                                                 {index > 0 && (

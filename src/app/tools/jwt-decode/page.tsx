@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2 } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 function base64UrlDecode(str: string): string {
     let base64 = str.replace(/-/g, '+').replace(/_/g, '/');
@@ -33,72 +35,9 @@ interface DecodedJwt {
     isValid: boolean;
 }
 
-const claimDescriptions: Record<string, string> = {
-    iss: '签发者 (Issuer)',
-    sub: '主题 (Subject)',
-    aud: '受众 (Audience)',
-    exp: '过期时间 (Expiration Time)',
-    nbf: '生效时间 (Not Before)',
-    iat: '签发时间 (Issued At)',
-    jti: 'JWT ID',
-    name: '名称',
-    email: '邮箱',
-    role: '角色',
-    admin: '管理员',
-};
-
 function formatTimestamp(value: number): string {
     const date = new Date(value * 1000);
-    return date.toLocaleString('zh-CN', {
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-    });
-}
-
-function decodeJwtDetailed(token: string): DecodedJwt | null {
-    const parts = token.split('.');
-    if (parts.length !== 3) {
-        return null;
-    }
-
-    try {
-        const headerRaw = base64UrlDecode(parts[0]);
-        const payloadRaw = base64UrlDecode(parts[1]);
-        const headerDecoded = JSON.parse(headerRaw);
-        const payloadDecoded = JSON.parse(payloadRaw);
-
-        const claims: { name: string; value: string; description: string }[] = [];
-        for (const [key, value] of Object.entries(payloadDecoded)) {
-            let displayValue = String(value);
-            if ((key === 'exp' || key === 'iat' || key === 'nbf') && typeof value === 'number') {
-                displayValue = `${value} (${formatTimestamp(value)})`;
-            }
-            claims.push({
-                name: key,
-                value: displayValue,
-                description: claimDescriptions[key] || '自定义字段',
-            });
-        }
-
-        // 检查是否过期
-        let isValid = true;
-        if (payloadDecoded.exp) {
-            isValid = payloadDecoded.exp * 1000 > Date.now();
-        }
-
-        return {
-            header: { raw: parts[0], decoded: headerDecoded },
-            payload: { raw: parts[1], decoded: payloadDecoded, claims },
-            signature: parts[2],
-            isValid,
-        };
-    } catch {
-        return null;
-    }
+    return date.toLocaleString();
 }
 
 export default function JwtDecodePage() {
@@ -106,6 +45,65 @@ export default function JwtDecodePage() {
     const [decoded, setDecoded] = useState<DecodedJwt | null>(null);
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
+
+    const claimDescriptions: Record<string, string> = {
+        iss: t('toolPages.jwtDecode.claims.iss'),
+        sub: t('toolPages.jwtDecode.claims.sub'),
+        aud: t('toolPages.jwtDecode.claims.aud'),
+        exp: t('toolPages.jwtDecode.claims.exp'),
+        nbf: t('toolPages.jwtDecode.claims.nbf'),
+        iat: t('toolPages.jwtDecode.claims.iat'),
+        jti: t('toolPages.jwtDecode.claims.jti'),
+        name: t('toolPages.jwtDecode.claims.name'),
+        email: t('toolPages.jwtDecode.claims.email'),
+        role: t('toolPages.jwtDecode.claims.role'),
+        admin: t('toolPages.jwtDecode.claims.admin'),
+    };
+
+    function decodeJwtDetailed(token: string): DecodedJwt | null {
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+            return null;
+        }
+
+        try {
+            const headerRaw = base64UrlDecode(parts[0]);
+            const payloadRaw = base64UrlDecode(parts[1]);
+            const headerDecoded = JSON.parse(headerRaw);
+            const payloadDecoded = JSON.parse(payloadRaw);
+
+            const claims: { name: string; value: string; description: string }[] = [];
+            for (const [key, value] of Object.entries(payloadDecoded)) {
+                let displayValue = String(value);
+                if ((key === 'exp' || key === 'iat' || key === 'nbf') && typeof value === 'number') {
+                    displayValue = `${value} (${formatTimestamp(value)})`;
+                }
+                claims.push({
+                    name: key,
+                    value: displayValue,
+                    description: claimDescriptions[key] || t('toolPages.jwtDecode.claims.custom'),
+                });
+            }
+
+            // 检查是否过期
+            let isValid = true;
+            if (payloadDecoded.exp) {
+                isValid = payloadDecoded.exp * 1000 > Date.now();
+            }
+
+            return {
+                header: { raw: parts[0], decoded: headerDecoded },
+                payload: { raw: parts[1], decoded: payloadDecoded, claims },
+                signature: parts[2],
+                isValid,
+            };
+        } catch {
+            return null;
+        }
+    }
 
     useEffect(() => {
         if (!input.trim()) {
@@ -119,14 +117,14 @@ export default function JwtDecodePage() {
             setDecoded(result);
             setError('');
         } else {
-            setError('无效的 JWT Token 格式');
+            setError(t('toolPages.jwt.invalidToken'));
             setDecoded(null);
         }
-    }, [input]);
+    }, [input, language]); // Added language dependecy to re-render claims descriptions
 
     const copyToClipboard = async (text: string) => {
         await navigator.clipboard.writeText(text);
-        showToast('已复制到剪贴板');
+        showToast(t('toolPages.common.copied'));
     };
 
     const clearAll = () => {
@@ -144,7 +142,7 @@ export default function JwtDecodePage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JWT 解密 高精度版</h1>
+                    <h1 className="tool-title">{t('toolPages.jwtDecode.title')}</h1>
                     <span style={{
                         padding: '4px 12px',
                         background: 'var(--primary-light)',
@@ -153,7 +151,7 @@ export default function JwtDecodePage() {
                         fontSize: '0.75rem',
                         fontWeight: 500,
                     }}>
-                        实时
+                        {t('toolPages.common.realtime')}
                     </span>
                 </div>
 
@@ -164,13 +162,13 @@ export default function JwtDecodePage() {
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder="请输入 JWT Token"
+                            placeholder={t('toolPages.jwt.inputToken')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             style={{ minHeight: '100px' }}
@@ -198,7 +196,7 @@ export default function JwtDecodePage() {
                                 color: decoded.isValid ? '#16a34a' : '#dc2626',
                             }}>
                                 <span style={{ fontWeight: 600 }}>
-                                    {decoded.isValid ? '✓ Token 有效' : '✗ Token 已过期'}
+                                    {decoded.isValid ? `✓ ${t('toolPages.jwtDecode.valid')}` : `✗ ${t('toolPages.jwtDecode.invalid')}`}
                                 </span>
                             </div>
 
@@ -217,7 +215,7 @@ export default function JwtDecodePage() {
                                     background: '#fef2f2',
                                     borderBottom: '1px solid var(--border)',
                                 }}>
-                                    <span style={{ fontWeight: 600, color: '#ef4444' }}>Header (头部)</span>
+                                    <span style={{ fontWeight: 600, color: '#ef4444' }}>Header ({t('toolPages.jwtDecode.header')})</span>
                                     <button className="editor-btn" onClick={() => copyToClipboard(JSON.stringify(decoded.header.decoded, null, 2))}>
                                         <Copy size={14} />
                                     </button>
@@ -248,7 +246,7 @@ export default function JwtDecodePage() {
                                     background: '#f3e8ff',
                                     borderBottom: '1px solid var(--border)',
                                 }}>
-                                    <span style={{ fontWeight: 600, color: '#a855f7' }}>Payload (载荷)</span>
+                                    <span style={{ fontWeight: 600, color: '#a855f7' }}>Payload ({t('toolPages.jwtDecode.payload')})</span>
                                     <button className="editor-btn" onClick={() => copyToClipboard(JSON.stringify(decoded.payload.decoded, null, 2))}>
                                         <Copy size={14} />
                                     </button>
@@ -257,9 +255,9 @@ export default function JwtDecodePage() {
                                     <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.85rem' }}>
                                         <thead>
                                             <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                                                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600 }}>字段</th>
-                                                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600 }}>值</th>
-                                                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600 }}>说明</th>
+                                                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600 }}>{t('toolPages.jwtDecode.field')}</th>
+                                                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600 }}>{t('toolPages.jwtDecode.value')}</th>
+                                                <th style={{ textAlign: 'left', padding: '8px', fontWeight: 600 }}>{t('toolPages.jwtDecode.description')}</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -293,7 +291,7 @@ export default function JwtDecodePage() {
                                     background: '#dbeafe',
                                     borderBottom: '1px solid var(--border)',
                                 }}>
-                                    <span style={{ fontWeight: 600, color: '#3b82f6' }}>Signature (签名)</span>
+                                    <span style={{ fontWeight: 600, color: '#3b82f6' }}>Signature ({t('toolPages.jwtDecode.signature')})</span>
                                 </div>
                                 <pre style={{
                                     margin: 0,
@@ -312,7 +310,7 @@ export default function JwtDecodePage() {
                             textAlign: 'center',
                             color: 'var(--text-muted)',
                         }}>
-                            输入 JWT Token 后将显示详细解析结果
+                            {t('toolPages.jwtDecode.waiting')}
                         </div>
                     )}
                 </div>

@@ -6,6 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, Sparkles, Info, Settings } from 'l
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 // Constants for watermark removal
 const ALPHA_THRESHOLD = 0.002;
@@ -101,6 +103,9 @@ export default function GeminiWatermarkPage() {
     const [alphaMaps, setAlphaMaps] = useState<{ bg48: Float32Array | null; bg96: Float32Array | null }>({ bg48: null, bg96: null });
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     // Load alpha maps from pre-captured images on mount
     useEffect(() => {
@@ -148,16 +153,16 @@ export default function GeminiWatermarkPage() {
                 });
             } catch (error) {
                 console.error('Failed to load alpha maps:', error);
-                showToast('加载水印模板失败');
+                showToast(t('toolPages.geminiWatermark.loadError'));
             }
         };
 
         loadAlphaMaps();
-    }, [showToast]);
+    }, [showToast, language]);
 
     const processImage = useCallback(async (file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
 
@@ -184,7 +189,7 @@ export default function GeminiWatermarkPage() {
                     const alphaMap = config.logoSize === 48 ? alphaMaps.bg48 : alphaMaps.bg96;
 
                     if (!alphaMap) {
-                        showToast('水印模板尚未加载完成，请稍后重试');
+                        showToast(t('toolPages.geminiWatermark.notReady'));
                         setIsProcessing(false);
                         return;
                     }
@@ -201,21 +206,21 @@ export default function GeminiWatermarkPage() {
 
                     setProcessedImage(canvas.toDataURL('image/png'));
                     setIsProcessing(false);
-                    showToast('水印去除成功！');
+                    showToast(t('toolPages.geminiWatermark.success'));
                 };
                 img.onerror = () => {
-                    showToast('图片加载失败');
+                    showToast(t('toolPages.geminiWatermark.imageLoadError'));
                     setIsProcessing(false);
                 };
                 img.src = imgSrc;
             } catch (error) {
                 console.error('Processing error:', error);
-                showToast('处理失败');
+                showToast(t('toolPages.geminiWatermark.processError'));
                 setIsProcessing(false);
             }
         };
         reader.readAsDataURL(file);
-    }, [alphaMaps, showToast]);
+    }, [alphaMaps, showToast, language]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -235,8 +240,8 @@ export default function GeminiWatermarkPage() {
         link.download = `no_watermark_${Date.now()}.png`;
         link.href = processedImage;
         link.click();
-        showToast('图片已下载');
-    }, [processedImage, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+    }, [processedImage, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -254,7 +259,7 @@ export default function GeminiWatermarkPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">去Gemini水印</h1>
+                    <h1 className="tool-title">{t('toolPages.geminiWatermark.title')}</h1>
                 </div>
 
                 {!originalImage && (
@@ -275,8 +280,8 @@ export default function GeminiWatermarkPage() {
                         <div className="image-tool-upload-icon gemini">
                             <Sparkles size={40} strokeWidth={1.5} />
                         </div>
-                        <p className="upload-text">点击或拖拽图片到此处上传</p>
-                        <p className="upload-hint">支持 Gemini AI 生成的 JPG、PNG 等格式图片</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.geminiWatermark.uploadHint')}</p>
                     </div>
                 )}
 
@@ -287,7 +292,7 @@ export default function GeminiWatermarkPage() {
                             <div className="image-tool-panel-header gemini">
                                 <h3>
                                     <Settings size={20} />
-                                    处理信息
+                                    {t('toolPages.geminiWatermark.processInfo')}
                                 </h3>
                             </div>
                             <div className="image-tool-panel-body">
@@ -295,41 +300,46 @@ export default function GeminiWatermarkPage() {
                                 <div className="image-tool-card">
                                     <div className="image-tool-card-title">
                                         <Info size={16} />
-                                        水印检测
+                                        {t('toolPages.geminiWatermark.watermarkDetect')}
                                     </div>
                                     {watermarkInfo ? (
                                         <div className="watermark-info">
                                             <div className="info-row">
-                                                <span className="info-label">水印尺寸:</span>
+                                                <span className="info-label">{t('toolPages.geminiWatermark.watermarkSize')}:</span>
                                                 <span className="info-value">{watermarkInfo.size}×{watermarkInfo.size}</span>
                                             </div>
                                             <div className="info-row">
-                                                <span className="info-label">位置:</span>
+                                                <span className="info-label">{t('toolPages.geminiWatermark.position')}:</span>
                                                 <span className="info-value">({watermarkInfo.position.x}, {watermarkInfo.position.y})</span>
                                             </div>
                                         </div>
                                     ) : (
                                         <div className="watermark-info">
-                                            <span className="info-loading">检测中...</span>
+                                            <span className="info-loading">{t('toolPages.geminiWatermark.detecting')}</span>
                                         </div>
                                     )}
                                 </div>
 
                                 {/* 状态显示 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">处理状态</div>
+                                    <div className="image-tool-card-title">{t('toolPages.geminiWatermark.status')}</div>
                                     <div className={`flip-status-badge ${processedImage ? 'active' : ''}`}>
-                                        {isProcessing ? '处理中...' : processedImage ? '已去除水印' : '待处理'}
+                                        {isProcessing
+                                            ? t('toolPages.common.processing')
+                                            : processedImage
+                                                ? t('toolPages.geminiWatermark.removed')
+                                                : t('toolPages.geminiWatermark.pending')
+                                        }
                                     </div>
                                 </div>
 
                                 {/* 算法说明 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">算法说明</div>
+                                    <div className="image-tool-card-title">{t('toolPages.geminiWatermark.algorithm')}</div>
                                     <div className="algorithm-info">
-                                        <p>使用反向 Alpha 混合算法数学精确还原原始像素。</p>
+                                        <p>{t('toolPages.geminiWatermark.algoDesc')}</p>
                                         <p style={{ marginTop: '8px', fontSize: '12px', opacity: 0.7 }}>
-                                            100% 客户端处理，图片不会上传到服务器。
+                                            {t('toolPages.geminiWatermark.privacy')}
                                         </p>
                                     </div>
                                 </div>
@@ -339,11 +349,11 @@ export default function GeminiWatermarkPage() {
                         {/* 右侧预览区域 */}
                         <div className="image-tool-preview">
                             <div className="image-tool-preview-header">
-                                <h3>预览效果</h3>
+                                <h3>{t('toolPages.geminiWatermark.preview')}</h3>
                                 <div className="image-tool-actions">
                                     <button className="image-tool-btn secondary" onClick={clearAll}>
                                         <Trash2 size={16} />
-                                        重新选择
+                                        {t('toolPages.common.reselect')}
                                     </button>
                                     <button
                                         className="image-tool-btn primary gemini"
@@ -351,14 +361,14 @@ export default function GeminiWatermarkPage() {
                                         disabled={!processedImage}
                                     >
                                         <Download size={16} />
-                                        下载图片
+                                        {t('toolPages.common.download')}
                                     </button>
                                 </div>
                             </div>
                             <div className="image-tool-preview-body">
                                 <div className="image-compare-container">
                                     <div className="image-compare-item">
-                                        <div className="image-compare-label">原图</div>
+                                        <div className="image-compare-label">{t('toolPages.geminiWatermark.original')}</div>
                                         <div className="image-tool-preview-bg">
                                             <img
                                                 src={originalImage}
@@ -368,7 +378,7 @@ export default function GeminiWatermarkPage() {
                                         </div>
                                     </div>
                                     <div className="image-compare-item">
-                                        <div className="image-compare-label">去水印后</div>
+                                        <div className="image-compare-label">{t('toolPages.geminiWatermark.after')}</div>
                                         <div className="image-tool-preview-bg">
                                             {processedImage ? (
                                                 <img
@@ -381,10 +391,10 @@ export default function GeminiWatermarkPage() {
                                                     {isProcessing ? (
                                                         <div className="processing-spinner">
                                                             <Sparkles size={32} className="spin" />
-                                                            <span>处理中...</span>
+                                                            <span>{t('toolPages.common.processing')}</span>
                                                         </div>
                                                     ) : (
-                                                        <span>等待处理</span>
+                                                        <span>{t('toolPages.geminiWatermark.waiting')}</span>
                                                     )}
                                                 </div>
                                             )}

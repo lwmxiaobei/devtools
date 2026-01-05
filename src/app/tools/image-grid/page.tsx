@@ -7,6 +7,8 @@ import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
 import JSZip from 'jszip';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 interface GridCell {
     index: number;
@@ -21,10 +23,13 @@ export default function ImageGridPage() {
     const [isProcessing, setIsProcessing] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     const processImage = useCallback((file: File) => {
         if (!file.type.startsWith('image/')) {
-            showToast('请上传图片文件');
+            showToast(t('toolPages.common.uploadError'));
             return;
         }
 
@@ -84,7 +89,7 @@ export default function ImageGridPage() {
         };
 
         reader.readAsDataURL(file);
-    }, [showToast]);
+    }, [showToast, language]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -117,8 +122,8 @@ export default function ImageGridPage() {
         link.download = `grid_${cell.index}.png`;
         link.href = cell.dataUrl;
         link.click();
-        showToast(`已下载 grid_${cell.index}.png`);
-    }, [showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', `grid_${cell.index}.png`));
+    }, [showToast, language]);
 
     const downloadAll = useCallback(async () => {
         if (gridCells.length !== 9) return;
@@ -136,8 +141,8 @@ export default function ImageGridPage() {
         link.href = URL.createObjectURL(content);
         link.click();
         URL.revokeObjectURL(link.href);
-        showToast('已下载 grid_images.zip');
-    }, [gridCells, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'grid_images.zip'));
+    }, [gridCells, showToast, language]);
 
     const clearAll = useCallback(() => {
         setOriginalImage(null);
@@ -156,7 +161,7 @@ export default function ImageGridPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">制作九宫格</h1>
+                    <h1 className="tool-title">{t('toolPages.imageGrid.title')}</h1>
                 </div>
 
                 {/* Upload Area */}
@@ -176,8 +181,8 @@ export default function ImageGridPage() {
                             style={{ display: 'none' }}
                         />
                         <Upload size={48} strokeWidth={1.5} />
-                        <p className="upload-text">点击或拖拽图片到此处上传</p>
-                        <p className="upload-hint">支持 JPG、PNG、GIF 等格式</p>
+                        <p className="upload-text">{t('toolPages.common.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.common.uploadHint')}</p>
                     </div>
                 )}
 
@@ -185,7 +190,7 @@ export default function ImageGridPage() {
                 {isProcessing && (
                     <div className="processing-indicator">
                         <div className="spinner"></div>
-                        <p>正在处理图片...</p>
+                        <p>{t('toolPages.common.processing')}</p>
                     </div>
                 )}
 
@@ -200,7 +205,7 @@ export default function ImageGridPage() {
                                         <button
                                             className="cell-download-btn"
                                             onClick={() => downloadSingle(cell)}
-                                            title="下载此图片"
+                                            title={t('toolPages.imageGrid.downloadSingle')}
                                         >
                                             <Download size={20} />
                                         </button>
@@ -213,11 +218,11 @@ export default function ImageGridPage() {
                         <div className="action-row">
                             <button className="action-btn secondary" onClick={clearAll}>
                                 <Trash2 size={18} />
-                                重新选择
+                                {t('toolPages.common.reselect')}
                             </button>
                             <button className="action-btn primary" onClick={downloadAll}>
                                 <Package size={18} />
-                                一键下载全部 (ZIP)
+                                {t('toolPages.imageGrid.downloadAll')}
                             </button>
                         </div>
                     </>

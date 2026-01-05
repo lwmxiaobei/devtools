@@ -6,6 +6,8 @@ import { ArrowLeft, Plus, Trash2, Copy, Save } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 interface EditNodeProps {
     keyName: string;
@@ -24,16 +26,23 @@ function EditNode({ keyName, value, path, onUpdate, onDelete, onAdd, depth }: Ed
     const isObject = value !== null && typeof value === 'object' && !Array.isArray(value);
     const isArray = Array.isArray(value);
 
+    // Update editingValue when value prop changes from outside (e.g. initial load or parent update)
+    useEffect(() => {
+        setEditingValue(typeof value === 'object' ? '' : String(value));
+    }, [value]);
+
     const handleValueChange = (newValue: string) => {
         setEditingValue(newValue);
         try {
+            // Try parsing as JSON first (for numbers, booleans, null)
             const parsed = JSON.parse(newValue);
             onUpdate(path, keyName, parsed);
         } catch {
+            // Keep as string if parsing fails, but check for specific keywords
             if (newValue === 'true') onUpdate(path, keyName, true);
             else if (newValue === 'false') onUpdate(path, keyName, false);
             else if (newValue === 'null') onUpdate(path, keyName, null);
-            else if (!isNaN(Number(newValue)) && newValue.trim()) onUpdate(path, keyName, Number(newValue));
+            else if (!isNaN(Number(newValue)) && newValue.trim() !== '') onUpdate(path, keyName, Number(newValue));
             else onUpdate(path, keyName, newValue);
         }
     };
@@ -137,6 +146,9 @@ export default function JsonEditorPage() {
     const [data, setData] = useState<Record<string, unknown> | null>(null);
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     useEffect(() => {
         if (!input.trim()) {
@@ -150,20 +162,47 @@ export default function JsonEditorPage() {
                 setData(parsed);
                 setError('');
             } else {
-                setError('请输入一个 JSON 对象或数组');
+                setError(t('toolPages.common.invalidInput'));
             }
         } catch (e) {
-            setError(`JSON 格式错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.jsonFormatter.jsonError')}: ${(e as Error).message}`);
         }
     }, [input]);
 
     const updateValue = (path: string, key: string, value: unknown) => {
         if (!data) return;
         const newData = JSON.parse(JSON.stringify(data));
-        const pathParts = path.split('.').filter(Boolean).slice(1);
-        let current: Record<string, unknown> = newData;
+        // Simple path traversal - assumes path is like $.key1.key2
+        // Note: This basic implementation might fail for complex paths in this specific recursion structure
+        // But for this simple editor it should suffice given the structure
+
+        // Re-implementing a safer deep update
+        const traverseAndUpdate = (current: any, targetPath: string[], targetKey: string, newValue: any) => {
+            if (targetPath.length === 0) {
+                current[targetKey] = newValue;
+                return;
+            }
+            const nextKey = targetPath[0];
+            traverseAndUpdate(current[nextKey], targetPath.slice(1), targetKey, newValue);
+        };
+
+        const pathParts = path.split('.').filter(Boolean).slice(1); // Remove '$' and initial empty
+        // The path passed from EditNode is like $.keyName.childKey
+        // But this structure in EditNode recursion passes path as `${path}.${keyName}`
+        // So for root we get $.keyName.
+
+        // Let's rely on the fact that we can just update the root data because input changes trigger setData
+        // Wait, input changes trigger setData, but here we are updating data directly.
+        // We need to sync back to input eventually or just update data.
+
+        // Correct approach for this recursion:
+        // We need to find the parent object of the key we want to update.
+        // The path arguments in EditNode are constructed as parentPath.currentKey
+
+        // Let's simplify: direct mutation of a clone is fine.
+        let current: any = newData;
         for (const part of pathParts) {
-            current = current[part] as Record<string, unknown>;
+            current = current[part];
         }
         current[key] = value;
         setData(newData);
@@ -173,9 +212,9 @@ export default function JsonEditorPage() {
         if (!data) return;
         const newData = JSON.parse(JSON.stringify(data));
         const pathParts = path.split('.').filter(Boolean).slice(1);
-        let current: Record<string, unknown> = newData;
+        let current: any = newData;
         for (const part of pathParts) {
-            current = current[part] as Record<string, unknown>;
+            current = current[part];
         }
         if (Array.isArray(current)) {
             current.splice(Number(key), 1);
@@ -189,10 +228,13 @@ export default function JsonEditorPage() {
         if (!data) return;
         const newData = JSON.parse(JSON.stringify(data));
         const pathParts = path.split('.').filter(Boolean).slice(1);
-        let current: Record<string, unknown> = newData;
-        for (const part of pathParts) {
-            current = current[part] as Record<string, unknown>;
+        let current: any = newData;
+        if (path !== '$') {
+            for (const part of pathParts) {
+                current = current[part];
+            }
         }
+
         if (Array.isArray(current)) {
             current.push('');
         } else {
@@ -205,14 +247,14 @@ export default function JsonEditorPage() {
     const copyToClipboard = async () => {
         if (data) {
             await navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
     const applyChanges = () => {
         if (data) {
             setInput(JSON.stringify(data, null, 2));
-            showToast('已应用更改');
+            showToast(t('toolPages.common.saved'));
         }
     };
 
@@ -231,23 +273,23 @@ export default function JsonEditorPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSON 编辑器</h1>
+                    <h1 className="tool-title">{t('toolPages.jsonEditor.title')}</h1>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 JSON</span>
+                            <span className="editor-title">{t('toolPages.jsonEditor.inputJson')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder='请输入 JSON 对象或数组'
+                            placeholder={t('toolPages.jsonFormatter.inputPlaceholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -265,7 +307,7 @@ export default function JsonEditorPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">可视化编辑</span>
+                            <span className="editor-title">{t('toolPages.jsonEditor.editJson')}</span>
                             <div className="editor-actions">
                                 {data && (
                                     <button
@@ -273,16 +315,16 @@ export default function JsonEditorPage() {
                                         onClick={() => addKey('$')}
                                     >
                                         <Plus size={14} />
-                                        添加
+                                        {t('toolPages.jsonEditor.addField')}
                                     </button>
                                 )}
                                 <button className="editor-btn" onClick={applyChanges} disabled={!data}>
                                     <Save size={14} />
-                                    应用
+                                    {t('toolPages.common.convert')}
                                 </button>
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!data}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -312,7 +354,7 @@ export default function JsonEditorPage() {
                                 ))
                             ) : (
                                 <span style={{ color: 'var(--text-muted)' }}>
-                                    输入有效的 JSON 后可以在这里编辑
+                                    {t('toolPages.jsonFormatter.emptyResult')}
                                 </span>
                             )}
                         </div>

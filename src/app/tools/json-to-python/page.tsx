@@ -6,6 +6,8 @@ import { ArrowLeft, Copy, Trash2 } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 function getPythonType(value: unknown): string {
     if (value === null) return 'Optional[Any]';
@@ -134,6 +136,9 @@ export default function JsonToPythonPage() {
     const [useDataclass, setUseDataclass] = useState(true);
     const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     useEffect(() => {
         if (!input.trim()) {
@@ -148,15 +153,15 @@ export default function JsonToPythonPage() {
             setOutput(python);
             setError('');
         } catch (e) {
-            setError(`JSON 格式错误: ${(e as Error).message}`);
+            setError(`${t('toolPages.jsonFormatter.formatError')}: ${(e as Error).message}`);
             setOutput('');
         }
-    }, [input, className, useDataclass]);
+    }, [input, className, useDataclass, language]);
 
     const copyToClipboard = async () => {
         if (output) {
             await navigator.clipboard.writeText(output);
-            showToast('已复制到剪贴板');
+            showToast(t('toolPages.common.copied'));
         }
     };
 
@@ -175,7 +180,7 @@ export default function JsonToPythonPage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">JSON 转 Python 类</h1>
+                    <h1 className="tool-title">{t('toolPages.jsonToPython.title')}</h1>
                     <span style={{
                         padding: '4px 12px',
                         background: 'var(--primary-light)',
@@ -184,7 +189,7 @@ export default function JsonToPythonPage() {
                         fontSize: '0.75rem',
                         fontWeight: 500,
                     }}>
-                        实时
+                        {t('toolPages.common.realtime')}
                     </span>
                 </div>
 
@@ -196,7 +201,7 @@ export default function JsonToPythonPage() {
                     alignItems: 'center',
                 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>类名:</label>
+                        <label style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>{t('toolPages.common.className')}:</label>
                         <input
                             type="text"
                             value={className}
@@ -214,24 +219,24 @@ export default function JsonToPythonPage() {
                         className={`action-btn ${useDataclass ? 'primary' : 'secondary'}`}
                         onClick={() => setUseDataclass(!useDataclass)}
                     >
-                        {useDataclass ? 'dataclass 模式' : '传统类模式'}
+                        {useDataclass ? t('toolPages.jsonToPython.dataclassMode') : t('toolPages.jsonToPython.normalClassMode')}
                     </button>
                 </div>
 
                 <div className="editor-container">
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">输入 JSON</span>
+                            <span className="editor-title">{t('toolPages.jsonToPython.input')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
-                                    清空
+                                    {t('toolPages.common.clear')}
                                 </button>
                             </div>
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder={'请输入 JSON，例如：\n{\n  "id": 1,\n  "userName": "张三",\n  "email": "test@example.com",\n  "isActive": true\n}'}
+                            placeholder={t('toolPages.jsonToPython.placeholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -239,11 +244,11 @@ export default function JsonToPythonPage() {
 
                     <div className="editor-panel">
                         <div className="editor-header">
-                            <span className="editor-title">Python 类</span>
+                            <span className="editor-title">{t('toolPages.jsonToPython.output')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
                                     <Copy size={14} />
-                                    复制
+                                    {t('toolPages.common.copy')}
                                 </button>
                             </div>
                         </div>
@@ -255,7 +260,7 @@ export default function JsonToPythonPage() {
                                 color: error ? '#ef4444' : 'inherit',
                             }}
                         >
-                            {error || output || 'Python 类代码将显示在这里'}
+                            {error || output || t('toolPages.jsonToPython.outputPlaceholder')}
                         </pre>
                     </div>
                 </div>

@@ -6,6 +6,8 @@ import { ArrowLeft, Upload, Download, Trash2, ChevronLeft, ChevronRight, FileIma
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
+import { useLanguage } from '@/components/LanguageContext';
+import { getTranslation } from '@/lib/i18n';
 
 export default function PdfToImagePage() {
     const [pdfFile, setPdfFile] = useState<File | null>(null);
@@ -18,6 +20,9 @@ export default function PdfToImagePage() {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const { toast, showToast, hideToast } = useToast();
     const pdfjsRef = useRef<typeof import('pdfjs-dist') | null>(null);
+    const { language } = useLanguage();
+
+    const t = (key: string) => getTranslation(language, key);
 
     useEffect(() => {
         const loadPdfJs = async () => {
@@ -30,7 +35,7 @@ export default function PdfToImagePage() {
 
     const processPdf = useCallback(async (file: File) => {
         if (!pdfjsRef.current) {
-            showToast('PDF库加载中，请稍后重试');
+            showToast(t('toolPages.pdfToImage.libLoading'));
             return;
         }
 
@@ -67,22 +72,22 @@ export default function PdfToImagePage() {
 
             setImages(convertedImages);
             setCurrentPage(0);
-            showToast(`成功转换 ${pdf.numPages} 页`);
+            showToast(t('toolPages.pdfToImage.success').replace('{count}', pdf.numPages.toString()));
         } catch (error) {
-            showToast('PDF处理失败');
+            showToast(t('toolPages.pdfToImage.error'));
             console.error(error);
         }
 
         setIsProcessing(false);
-    }, [scale, showToast]);
+    }, [scale, showToast, language]);
 
     const handleFileSelect = useCallback((file: File) => {
         if (file.type !== 'application/pdf') {
-            showToast('请上传PDF文件');
+            showToast(t('toolPages.pdfToImage.uploadError'));
             return;
         }
         processPdf(file);
-    }, [processPdf, showToast]);
+    }, [processPdf, showToast, language]);
 
     const handleDrop = useCallback((e: React.DragEvent) => {
         e.preventDefault();
@@ -97,8 +102,8 @@ export default function PdfToImagePage() {
         link.download = `page_${currentPage + 1}_${Date.now()}.png`;
         link.href = images[currentPage];
         link.click();
-        showToast('图片已下载');
-    }, [images, currentPage, showToast]);
+        showToast(t('toolPages.common.downloaded').replace('{name}', 'image'));
+    }, [images, currentPage, showToast, language]);
 
     const downloadAllImages = useCallback(() => {
         if (images.length === 0) return;
@@ -110,8 +115,8 @@ export default function PdfToImagePage() {
                 link.click();
             }, index * 200);
         });
-        showToast('正在下载所有图片...');
-    }, [images, showToast]);
+        showToast(t('toolPages.pdfToImage.downloadingAll'));
+    }, [images, showToast, language]);
 
     const clearAll = useCallback(() => {
         setPdfFile(null);
@@ -130,7 +135,7 @@ export default function PdfToImagePage() {
                     <Link href="/" className="back-btn">
                         <ArrowLeft size={20} />
                     </Link>
-                    <h1 className="tool-title">PDF转图片</h1>
+                    <h1 className="tool-title">{t('toolPages.pdfToImage.title')}</h1>
                 </div>
 
                 {!pdfFile ? (
@@ -151,8 +156,8 @@ export default function PdfToImagePage() {
                         <div className="image-tool-upload-icon pdf">
                             <FileImage size={40} strokeWidth={1.5} />
                         </div>
-                        <p className="upload-text">点击或拖拽PDF文件到此处上传</p>
-                        <p className="upload-hint">支持所有PDF文件格式</p>
+                        <p className="upload-text">{t('toolPages.pdfToImage.uploadText')}</p>
+                        <p className="upload-hint">{t('toolPages.pdfToImage.uploadHint')}</p>
                     </div>
                 ) : (
                     <div className="image-tool-layout">
@@ -161,25 +166,28 @@ export default function PdfToImagePage() {
                             <div className="image-tool-panel-header pdf">
                                 <h3>
                                     <Settings size={20} />
-                                    文件信息
+                                    {t('toolPages.pdfToImage.fileInfo')}
                                 </h3>
                             </div>
                             <div className="image-tool-panel-body">
                                 {/* 文件信息 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">当前文件</div>
+                                    <div className="image-tool-card-title">{t('toolPages.pdfToImage.currentFile')}</div>
                                     <div className="pdf-file-info">
                                         <FileImage size={20} />
                                         <span className="pdf-filename">{pdfFile?.name}</span>
                                     </div>
                                     <div className="pdf-page-count">
-                                        共 <strong>{totalPages}</strong> 页
+                                        {language === 'zh'
+                                            ? <>共 <strong>{totalPages}</strong> 页</>
+                                            : <><strong>{totalPages}</strong> pages total</>
+                                        }
                                     </div>
                                 </div>
 
                                 {/* 缩放设置 */}
                                 <div className="image-tool-card">
-                                    <div className="image-tool-card-title">输出质量</div>
+                                    <div className="image-tool-card-title">{t('toolPages.pdfToImage.outputQuality')}</div>
                                     <div className="pdf-scale-btns">
                                         {[1, 2, 3].map((s) => (
                                             <button
@@ -197,7 +205,7 @@ export default function PdfToImagePage() {
                                 <div className="image-tool-card">
                                     <button className="pdf-action-btn" onClick={clearAll}>
                                         <Trash2 size={16} />
-                                        重新选择文件
+                                        {t('toolPages.common.reselect')}
                                     </button>
                                 </div>
                             </div>
@@ -206,15 +214,15 @@ export default function PdfToImagePage() {
                         {/* 右侧预览区域 */}
                         <div className="image-tool-preview">
                             <div className="image-tool-preview-header">
-                                <h3>页面预览</h3>
+                                <h3>{t('toolPages.pdfToImage.preview')}</h3>
                                 <div className="image-tool-actions">
                                     <button className="image-tool-btn secondary" onClick={downloadCurrentImage} disabled={images.length === 0}>
                                         <Download size={16} />
-                                        下载当前页
+                                        {t('toolPages.pdfToImage.downloadCurrent')}
                                     </button>
                                     <button className="image-tool-btn primary pdf" onClick={downloadAllImages} disabled={images.length === 0}>
                                         <Download size={16} />
-                                        下载全部
+                                        {t('toolPages.pdfToImage.downloadAll')}
                                     </button>
                                 </div>
                             </div>
@@ -222,7 +230,7 @@ export default function PdfToImagePage() {
                                 {isProcessing ? (
                                     <div className="pdf-loading">
                                         <div className="spinner"></div>
-                                        <p>正在转换PDF...</p>
+                                        <p>{t('toolPages.pdfToImage.converting')}</p>
                                     </div>
                                 ) : images.length > 0 ? (
                                     <>
@@ -235,7 +243,10 @@ export default function PdfToImagePage() {
                                                 <ChevronLeft size={24} />
                                             </button>
                                             <span className="pdf-page-indicator">
-                                                第 {currentPage + 1} / {totalPages} 页
+                                                {language === 'zh'
+                                                    ? `第 ${currentPage + 1} / ${totalPages} 页`
+                                                    : `Page ${currentPage + 1} of ${totalPages}`
+                                                }
                                             </span>
                                             <button
                                                 className="pdf-nav-btn"
