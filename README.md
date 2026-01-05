@@ -23,6 +23,7 @@
 - 🔒 **Privacy First** - All data processing happens locally in your browser
 - ⚡ **Fast & Lightweight** - Built with Next.js for optimal performance
 - 🎨 **Modern UI** - Clean, intuitive interface with smooth animations
+- 📲 **PWA Support** - Install as app, works offline after first visit
 
 ## 🛠️ Tools
 
