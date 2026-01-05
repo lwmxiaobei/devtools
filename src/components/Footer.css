@@ -1,0 +1,228 @@
+/* Modern Footer Styles */
+
+.site-footer {
+    background: var(--bg-primary);
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px 24px 24px;
+}
+
+/* Main Footer Content */
+.footer-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 48px;
+    flex-wrap: wrap;
+}
+
+/* Brand Section */
+.footer-brand {
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.footer-logo-icon {
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.footer-logo span {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.footer-tagline {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Links Section */
+.footer-links {
+    display: flex;
+    gap: 64px;
+    flex-wrap: wrap;
+}
+
+.footer-links-group h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.footer-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.footer-link:hover {
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
+.footer-link svg {
+    opacity: 0.7;
+}
+
+.footer-link:hover svg {
+    opacity: 1;
+}
+
+/* Divider */
+.footer-divider {
+    height: 1px;
+    background: linear-gradient(90deg,
+            transparent,
+            var(--border) 20%,
+            var(--border) 80%,
+            transparent);
+    margin: 32px 0 24px;
+}
+
+/* Bottom Bar */
+.footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.footer-copyright {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.footer-made-with {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.heart-icon {
+    color: #ef4444;
+    animation: heartBeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartBeat {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+/* Social Links */
+.footer-social {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.social-link {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    transition: var(--transition);
+}
+
+.social-link:hover {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-container {
+        padding: 32px 16px 20px;
+    }
+
+    .footer-main {
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .footer-brand {
+        max-width: none;
+        text-align: center;
+    }
+
+    .footer-logo {
+        justify-content: center;
+    }
+
+    .footer-links {
+        width: 100%;
+        justify-content: center;
+        gap: 48px;
+    }
+
+    .footer-links-group {
+        text-align: center;
+    }
+
+    .footer-link {
+        justify-content: center;
+    }
+
+    .footer-link:hover {
+        transform: none;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-copyright {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
