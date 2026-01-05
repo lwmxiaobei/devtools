@@ -13,6 +13,10 @@
   <a href="#license">License</a>
 </p>
 
+<p align="center">
+  English | <a href="./README_CN.md">简体中文</a>
+</p>
+
 ---
 
 ## ✨ Features
