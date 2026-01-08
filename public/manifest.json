@@ -1,7 +1,7 @@
 {
-    "name": "DevTools - 开发者工具集",
-    "short_name": "DevTools",
-    "description": "一站式开发者工具箱：JSON格式化、Base64编解码、时间戳转换、UUID生成器、图片处理等常用开发工具",
+    "name": "LocalTools.cc - 本地开发者工具集",
+    "short_name": "LocalTools.cc",
+    "description": "一站式本地开发者工具箱：JSON格式化、Base64编解码、时间戳转换、UUID生成器、图片处理等常用开发工具，数据不离开浏览器",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#1a1a2e",
@@ -70,7 +70,7 @@
             "sizes": "1200x630",
             "type": "image/png",
             "form_factor": "wide",
-            "label": "DevTools Homepage"
+            "label": "LocalTools.cc Homepage"
         }
     ]
 }

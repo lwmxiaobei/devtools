@@ -2,7 +2,8 @@
 
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Link from 'next/link';
-import { Search, Wrench, X } from 'lucide-react';
+import Image from 'next/image';
+import { Search, X } from 'lucide-react';
 import { tools, categories } from '@/lib/tools';
 import ThemeToggle from './ThemeToggle';
 import LanguageToggle from './LanguageToggle';
@@ -75,9 +76,9 @@ export default function Header({ searchQuery: externalQuery, onSearchChange }: H
             <div className="header-container">
                 <Link href="/" className="logo">
                     <div className="logo-icon">
-                        <Wrench size={20} />
+                        <Image src="/logo.png" alt="LocalTools" width={48} height={48} style={{ borderRadius: '6px' }} />
                     </div>
-                    <span>DevTools</span>
+                    <span>LocalTools.cc</span>
                 </Link>
 
                 <nav className="nav-links">

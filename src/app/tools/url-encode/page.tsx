@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, Copy, Trash2, ArrowRightLeft } from 'lucide-react';
 import Header from '@/components/Header';
@@ -14,16 +14,23 @@ export default function UrlEncodePage() {
     const [output, setOutput] = useState('');
     const [mode, setMode] = useState<'encode' | 'decode'>('encode');
     const [encodeType, setEncodeType] = useState<'component' | 'uri'>('component');
+    const [error, setError] = useState('');
     const { toast, showToast, hideToast } = useToast();
     const { language } = useLanguage();
 
     const t = (key: string) => getTranslation(language, key);
 
     const encode = () => {
-        if (encodeType === 'component') {
-            setOutput(encodeURIComponent(input));
-        } else {
-            setOutput(encodeURI(input));
+        try {
+            if (encodeType === 'component') {
+                setOutput(encodeURIComponent(input));
+            } else {
+                setOutput(encodeURI(input));
+            }
+            setError('');
+        } catch (e) {
+            setError(`${t('toolPages.common.encodeError')}: ${(e as Error).message}`);
+            setOutput('');
         }
     };
 
@@ -34,18 +41,26 @@ export default function UrlEncodePage() {
             } else {
                 setOutput(decodeURI(input));
             }
+            setError('');
         } catch {
-            setOutput(t('toolPages.urlEncode.decodeFailed'));
+            setError(t('toolPages.urlEncode.decodeFailed'));
+            setOutput('');
         }
     };
 
-    const handleAction = () => {
+    // 实时编解码
+    useEffect(() => {
+        if (!input) {
+            setOutput('');
+            setError('');
+            return;
+        }
         if (mode === 'encode') {
             encode();
         } else {
             decode();
         }
-    };
+    }, [input, mode, encodeType]);
 
     const copyToClipboard = async () => {
         if (output) {
@@ -57,6 +72,7 @@ export default function UrlEncodePage() {
     const clearAll = () => {
         setInput('');
         setOutput('');
+        setError('');
     };
 
     const swapInputOutput = () => {
@@ -77,8 +93,8 @@ export default function UrlEncodePage() {
                     <h1 className="tool-title">{t('toolPages.urlEncode.title')}</h1>
                 </div>
 
-                <div className="single-panel">
-                    <div className="options-grid">
+                <div className="action-row" style={{ marginBottom: '20px' }}>
+                    <div className="options-grid" style={{ margin: 0 }}>
                         <button
                             className={`option-btn ${mode === 'encode' ? 'active' : ''}`}
                             onClick={() => setMode('encode')}
@@ -92,8 +108,7 @@ export default function UrlEncodePage() {
                             {t('toolPages.common.decode')}
                         </button>
                     </div>
-
-                    <div className="options-grid" style={{ marginBottom: '20px' }}>
+                    <div className="options-grid" style={{ margin: 0 }}>
                         <button
                             className={`option-btn ${encodeType === 'component' ? 'active' : ''}`}
                             onClick={() => setEncodeType('component')}
@@ -109,46 +124,61 @@ export default function UrlEncodePage() {
                             encodeURI
                         </button>
                     </div>
+                    <button className="action-btn secondary" onClick={swapInputOutput} disabled={!output}>
+                        <ArrowRightLeft size={18} />
+                        {t('toolPages.common.swap')}
+                    </button>
+                    <button className="action-btn secondary" onClick={clearAll}>
+                        <Trash2 size={18} />
+                        {t('toolPages.common.clear')}
+                    </button>
+                </div>
 
-                    <div className="input-group">
-                        <label className="input-label">
-                            {mode === 'encode' ? t('toolPages.urlEncode.urlToEncode') : t('toolPages.urlEncode.urlToDecode')}
-                        </label>
+                {error && (
+                    <div style={{
+                        padding: '12px 16px',
+                        background: '#fef2f2',
+                        color: '#dc2626',
+                        borderRadius: 'var(--radius)',
+                        fontSize: '0.85rem',
+                        marginBottom: '20px',
+                    }}>
+                        {error}
+                    </div>
+                )}
+
+                <div className="editor-container">
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">
+                                {mode === 'encode' ? t('toolPages.urlEncode.urlToEncode') : t('toolPages.urlEncode.urlToDecode')}
+                            </span>
+                        </div>
                         <textarea
                             className="editor-textarea"
-                            style={{ minHeight: '120px', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
                             placeholder={mode === 'encode' ? t('toolPages.urlEncode.encodePlaceholder') : t('toolPages.urlEncode.decodePlaceholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
                     </div>
 
-                    <div className="action-row" style={{ marginBottom: '20px' }}>
-                        <button className="action-btn primary" onClick={handleAction}>
-                            {mode === 'encode' ? t('toolPages.common.encode') : t('toolPages.common.decode')}
-                        </button>
-                        <button className="action-btn secondary" onClick={swapInputOutput} disabled={!output}>
-                            <ArrowRightLeft size={18} />
-                            {t('toolPages.common.swap')}
-                        </button>
-                        <button className="action-btn secondary" onClick={clearAll}>
-                            <Trash2 size={18} />
-                            {t('toolPages.common.clear')}
-                        </button>
-                    </div>
-
-                    {output && (
-                        <div className="input-group">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                <label className="input-label" style={{ margin: 0 }}>{t('toolPages.common.result')}</label>
-                                <button className="editor-btn" onClick={copyToClipboard}>
-                                    <Copy size={14} />
-                                    {t('toolPages.common.copy')}
-                                </button>
-                            </div>
-                            <div className="result-box">{output}</div>
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">
+                                {mode === 'encode' ? t('toolPages.urlEncode.encodedResult') : t('toolPages.urlEncode.decodedResult')}
+                            </span>
+                            <button className="editor-btn" onClick={copyToClipboard} disabled={!output}>
+                                <Copy size={14} />
+                                {t('toolPages.common.copy')}
+                            </button>
                         </div>
-                    )}
+                        <textarea
+                            className="editor-textarea"
+                            readOnly
+                            value={output}
+                            placeholder={t('toolPages.common.result')}
+                        />
+                    </div>
                 </div>
             </div>
             <Toast message={toast.message} show={toast.show} onClose={hideToast} />

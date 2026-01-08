@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { Code2, Heart, Shield, FileText } from 'lucide-react';
+import Image from 'next/image';
+import { Heart, Shield, FileText } from 'lucide-react';
 import { useTranslation } from './LanguageContext';
 import './Footer.css';
 
@@ -23,9 +24,9 @@ export const Footer = () => {
                     <div className="footer-brand">
                         <Link href="/" className="footer-logo">
                             <div className="footer-logo-icon">
-                                <Code2 size={20} />
+                                <Image src="/logo.png" alt="LocalTools" width={48} height={48} style={{ borderRadius: '4px' }} />
                             </div>
-                            <span>DevTools</span>
+                            <span>LocalTools.cc</span>
                         </Link>
                         <p className="footer-tagline">
                             {t('footer.tagline')}
@@ -60,7 +61,7 @@ export const Footer = () => {
                 {/* Bottom Bar */}
                 <div className="footer-bottom">
                     <div className="footer-copyright">
-                        <span>© {new Date().getFullYear()} <Link href="/" className="hover:text-primary transition-colors">DevToolss    </Link>.</span>
+                        <span>© {new Date().getFullYear()} <Link href="/" className="hover:text-primary transition-colors">LocalTools.cc</Link>.</span>
                         <span className="footer-made-with">
                             Made with <Heart size={14} className="heart-icon" /> for developers
                         </span>

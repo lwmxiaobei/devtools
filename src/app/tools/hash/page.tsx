@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Copy, Trash2, Hash } from 'lucide-react';
+import { ArrowLeft, Copy, Trash2 } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
@@ -26,7 +26,13 @@ export default function HashPage() {
 
     const t = (key: string) => getTranslation(language, key);
 
-    const calculateHashes = () => {
+    // 实时计算哈希
+    useEffect(() => {
+        if (!input) {
+            setResults({ md5: '', sha1: '', sha256: '', sha512: '' });
+            return;
+        }
+
         const md5 = CryptoJS.MD5(input).toString();
         const sha1 = CryptoJS.SHA1(input).toString();
         const sha256 = CryptoJS.SHA256(input).toString();
@@ -40,7 +46,7 @@ export default function HashPage() {
             sha256: transform(sha256),
             sha512: transform(sha512),
         });
-    };
+    }, [input, uppercase]);
 
     const copyToClipboard = async (text: string) => {
         await navigator.clipboard.writeText(text);
@@ -71,19 +77,8 @@ export default function HashPage() {
                     <h1 className="tool-title">{t('toolPages.hash.title')}</h1>
                 </div>
 
-                <div className="single-panel">
-                    <div className="input-group">
-                        <label className="input-label">{t('toolPages.hash.textToCalculate')}</label>
-                        <textarea
-                            className="editor-textarea"
-                            style={{ minHeight: '150px', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
-                            placeholder={t('toolPages.hash.inputPlaceholder')}
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="options-grid">
+                <div className="action-row" style={{ marginBottom: '20px' }}>
+                    <div className="options-grid" style={{ margin: 0 }}>
                         <button
                             className={`option-btn ${!uppercase ? 'active' : ''}`}
                             onClick={() => setUppercase(false)}
@@ -97,27 +92,37 @@ export default function HashPage() {
                             {t('toolPages.common.uppercase')}
                         </button>
                     </div>
+                    <button className="action-btn secondary" onClick={clearAll}>
+                        <Trash2 size={18} />
+                        {t('toolPages.common.clear')}
+                    </button>
+                </div>
 
-                    <div className="action-row" style={{ marginBottom: '24px' }}>
-                        <button className="action-btn primary" onClick={calculateHashes}>
-                            <Hash size={18} />
-                            {t('toolPages.hash.calculateHash')}
-                        </button>
-                        <button className="action-btn secondary" onClick={clearAll}>
-                            <Trash2 size={18} />
-                            {t('toolPages.common.clear')}
-                        </button>
+                <div className="editor-container">
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">{t('toolPages.hash.textToCalculate')}</span>
+                        </div>
+                        <textarea
+                            className="editor-textarea"
+                            placeholder={t('toolPages.hash.inputPlaceholder')}
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                        />
                     </div>
 
-                    {results.md5 && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">{t('toolPages.hash.hashResults')}</span>
+                        </div>
+                        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '16px', overflow: 'auto', flex: 1 }}>
                             {hashTypes.map((hash) => (
                                 <div key={hash.id} className="input-group" style={{ marginBottom: 0 }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                                         <label className="input-label" style={{ margin: 0 }}>
                                             {hash.name} <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>({hash.bits})</span>
                                         </label>
-                                        <button className="editor-btn" onClick={() => copyToClipboard(results[hash.id])}>
+                                        <button className="editor-btn" onClick={() => copyToClipboard(results[hash.id])} disabled={!results[hash.id]}>
                                             <Copy size={14} />
                                         </button>
                                     </div>
@@ -129,12 +134,12 @@ export default function HashPage() {
                                             wordBreak: 'break-all',
                                         }}
                                     >
-                                        {results[hash.id]}
+                                        {results[hash.id] || hash.name}
                                     </div>
                                 </div>
                             ))}
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
             <Toast message={toast.message} show={toast.show} onClose={hideToast} />

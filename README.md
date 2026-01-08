@@ -1,7 +1,7 @@
-# DevTools - 开发者在线工具集合
+# LocalTools.cc - 本地开发者工具集合
 
 <p align="center">
-  <strong>🛠️ Developer Tools Collection for Efficient Development</strong>
+  <strong>🛠️ Local Developer Tools - Your Data Never Leaves the Browser</strong>
 </p>
 
 <p align="center">
@@ -68,6 +68,8 @@
 | MD5 Hash | MD5 hash calculation |
 | Hash Calculator | SHA1/SHA256/SHA512 hash calculation |
 | UUID Generator | Generate UUID/GUID online |
+| Password Generator | Generate secure random passwords |
+
 
 ### Date & Time
 | Tool | Description |

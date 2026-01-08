@@ -112,12 +112,11 @@ button {
 .logo-icon {
   width: 36px;
   height: 36px;
-  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  overflow: hidden;
 }
 
 .nav-links {
@@ -772,6 +771,36 @@ button {
   max-width: 800px;
   width: 100%;
 }
+
+/* Dual Panel Layout (Left-Right Split) */
+.dual-panel {
+  display: flex;
+  gap: 24px;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .dual-panel {
+    flex-direction: column;
+  }
+}
+
+.left-panel {
+  flex: 1;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
+.right-panel {
+  flex: 1;
+  background: var(--bg-primary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+
 
 .input-group {
   margin-bottom: 20px;

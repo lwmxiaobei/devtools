@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Copy, Trash2, Hash } from 'lucide-react';
+import { ArrowLeft, Copy, Trash2 } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
@@ -19,16 +19,19 @@ export default function Md5Page() {
 
     const t = (key: string) => getTranslation(language, key);
 
-    const calculateMd5 = () => {
+    // 实时计算MD5
+    useEffect(() => {
+        if (!input) {
+            setOutput('');
+            return;
+        }
         const hash = CryptoJS.MD5(input).toString();
         setOutput(uppercase ? hash.toUpperCase() : hash);
-    };
+    }, [input, uppercase]);
 
-    const copyToClipboard = async () => {
-        if (output) {
-            await navigator.clipboard.writeText(output);
-            showToast(t('toolPages.common.copied'));
-        }
+    const copyToClipboard = async (text: string) => {
+        await navigator.clipboard.writeText(text);
+        showToast(t('toolPages.common.copied'));
     };
 
     const clearAll = () => {
@@ -48,19 +51,8 @@ export default function Md5Page() {
                     <h1 className="tool-title">{t('toolPages.md5.title')}</h1>
                 </div>
 
-                <div className="single-panel">
-                    <div className="input-group">
-                        <label className="input-label">{t('toolPages.md5.textToEncrypt')}</label>
-                        <textarea
-                            className="editor-textarea"
-                            style={{ minHeight: '150px', border: '1px solid var(--border)', borderRadius: 'var(--radius)' }}
-                            placeholder={t('toolPages.md5.inputPlaceholder')}
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                        />
-                    </div>
-
-                    <div className="options-grid">
+                <div className="action-row" style={{ marginBottom: '20px' }}>
+                    <div className="options-grid" style={{ margin: 0 }}>
                         <button
                             className={`option-btn ${!uppercase ? 'active' : ''}`}
                             onClick={() => setUppercase(false)}
@@ -74,38 +66,50 @@ export default function Md5Page() {
                             {t('toolPages.common.uppercase')}
                         </button>
                     </div>
+                    <button className="action-btn secondary" onClick={clearAll}>
+                        <Trash2 size={18} />
+                        {t('toolPages.common.clear')}
+                    </button>
+                </div>
 
-                    <div className="action-row" style={{ marginBottom: '20px' }}>
-                        <button className="action-btn primary" onClick={calculateMd5}>
-                            <Hash size={18} />
-                            {t('toolPages.md5.calculateMd5')}
-                        </button>
-                        <button className="action-btn secondary" onClick={clearAll}>
-                            <Trash2 size={18} />
-                            {t('toolPages.common.clear')}
-                        </button>
+                <div className="editor-container">
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">{t('toolPages.md5.textToEncrypt')}</span>
+                        </div>
+                        <textarea
+                            className="editor-textarea"
+                            placeholder={t('toolPages.md5.inputPlaceholder')}
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                        />
                     </div>
 
-                    {output && (
-                        <div className="input-group">
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                                <label className="input-label" style={{ margin: 0 }}>{t('toolPages.md5.md5Value32')}</label>
-                                <button className="editor-btn" onClick={copyToClipboard}>
-                                    <Copy size={14} />
-                                    {t('toolPages.common.copy')}
-                                </button>
-                            </div>
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">{t('toolPages.md5.md5Value32')}</span>
+                            <button className="editor-btn" onClick={() => copyToClipboard(output)} disabled={!output}>
+                                <Copy size={14} />
+                                {t('toolPages.common.copy')}
+                            </button>
+                        </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px', flex: 1 }}>
                             <div className="result-box" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                                {output}
+                                {output || t('toolPages.md5.md5Value32')}
                             </div>
-                            <div style={{ marginTop: '12px' }}>
-                                <label className="input-label" style={{ marginBottom: '8px' }}>{t('toolPages.md5.md5Value16')}</label>
+                            <div>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                                    <label className="input-label" style={{ margin: 0 }}>{t('toolPages.md5.md5Value16')}</label>
+                                    <button className="editor-btn" onClick={() => copyToClipboard(output.substring(8, 24))} disabled={!output}>
+                                        <Copy size={14} />
+                                    </button>
+                                </div>
                                 <div className="result-box" style={{ fontFamily: 'JetBrains Mono, monospace' }}>
-                                    {output.substring(8, 24)}
+                                    {output ? output.substring(8, 24) : t('toolPages.md5.md5Value16')}
                                 </div>
                             </div>
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
             <Toast message={toast.message} show={toast.show} onClose={hideToast} />

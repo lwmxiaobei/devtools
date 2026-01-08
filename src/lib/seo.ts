@@ -21,8 +21,8 @@ export function generateToolMetadata(config: ToolSeoConfig): Metadata {
 
     if (!tool) {
         return {
-            title: language === 'zh' ? 'DevTools - 开发者工具' : 'DevTools - Developer Tools',
-            description: language === 'zh' ? '开发者在线工具' : 'Online developer tools',
+            title: language === 'zh' ? 'LocalTools.cc - 本地开发者工具' : 'LocalTools.cc - Local Developer Tools',
+            description: language === 'zh' ? '本地开发者工具' : 'Local developer tools',
         };
     }
 
@@ -44,8 +44,8 @@ export function generateToolMetadata(config: ToolSeoConfig): Metadata {
         : `${toolName} - Online ${toolName} Tool`;
 
     const description = language === 'zh'
-        ? `${toolDescription}。免费在线使用，无需下载安装，支持实时处理。DevTools 开发者工具箱。`
-        : `${toolDescription}. Free online tool, no download required, supports real-time processing. DevTools developer toolbox.`;
+        ? `${toolDescription}。数据本地处理，不离开浏览器，安全可靠。LocalTools.cc 本地开发者工具箱。`
+        : `${toolDescription}. Data processed locally in your browser, secure and reliable. LocalTools.cc developer toolbox.`;
 
     // Base keywords
     const baseKeywords = language === 'zh'
@@ -73,7 +73,7 @@ export function generateToolMetadata(config: ToolSeoConfig): Metadata {
     const keywords = [...baseKeywords, ...additionalKeywords, ...(config.additionalKeywords || [])];
 
     const locale = language === 'zh' ? 'zh_CN' : 'en_US';
-    const siteName = language === 'zh' ? 'DevTools - 开发者在线工具集合' : 'DevTools - Online Developer Tools';
+    const siteName = language === 'zh' ? 'LocalTools.cc - 本地开发者工具集合' : 'LocalTools.cc - Local Developer Tools';
 
     return {
         title,

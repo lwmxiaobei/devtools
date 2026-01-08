@@ -1,7 +1,7 @@
-# DevTools - 开发者在线工具集合
+# LocalTools.cc - 本地开发者工具集合
 
 <p align="center">
-  <strong>🛠️ 让开发更高效的在线工具箱</strong>
+  <strong>🛠️ 数据不离开浏览器的本地开发者工具箱</strong>
 </p>
 
 <p align="center">
@@ -68,6 +68,8 @@
 | MD5 加密 | MD5 哈希值计算 |
 | 哈希计算 | SHA1/SHA256/SHA512 哈希计算 |
 | UUID 生成器 | 在线生成 UUID/GUID |
+| 随机密码生成器 | 生成安全的随机密码 |
+
 
 ### 时间日期
 | 工具 | 描述 |

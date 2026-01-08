@@ -1,4 +1,5 @@
-import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage } from 'lucide-react';
+import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck } from 'lucide-react';
+
 
 export interface Tool {
     id: string;
@@ -202,6 +203,15 @@ export const tools: Tool[] = [
         iconType: 'encode',
         category: 'encode',
         path: '/tools/uuid',
+    },
+    {
+        id: 'password-generator',
+        name: '随机密码生成器',
+        description: '生成安全的随机密码',
+        icon: ShieldCheck,
+        iconType: 'encode',
+        category: 'encode',
+        path: '/tools/password-generator',
     },
     {
         id: 'timestamp',

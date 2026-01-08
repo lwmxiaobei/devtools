@@ -16,12 +16,12 @@ const translations: Record<Language, Translations> = {
         },
         // Footer
         footer: {
-            tagline: '开发者在线工具集合，让开发更高效',
+            tagline: '开发者本地工具集合，数据不离开浏览器',
             legal: '法律条款',
             privacy: '隐私政策',
             terms: '服务条款',
             contact: '联系我们',
-            copyright: '© {year} DevTools.',
+            copyright: '© {year} LocalTools.cc.',
             madeWith: 'Made with ❤️ for developers',
         },
         // Home page
@@ -158,6 +158,10 @@ const translations: Record<Language, Translations> = {
             'uuid': {
                 name: 'UUID生成器',
                 description: '在线生成UUID/GUID',
+            },
+            'password-generator': {
+                name: '随机密码生成器',
+                description: '生成安全的随机密码',
             },
             'timestamp': {
                 name: 'Unix时间戳',
@@ -322,6 +326,8 @@ const translations: Record<Language, Translations> = {
                 urlToDecode: '待解码URL',
                 encodePlaceholder: '请输入要编码的URL...',
                 decodePlaceholder: '请输入编码后的URL...',
+                encodedResult: '编码结果',
+                decodedResult: '解码结果',
                 decodeFailed: '解码失败：无效的URL编码',
             },
             // MD5
@@ -339,6 +345,7 @@ const translations: Record<Language, Translations> = {
                 textToCalculate: '待计算文本',
                 inputPlaceholder: '请输入要计算哈希值的文本...',
                 calculateHash: '计算哈希',
+                hashResults: '哈希结果',
                 bits: '位',
             },
             // UUID
@@ -347,6 +354,8 @@ const translations: Record<Language, Translations> = {
                 generateCount: '生成数量',
                 generateUuid: '生成UUID',
                 generateResult: '生成结果',
+                settings: '生成设置',
+                noResult: '点击生成UUID按钮开始生成',
             },
             // Timestamp
             timestamp: {
@@ -450,6 +459,16 @@ const translations: Record<Language, Translations> = {
                 decode: '解码',
                 verify: '验证',
                 jwtPlaceholder: '请输入JWT Token...',
+                inputToken: '请输入JWT Token',
+                invalidToken: '无效的JWT Token',
+                generated: 'JWT已生成',
+                formatError: 'JSON格式错误',
+                generate: '生成',
+                decodeResult: '解码结果',
+                decodeToken: '解码Token',
+                generatedToken: '生成的Token',
+                confirmGenerate: '确认生成',
+                generatedDisplay: '生成的JWT Token将显示在这里',
             },
             // JWT Decode
             jwtDecode: {
@@ -461,6 +480,29 @@ const translations: Record<Language, Translations> = {
                 issuedAt: '签发时间',
                 expiresAt: '过期时间',
                 notBefore: '生效时间',
+                waiting: '等待输入JWT Token...',
+                valid: '有效',
+                invalid: '已过期',
+                header: '头部',
+                payload: '载荷',
+                signature: '签名',
+                field: '字段',
+                value: '值',
+                description: '说明',
+                claims: {
+                    iss: '签发者',
+                    sub: '主题',
+                    aud: '受众',
+                    exp: '过期时间',
+                    nbf: '生效时间',
+                    iat: '签发时间',
+                    jti: 'JWT ID',
+                    name: '用户名',
+                    email: '邮箱',
+                    role: '角色',
+                    admin: '管理员',
+                    custom: '自定义字段',
+                },
             },
             // Conversion tools
             conversion: {
@@ -808,6 +850,28 @@ const translations: Record<Language, Translations> = {
                 imageLoadError: '图片加载失败',
                 processError: '处理失败',
             },
+            passwordGenerator: {
+                title: '随机密码生成器',
+                passwordLength: '密码长度',
+                characterTypes: '字符类型',
+                uppercase: '大写字母 (A-Z)',
+                lowercase: '小写字母 (a-z)',
+                numbers: '数字 (0-9)',
+                symbols: '特殊符号',
+                options: '选项',
+                excludeAmbiguous: '排除易混淆字符 (0, O, 1, l, I)',
+                generate: '生成密码',
+                generatedPassword: '生成的密码',
+                passwordStrength: '密码强度',
+                strengthWeak: '弱',
+                strengthMedium: '中等',
+                strengthStrong: '强',
+                strengthVeryStrong: '非常强',
+                show: '显示',
+                hide: '隐藏',
+                selectAtLeastOne: '请至少选择一种字符类型',
+                generateFirst: '请先生成密码',
+            },
         },
         // Privacy Policy Page
         privacyPage: {
@@ -830,13 +894,13 @@ const translations: Record<Language, Translations> = {
             sections: {
                 introduction: {
                     title: '简介',
-                    content: '欢迎使用 DevTools（"我们"）。我们致力于保护您的隐私。本隐私政策解释了当您使用我们的网站和服务时，我们如何收集、使用和共享您的信息。',
+                    content: '欢迎使用 LocalTools.cc（"我们"）。我们致力于保护您的隐私。本隐私政策解释了当您使用我们的网站和服务时，我们如何收集、使用和共享您的信息。',
                 },
                 dataProcessing: {
                     title: '数据处理与隐私',
                     callout: {
                         title: '您的隐私是我们的首要任务。',
-                        content: '我们设计 DevTools 时尽可能在浏览器本地处理您的数据。',
+                        content: '我们设计 LocalTools.cc 时尽可能在浏览器本地处理您的数据。',
                     },
                     clientSide: {
                         title: '客户端处理：',
@@ -890,13 +954,13 @@ const translations: Record<Language, Translations> = {
             sections: {
                 acceptance: {
                     title: '条款接受',
-                    content: '通过访问和使用 DevTools（"服务"），您接受并同意受本协议条款和条款的约束。此外，在使用这些特定服务时，您还应遵守适用于此类服务的任何已发布的指南或规则。',
+                    content: '通过访问和使用 LocalTools.cc（"服务"），您接受并同意受本协议条款和条款的约束。此外，在使用这些特定服务时，您还应遵守适用于此类服务的任何已发布的指南或规则。',
                 },
                 description: {
                     title: '服务描述',
                     callout: {
-                        title: '关于 DevTools。',
-                        content: 'DevTools 为您提供一系列在线开发者实用工具。',
+                        title: '关于 LocalTools.cc。',
+                        content: 'LocalTools.cc 为您提供一系列本地开发者实用工具，数据不离开浏览器。',
                     },
                     tools: {
                         title: '可用工具：',
@@ -913,19 +977,19 @@ const translations: Record<Language, Translations> = {
                 },
                 intellectualProperty: {
                     title: '知识产权',
-                    content: '服务上的所有内容，包括但不限于设计、文本、图形、其他文件及其选择和排列，均为 DevTools 或其许可方的专有财产。',
+                    content: '服务上的所有内容，包括但不限于设计、文本、图形、其他文件及其选择和排列，均为 LocalTools.cc 或其许可方的专有财产。',
                 },
                 disclaimer: {
                     title: '免责声明',
-                    content: '服务按"原样"和"可用"基础提供。DevTools 不对服务的运营或服务中包含的信息、内容、材料或产品作出任何明示或暗示的陈述或保证。',
+                    content: '服务按"原样"和"可用"基础提供。LocalTools.cc 不对服务的运营或服务中包含的信息、内容、材料或产品作出任何明示或暗示的陈述或保证。',
                 },
                 limitation: {
                     title: '责任限制',
-                    content: 'DevTools 不对因使用服务而引起的任何损害承担责任，包括但不限于直接、间接、附带、惩罚性和后果性损害。',
+                    content: 'LocalTools.cc 不对因使用服务而引起的任何损害承担责任，包括但不限于直接、间接、附带、惩罚性和后果性损害。',
                 },
                 changes: {
                     title: '条款变更',
-                    content: 'DevTools 保留随时更改这些服务条款的权利。您在此类更改后继续使用服务将构成对修改条款的确认和同意。',
+                    content: 'LocalTools.cc 保留随时更改这些服务条款的权利。您在此类更改后继续使用服务将构成对修改条款的确认和同意。',
                 },
             },
         },
@@ -941,12 +1005,12 @@ const translations: Record<Language, Translations> = {
         },
         // Footer
         footer: {
-            tagline: 'Developer tools collection for efficient development',
+            tagline: 'Local developer tools - your data never leaves the browser',
             legal: 'Legal',
             privacy: 'Privacy Policy',
             terms: 'Terms of Service',
             contact: 'Contact Us',
-            copyright: '© {year} DevTools.',
+            copyright: '© {year} LocalTools.cc.',
             madeWith: 'Made with ❤️ for developers',
         },
         // Home page
@@ -1083,6 +1147,10 @@ const translations: Record<Language, Translations> = {
             'uuid': {
                 name: 'UUID Generator',
                 description: 'Generate UUID/GUID online',
+            },
+            'password-generator': {
+                name: 'Password Generator',
+                description: 'Generate secure random passwords',
             },
             'timestamp': {
                 name: 'Unix Timestamp',
@@ -1247,6 +1315,8 @@ const translations: Record<Language, Translations> = {
                 urlToDecode: 'URL to Decode',
                 encodePlaceholder: 'Enter URL to encode...',
                 decodePlaceholder: 'Enter encoded URL...',
+                encodedResult: 'Encoded Result',
+                decodedResult: 'Decoded Result',
                 decodeFailed: 'Decode failed: Invalid URL encoding',
             },
             // MD5
@@ -1264,6 +1334,7 @@ const translations: Record<Language, Translations> = {
                 textToCalculate: 'Text to Calculate',
                 inputPlaceholder: 'Enter text to calculate hash...',
                 calculateHash: 'Calculate Hash',
+                hashResults: 'Hash Results',
                 bits: 'bits',
             },
             // UUID
@@ -1272,6 +1343,8 @@ const translations: Record<Language, Translations> = {
                 generateCount: 'Generate Count',
                 generateUuid: 'Generate UUID',
                 generateResult: 'Generated Result',
+                settings: 'Settings',
+                noResult: 'Click Generate UUID button to start',
             },
             // Timestamp
             timestamp: {
@@ -1375,6 +1448,16 @@ const translations: Record<Language, Translations> = {
                 decode: 'Decode',
                 verify: 'Verify',
                 jwtPlaceholder: 'Enter JWT Token...',
+                inputToken: 'Please enter JWT Token',
+                invalidToken: 'Invalid JWT Token',
+                generated: 'JWT generated',
+                formatError: 'JSON format error',
+                generate: 'Generate',
+                decodeResult: 'Decode Result',
+                decodeToken: 'Decode Token',
+                generatedToken: 'Generated Token',
+                confirmGenerate: 'Confirm Generation',
+                generatedDisplay: 'Generated JWT Token will be displayed here',
             },
             // JWT Decode
             jwtDecode: {
@@ -1386,6 +1469,29 @@ const translations: Record<Language, Translations> = {
                 issuedAt: 'Issued At',
                 expiresAt: 'Expires At',
                 notBefore: 'Not Before',
+                waiting: 'Waiting for JWT Token input...',
+                valid: 'Valid',
+                invalid: 'Expired',
+                header: 'Header',
+                payload: 'Payload',
+                signature: 'Signature',
+                field: 'Field',
+                value: 'Value',
+                description: 'Description',
+                claims: {
+                    iss: 'Issuer',
+                    sub: 'Subject',
+                    aud: 'Audience',
+                    exp: 'Expiration Time',
+                    nbf: 'Not Before',
+                    iat: 'Issued At',
+                    jti: 'JWT ID',
+                    name: 'Name',
+                    email: 'Email',
+                    role: 'Role',
+                    admin: 'Admin',
+                    custom: 'Custom Field',
+                },
             },
             // Conversion tools
             conversion: {
@@ -1733,6 +1839,28 @@ const translations: Record<Language, Translations> = {
                 imageLoadError: 'Failed to load image',
                 processError: 'Processing failed',
             },
+            passwordGenerator: {
+                title: 'Password Generator',
+                passwordLength: 'Password Length',
+                characterTypes: 'Character Types',
+                uppercase: 'Uppercase (A-Z)',
+                lowercase: 'Lowercase (a-z)',
+                numbers: 'Numbers (0-9)',
+                symbols: 'Symbols',
+                options: 'Options',
+                excludeAmbiguous: 'Exclude Ambiguous Characters (0, O, 1, l, I)',
+                generate: 'Generate Password',
+                generatedPassword: 'Generated Password',
+                passwordStrength: 'Password Strength',
+                strengthWeak: 'Weak',
+                strengthMedium: 'Medium',
+                strengthStrong: 'Strong',
+                strengthVeryStrong: 'Very Strong',
+                show: 'Show',
+                hide: 'Hide',
+                selectAtLeastOne: 'Please select at least one character type',
+                generateFirst: 'Please generate a password first',
+            },
         },
         // Privacy Policy Page
         privacyPage: {
@@ -1755,13 +1883,13 @@ const translations: Record<Language, Translations> = {
             sections: {
                 introduction: {
                     title: 'Introduction',
-                    content: 'Welcome to DevTools ("we," "our," or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share information about you when you use our website and services.',
+                    content: 'Welcome to LocalTools.cc ("we," "our," or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, and share information about you when you use our website and services.',
                 },
                 dataProcessing: {
                     title: 'Data Processing & Privacy',
                     callout: {
                         title: 'Your Privacy is Our Priority.',
-                        content: 'We designed DevTools to process your data locally in your browser whenever possible.',
+                        content: 'We designed LocalTools.cc to process your data locally in your browser whenever possible.',
                     },
                     clientSide: {
                         title: 'Client-Side Processing:',
@@ -1815,13 +1943,13 @@ const translations: Record<Language, Translations> = {
             sections: {
                 acceptance: {
                     title: 'Acceptance of Terms',
-                    content: 'By accessing and using DevTools ("Service"), you accept and agree to be bound by the terms and provision of this agreement. In addition, when using these particular services, you shall be subject to any posted guidelines or rules applicable to such services.',
+                    content: 'By accessing and using LocalTools.cc ("Service"), you accept and agree to be bound by the terms and provision of this agreement. In addition, when using these particular services, you shall be subject to any posted guidelines or rules applicable to such services.',
                 },
                 description: {
                     title: 'Description of Service',
                     callout: {
-                        title: 'About DevTools.',
-                        content: 'DevTools provides a collection of online developer utilities for your convenience.',
+                        title: 'About LocalTools.cc.',
+                        content: 'LocalTools.cc provides a collection of local developer utilities - your data never leaves the browser.',
                     },
                     tools: {
                         title: 'Available Tools:',
@@ -1838,19 +1966,19 @@ const translations: Record<Language, Translations> = {
                 },
                 intellectualProperty: {
                     title: 'Intellectual Property',
-                    content: 'All content on the Service, including but not limited to design, text, graphics, other files, and their selection and arrangement are the proprietary property of DevTools or its licensors.',
+                    content: 'All content on the Service, including but not limited to design, text, graphics, other files, and their selection and arrangement are the proprietary property of LocalTools.cc or its licensors.',
                 },
                 disclaimer: {
                     title: 'Disclaimer of Warranties',
-                    content: 'The Service is provided on an "as is" and "as available" basis. DevTools makes no representations or warranties of any kind, express or implied, as to the operation of the Service or the information, content, materials, or products included on the Service.',
+                    content: 'The Service is provided on an "as is" and "as available" basis. LocalTools.cc makes no representations or warranties of any kind, express or implied, as to the operation of the Service or the information, content, materials, or products included on the Service.',
                 },
                 limitation: {
                     title: 'Limitation of Liability',
-                    content: 'DevTools shall not be liable for any damages of any kind arising from the use of the Service, including, but not limited to direct, indirect, incidental, punitive, and consequential damages.',
+                    content: 'LocalTools.cc shall not be liable for any damages of any kind arising from the use of the Service, including, but not limited to direct, indirect, incidental, punitive, and consequential damages.',
                 },
                 changes: {
                     title: 'Changes to Terms',
-                    content: 'DevTools reserves the right to change these Terms of Service from time to time. Your continued use of the Service after such changes will constitute acknowledgment and agreement of the modified terms.',
+                    content: 'LocalTools.cc reserves the right to change these Terms of Service from time to time. Your continued use of the Service after such changes will constitute acknowledgment and agreement of the modified terms.',
                 },
             },
         },

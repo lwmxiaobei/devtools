@@ -14,7 +14,7 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-const LANGUAGE_STORAGE_KEY = 'devtools-language';
+const LANGUAGE_STORAGE_KEY = 'localtools-language';
 
 function getInitialLanguage(): Language {
     if (typeof window === 'undefined') {

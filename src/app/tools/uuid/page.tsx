@@ -66,69 +66,83 @@ export default function UuidPage() {
                     <h1 className="tool-title">{t('toolPages.uuid.title')}</h1>
                 </div>
 
-                <div className="single-panel">
-                    <div className="input-group">
-                        <label className="input-label">{t('toolPages.uuid.generateCount')}</label>
-                        <input
-                            type="number"
-                            className="input-field"
-                            min="1"
-                            max="100"
-                            value={count}
-                            onChange={(e) => setCount(Math.min(100, Math.max(1, parseInt(e.target.value) || 1)))}
-                            style={{ width: '120px' }}
-                        />
+                <div className="editor-container">
+                    {/* 左侧：设置面板 */}
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">{t('toolPages.uuid.settings')}</span>
+                        </div>
+                        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                            <div className="input-group" style={{ marginBottom: 0 }}>
+                                <label className="input-label">{t('toolPages.uuid.generateCount')}</label>
+                                <input
+                                    type="number"
+                                    className="input-field"
+                                    min="1"
+                                    max="100"
+                                    value={count}
+                                    onChange={(e) => setCount(Math.min(100, Math.max(1, parseInt(e.target.value) || 1)))}
+                                    style={{ width: '100%' }}
+                                />
+                            </div>
+
+                            <div className="options-grid">
+                                <button
+                                    className={`option-btn ${!uppercase ? 'active' : ''}`}
+                                    onClick={() => setUppercase(false)}
+                                >
+                                    {t('toolPages.common.lowercase')}
+                                </button>
+                                <button
+                                    className={`option-btn ${uppercase ? 'active' : ''}`}
+                                    onClick={() => setUppercase(true)}
+                                >
+                                    {t('toolPages.common.uppercase')}
+                                </button>
+                            </div>
+
+                            <div className="options-grid">
+                                <button
+                                    className={`option-btn ${withHyphens ? 'active' : ''}`}
+                                    onClick={() => setWithHyphens(true)}
+                                >
+                                    {t('toolPages.common.withHyphens')}
+                                </button>
+                                <button
+                                    className={`option-btn ${!withHyphens ? 'active' : ''}`}
+                                    onClick={() => setWithHyphens(false)}
+                                >
+                                    {t('toolPages.common.withoutHyphens')}
+                                </button>
+                            </div>
+
+                            <div className="action-row" style={{ flexDirection: 'column', gap: '12px' }}>
+                                <button className="action-btn primary" onClick={generate} style={{ width: '100%' }}>
+                                    <RefreshCw size={18} />
+                                    {t('toolPages.uuid.generateUuid')}
+                                </button>
+                                <button className="action-btn secondary" onClick={clearAll} style={{ width: '100%' }}>
+                                    <Trash2 size={18} />
+                                    {t('toolPages.common.clear')}
+                                </button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div className="options-grid">
-                        <button
-                            className={`option-btn ${!uppercase ? 'active' : ''}`}
-                            onClick={() => setUppercase(false)}
-                        >
-                            {t('toolPages.common.lowercase')}
-                        </button>
-                        <button
-                            className={`option-btn ${uppercase ? 'active' : ''}`}
-                            onClick={() => setUppercase(true)}
-                        >
-                            {t('toolPages.common.uppercase')}
-                        </button>
-                        <button
-                            className={`option-btn ${withHyphens ? 'active' : ''}`}
-                            onClick={() => setWithHyphens(true)}
-                        >
-                            {t('toolPages.common.withHyphens')}
-                        </button>
-                        <button
-                            className={`option-btn ${!withHyphens ? 'active' : ''}`}
-                            onClick={() => setWithHyphens(false)}
-                        >
-                            {t('toolPages.common.withoutHyphens')}
-                        </button>
-                    </div>
-
-                    <div className="action-row" style={{ marginBottom: '20px' }}>
-                        <button className="action-btn primary" onClick={generate}>
-                            <RefreshCw size={18} />
-                            {t('toolPages.uuid.generateUuid')}
-                        </button>
-                        {uuids.length > 1 && (
-                            <button className="action-btn secondary" onClick={copyAll}>
-                                <Copy size={18} />
-                                {t('toolPages.common.copyAll')}
-                            </button>
-                        )}
-                        <button className="action-btn secondary" onClick={clearAll}>
-                            <Trash2 size={18} />
-                            {t('toolPages.common.clear')}
-                        </button>
-                    </div>
-
-                    {uuids.length > 0 && (
-                        <div className="input-group">
-                            <label className="input-label">{t('toolPages.uuid.generateResult')}</label>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                {uuids.map((uuid, index) => (
+                    {/* 右侧：结果面板 */}
+                    <div className="editor-panel">
+                        <div className="editor-header">
+                            <span className="editor-title">{t('toolPages.uuid.generateResult')}</span>
+                            {uuids.length > 1 && (
+                                <button className="editor-btn" onClick={copyAll}>
+                                    <Copy size={14} />
+                                    {t('toolPages.common.copyAll')}
+                                </button>
+                            )}
+                        </div>
+                        <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '8px', overflow: 'auto', flex: 1 }}>
+                            {uuids.length > 0 ? (
+                                uuids.map((uuid, index) => (
                                     <div
                                         key={index}
                                         style={{
@@ -154,10 +168,21 @@ export default function UuidPage() {
                                             <Copy size={14} />
                                         </button>
                                     </div>
-                                ))}
-                            </div>
+                                ))
+                            ) : (
+                                <div style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    height: '100%',
+                                    color: 'var(--text-muted)',
+                                    fontSize: '0.9rem',
+                                }}>
+                                    {t('toolPages.uuid.noResult')}
+                                </div>
+                            )}
                         </div>
-                    )}
+                    </div>
                 </div>
             </div>
             <Toast message={toast.message} show={toast.show} onClose={hideToast} />

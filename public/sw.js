@@ -1,4 +1,4 @@
-const CACHE_NAME = 'devtools-cache-v1';
+const CACHE_NAME = 'localtools-cache-v1';
 
 // 需要预缓存的核心资源
 const PRECACHE_ASSETS = [
