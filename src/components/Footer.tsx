@@ -50,6 +50,7 @@ export const Footer = () => {
                             <h4>{t('footer.contact')}</h4>
                             <a href="https://x.com/linxiaobei888" target="_blank" rel="noopener noreferrer" className="footer-link">
                                 <XIcon size={14} />
+                                <span>X / Twitter</span>
                             </a>
                         </div>
                     </div>

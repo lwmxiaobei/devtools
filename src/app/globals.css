@@ -79,6 +79,19 @@ button {
   font-family: inherit;
 }
 
+/* Layout utilities for footer positioning */
+.min-h-screen {
+  min-height: 100vh;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
 /* Header Styles */
 .header {
   background: var(--bg-primary);
@@ -593,6 +606,7 @@ button {
 /* Tool Page Layout */
 .tool-page {
   max-width: 1400px;
+  width: 100%;
   margin: 0 auto;
   padding: 32px 24px;
 }
@@ -899,10 +913,47 @@ button {
   }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive - Tablet */
+@media (max-width: 900px) {
   .header-container {
     padding: 0 16px;
+    height: 56px;
+  }
+
+  .logo {
+    font-size: 1.25rem;
+  }
+
+  .logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .search-box {
+    width: 200px;
+  }
+
+  .main {
+    padding: 20px 16px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 12px;
+    height: 56px;
+    gap: 12px;
+  }
+
+  .logo {
+    font-size: 1.1rem;
+    gap: 8px;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
   }
 
   .nav-links {
@@ -910,21 +961,234 @@ button {
   }
 
   .search-box {
-    width: 180px;
+    width: 140px;
+    padding: 6px 12px;
+  }
+
+  .search-box input {
+    font-size: 0.85rem;
+  }
+
+  .header-actions {
+    gap: 8px;
+  }
+
+  .theme-toggle {
+    width: 36px;
+    height: 36px;
   }
 
   .main {
-    padding: 24px 16px;
+    padding: 16px 12px;
   }
 
   .tools-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  /* Category tabs horizontal scrolling */
+  .category-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 8px;
+    margin-bottom: 20px;
+    gap: 8px;
+  }
+
+  .category-tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .category-tab {
+    flex-shrink: 0;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+  }
+
+  /* Tool card mobile optimization */
+  .tool-card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .tool-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .tool-content h3 {
+    font-size: 0.95rem;
+  }
+
+  .tool-content p {
+    font-size: 0.8rem;
+  }
+
+  /* Tool page mobile optimization */
+  .tool-page {
+    padding: 16px 12px;
+  }
+
+  .tool-header {
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .tool-title {
+    font-size: 1.2rem;
+  }
+
+  .back-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  /* Tool menu horizontal scroll */
+  .tool-menu {
+    top: 56px;
+  }
+
+  .tool-menu-inner {
+    padding: 0 12px;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .tool-menu-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tool-menu-category-btn {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+  }
+
+  .tool-menu .tool-menu-dropdown {
+    position: fixed !important;
+    left: 12px !important;
+    right: 12px !important;
+    top: 100px !important;
+    width: auto !important;
+    min-width: auto !important;
+    max-height: 50vh;
+    overflow-y: auto;
+    z-index: 200 !important;
+  }
+
+  /* Editor container mobile */
+  .editor-container {
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .editor-panel {
+    border-radius: var(--radius);
+  }
+
+  .editor-header {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .editor-title {
+    font-size: 0.85rem;
+  }
+
+  .editor-actions {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .editor-btn {
+    padding: 5px 10px;
+    font-size: 0.75rem;
+  }
+
+  .editor-textarea {
+    min-height: 250px;
+    padding: 12px;
+    font-size: 0.8rem;
+  }
+
+  /* Dual panel layout mobile */
+  .dual-panel {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .left-panel,
+  .right-panel {
+    padding: 16px;
+    border-radius: var(--radius);
+  }
+
+  .single-panel {
+    padding: 16px;
+    border-radius: var(--radius);
+  }
+
+  /* Action row mobile */
+  .action-row {
+    padding: 12px;
+    gap: 8px;
+    border-radius: var(--radius);
+  }
+
+  .action-btn {
+    padding: 10px 18px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive - Small Mobile */
+@media (max-width: 480px) {
+  .header-container {
+    gap: 8px;
+  }
+
+  .logo span {
+    display: none;
+  }
+
+  .search-box {
+    flex: 1;
+    width: auto;
+    min-width: 100px;
+  }
+
+  .main {
+    padding: 12px 10px;
   }
 
   .category-tabs {
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 8px;
+    margin-left: -10px;
+    margin-right: -10px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .category-tab {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
+
+  .tool-card {
+    padding: 14px;
+  }
+
+  .tool-icon {
+    width: 40px;
+    height: 40px;
   }
 }
 

@@ -180,14 +180,16 @@
 /* Responsive */
 @media (max-width: 768px) {
     .footer-container {
-        padding: 32px 16px 20px;
+        padding: 24px 16px 20px;
     }
 
     .footer-main {
         flex-direction: column;
-        gap: 32px;
+        align-items: center;
+        gap: 24px;
     }
 
+    /* Brand Section - Compact */
     .footer-brand {
         max-width: none;
         text-align: center;
@@ -195,33 +197,100 @@
 
     .footer-logo {
         justify-content: center;
+        margin-bottom: 8px;
     }
 
+    .footer-logo-icon {
+        width: 32px;
+        height: 32px;
+    }
+
+    .footer-logo span {
+        font-size: 1.1rem;
+    }
+
+    .footer-tagline {
+        font-size: 0.8rem;
+    }
+
+    /* Links Section - Horizontal compact */
     .footer-links {
         width: 100%;
         justify-content: center;
-        gap: 48px;
+        gap: 32px;
     }
 
     .footer-links-group {
         text-align: center;
     }
 
+    .footer-links-group h4 {
+        font-size: 0.8rem;
+        margin-bottom: 10px;
+    }
+
     .footer-link {
         justify-content: center;
+        padding: 6px 0;
+        font-size: 0.85rem;
     }
 
     .footer-link:hover {
         transform: none;
     }
 
+    /* Divider */
+    .footer-divider {
+        margin: 20px 0 16px;
+    }
+
+    /* Bottom Bar */
     .footer-bottom {
         flex-direction: column;
         text-align: center;
+        gap: 8px;
     }
 
     .footer-copyright {
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
+        font-size: 0.8rem;
+    }
+
+    .footer-made-with {
+        font-size: 0.75rem;
+    }
+}
+
+/* Extra small mobile */
+@media (max-width: 480px) {
+    .footer-container {
+        padding: 20px 12px 16px;
+    }
+
+    .footer-main {
+        gap: 20px;
+    }
+
+    .footer-links {
+        gap: 24px;
+    }
+
+    .footer-links-group h4 {
+        font-size: 0.75rem;
+        margin-bottom: 8px;
+    }
+
+    .footer-link {
+        padding: 5px 0;
+        font-size: 0.8rem;
+    }
+
+    .footer-divider {
+        margin: 16px 0 12px;
+    }
+
+    .footer-copyright {
+        font-size: 0.75rem;
     }
 }

@@ -23,6 +23,7 @@ const translations: Record<Language, Translations> = {
             contact: '联系我们',
             copyright: '© {year} LocalTools.cc.',
             madeWith: 'Made with ❤️ for developers',
+            lastUpdated: '最后更新：',
         },
         // Home page
         home: {
@@ -1012,6 +1013,7 @@ const translations: Record<Language, Translations> = {
             contact: 'Contact Us',
             copyright: '© {year} LocalTools.cc.',
             madeWith: 'Made with ❤️ for developers',
+            lastUpdated: 'Last updated: ',
         },
         // Home page
         home: {
