@@ -430,6 +430,14 @@ const translations: Record<Language, Translations> = {
                 inputJson5: '输入 JSON5',
                 parseResult: '解析结果',
                 parse: '解析',
+                example: '示例',
+                placeholder: '输入 JSON5，支持：\n- 无引号的键名\n- 单引号字符串\n- 尾随逗号\n- 注释',
+                featuresTitle: 'JSON5 特性',
+                feature1: '对象键名如果是有效标识符则无需引号',
+                feature2: '字符串可以使用单引号',
+                feature3: '允许尾随逗号',
+                feature4: '支持单行和多行注释',
+                feature5: '支持十六进制数字',
             },
             // JSON Viewer
             jsonViewer: {
@@ -1420,6 +1428,14 @@ const translations: Record<Language, Translations> = {
                 inputJson5: 'Input JSON5',
                 parseResult: 'Parse Result',
                 parse: 'Parse',
+                example: 'Example',
+                placeholder: 'Enter JSON5, supports:\n- Unquoted keys\n- Single quoted strings\n- Trailing commas\n- Comments',
+                featuresTitle: 'JSON5 Features',
+                feature1: 'Object keys can be unquoted if they are valid identifiers',
+                feature2: 'Strings can use single quotes',
+                feature3: 'Trailing commas are allowed',
+                feature4: 'Single and multi-line comments are allowed',
+                feature5: 'Hexadecimal numbers are allowed',
             },
             // JSON Viewer
             jsonViewer: {

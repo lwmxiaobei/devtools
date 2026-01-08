@@ -114,7 +114,7 @@ export default function Json5Page() {
                             <span className="editor-title">{t('toolPages.json5.inputJson5')}</span>
                             <div className="editor-actions">
                                 <button className="editor-btn" onClick={loadExample}>
-                                    Example
+                                    {t('toolPages.json5.example')}
                                 </button>
                                 <button className="editor-btn" onClick={clearAll}>
                                     <Trash2 size={14} />
@@ -124,7 +124,7 @@ export default function Json5Page() {
                         </div>
                         <textarea
                             className="editor-textarea"
-                            placeholder={"Enter JSON5, supports:\n- Unquoted keys\n- Single quoted strings\n- Trailing commas\n- Comments"}
+                            placeholder={t('toolPages.json5.placeholder')}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
@@ -160,18 +160,18 @@ export default function Json5Page() {
                     borderRadius: 'var(--radius)',
                     border: '1px solid var(--border)',
                 }}>
-                    <h3 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>JSON5 Features</h3>
+                    <h3 style={{ margin: '0 0 8px 0', fontSize: '0.9rem' }}>{t('toolPages.json5.featuresTitle')}</h3>
                     <ul style={{
                         margin: 0,
                         paddingLeft: '20px',
                         fontSize: '0.85rem',
                         color: 'var(--text-secondary)',
                     }}>
-                        <li>Object keys can be unquoted if they are valid identifiers</li>
-                        <li>Strings can use single quotes</li>
-                        <li>Trailing commas are allowed</li>
-                        <li>Single and multi-line comments are allowed</li>
-                        <li>Hexadecimal numbers are allowed</li>
+                        <li>{t('toolPages.json5.feature1')}</li>
+                        <li>{t('toolPages.json5.feature2')}</li>
+                        <li>{t('toolPages.json5.feature3')}</li>
+                        <li>{t('toolPages.json5.feature4')}</li>
+                        <li>{t('toolPages.json5.feature5')}</li>
                     </ul>
                 </div>
             </div>
