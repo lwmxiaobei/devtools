@@ -6,19 +6,13 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devtools.example.co
 export default function sitemap(): MetadataRoute.Sitemap {
     const now = new Date();
 
-    // Homepage with language alternates
+    // Homepage
     const routes: MetadataRoute.Sitemap = [
         {
             url: siteUrl,
             lastModified: now,
             changeFrequency: 'weekly',
             priority: 1.0,
-            alternates: {
-                languages: {
-                    'zh-CN': siteUrl,
-                    'en': siteUrl,
-                },
-            },
         },
         // Privacy and Terms pages
         {
@@ -35,19 +29,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
         },
     ];
 
-    // All tool pages with language alternates
+    // All tool pages
     tools.forEach((tool) => {
         routes.push({
             url: `${siteUrl}${tool.path}`,
             lastModified: now,
             changeFrequency: 'monthly',
             priority: 0.8,
-            alternates: {
-                languages: {
-                    'zh-CN': `${siteUrl}${tool.path}`,
-                    'en': `${siteUrl}${tool.path}`,
-                },
-            },
         });
     });
 

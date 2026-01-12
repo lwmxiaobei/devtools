@@ -1418,7 +1418,7 @@ button {
 
 .tool-menu-dropdown-item.active {
   color: var(--primary);
-  background: var(--primary-light);
+  background: transparent;
 }
 
 /* ===== Image Watermark Tool Styles ===== */

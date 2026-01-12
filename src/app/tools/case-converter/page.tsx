@@ -132,7 +132,7 @@ export default function CaseConverterPage() {
                         <input
                             type="text"
                             className="input-field"
-                            placeholder={language === 'zh' ? '例如: hello_world, helloWorld, HelloWorld...' : 'e.g.: hello_world, helloWorld, HelloWorld...'}
+                            placeholder={language === 'zh' ? '请输入带分隔符的文本，如: hello world, hello_world, helloWorld' : 'Enter text with separators, e.g.: hello world, hello_world, helloWorld'}
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />

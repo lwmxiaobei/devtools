@@ -116,12 +116,12 @@ export default function UuidPage() {
                                 </button>
                             </div>
 
-                            <div className="action-row" style={{ flexDirection: 'column', gap: '12px' }}>
-                                <button className="action-btn primary" onClick={generate} style={{ width: '100%' }}>
+                            <div className="action-row">
+                                <button className="action-btn primary" onClick={generate}>
                                     <RefreshCw size={18} />
                                     {t('toolPages.uuid.generateUuid')}
                                 </button>
-                                <button className="action-btn secondary" onClick={clearAll} style={{ width: '100%' }}>
+                                <button className="action-btn secondary" onClick={clearAll}>
                                     <Trash2 size={18} />
                                     {t('toolPages.common.clear')}
                                 </button>
