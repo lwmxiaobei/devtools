@@ -167,6 +167,24 @@ export const tools: Tool[] = [
         category: 'json',
         path: '/tools/json-to-objc',
     },
+    {
+        id: 'json-to-xml',
+        name: 'JSON转XML',
+        description: '将JSON数据转换为XML格式',
+        icon: FileCode,
+        iconType: 'json',
+        category: 'json',
+        path: '/tools/json-to-xml',
+    },
+    {
+        id: 'xml-to-json',
+        name: 'XML转JSON',
+        description: '将XML数据转换为JSON格式',
+        icon: FileJson,
+        iconType: 'json',
+        category: 'json',
+        path: '/tools/xml-to-json',
+    },
 
     {
         id: 'base64',
@@ -240,6 +258,15 @@ export const tools: Tool[] = [
         iconType: 'encode',
         category: 'encode',
         path: '/tools/hash',
+    },
+    {
+        id: 'file-hash',
+        name: '文件哈希',
+        description: '计算文件的MD5/SHA1/SHA256/SHA512哈希值',
+        icon: Hash,
+        iconType: 'encode',
+        category: 'encode',
+        path: '/tools/file-hash',
     },
     {
         id: 'text-diff',

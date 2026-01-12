@@ -206,6 +206,7 @@ export default function JsonToObjcPage() {
                                 borderRadius: '6px',
                                 fontSize: '0.9rem',
                                 background: 'var(--bg-primary)',
+                                color: 'var(--text-primary)',
                             }}
                         />
                     </div>

@@ -140,6 +140,14 @@ const translations: Record<Language, Translations> = {
                 name: 'JSON转ObjectiveC',
                 description: 'JSON转OC模型类',
             },
+            'json-to-xml': {
+                name: 'JSON转XML',
+                description: '将JSON数据转换为XML格式',
+            },
+            'xml-to-json': {
+                name: 'XML转JSON',
+                description: '将XML数据转换为JSON格式',
+            },
             'lottie-preview': {
                 name: 'Lottie动画预览',
                 description: '预览Lottie JSON动画',
@@ -179,6 +187,10 @@ const translations: Record<Language, Translations> = {
             'hash': {
                 name: '哈希计算',
                 description: 'SHA1/SHA256/SHA512哈希计算',
+            },
+            'file-hash': {
+                name: '文件哈希',
+                description: '计算文件的MD5/SHA1/SHA256/SHA512哈希值',
             },
             'text-diff': {
                 name: '文本对比',
@@ -405,6 +417,20 @@ const translations: Record<Language, Translations> = {
                 hashResults: '哈希结果',
                 bits: '位',
             },
+            // File Hash
+            fileHash: {
+                title: '文件哈希计算',
+                uploadHint: '点击或拖拽文件到此处',
+                supportFormats: '支持任意类型文件',
+                fileName: '文件名',
+                fileSize: '文件大小',
+                calculating: '正在计算哈希值...',
+                hashResults: '哈希结果',
+                bits: '位',
+                noFile: '请先上传文件',
+                selectFile: '选择文件',
+                selectAnotherFile: '选择其他文件',
+            },
             // UUID
             uuid: {
                 title: 'UUID 生成器',
@@ -625,6 +651,24 @@ const translations: Record<Language, Translations> = {
             },
             jsonToObjc: {
                 title: 'JSON 转 ObjectiveC',
+                input: '输入 JSON',
+                placeholder: '请输入 JSON 对象...',
+                outputPlaceholder: 'ObjectiveC 代码将显示在这里',
+            },
+            jsonToXml: {
+                title: 'JSON 转 XML',
+                input: '输入 JSON',
+                output: '输出 XML',
+                placeholder: '请输入 JSON 数据...',
+                outputPlaceholder: 'XML 数据将显示在这里',
+                rootElement: '根元素名称',
+            },
+            xmlToJson: {
+                title: 'XML 转 JSON',
+                input: '输入 XML',
+                output: '输出 JSON',
+                placeholder: '请输入 XML 数据...',
+                outputPlaceholder: 'JSON 数据将显示在这里',
             },
             lottiePreview: {
                 title: 'Lottie 动画预览',
@@ -1363,6 +1407,14 @@ const translations: Record<Language, Translations> = {
                 name: 'JSON to ObjectiveC',
                 description: 'Convert JSON to OC model class',
             },
+            'json-to-xml': {
+                name: 'JSON to XML',
+                description: 'Convert JSON data to XML format',
+            },
+            'xml-to-json': {
+                name: 'XML to JSON',
+                description: 'Convert XML data to JSON format',
+            },
             'lottie-preview': {
                 name: 'Lottie Preview',
                 description: 'Preview Lottie JSON animations',
@@ -1402,6 +1454,10 @@ const translations: Record<Language, Translations> = {
             'hash': {
                 name: 'Hash Calculator',
                 description: 'SHA1/SHA256/SHA512 hash calculation',
+            },
+            'file-hash': {
+                name: 'File Hash',
+                description: 'Calculate MD5/SHA1/SHA256/SHA512 hash of files',
             },
             'text-diff': {
                 name: 'Text Diff',
@@ -1628,6 +1684,20 @@ const translations: Record<Language, Translations> = {
                 hashResults: 'Hash Results',
                 bits: 'bits',
             },
+            // File Hash
+            fileHash: {
+                title: 'File Hash Calculator',
+                uploadHint: 'Click or drag file here',
+                supportFormats: 'Supports any file type',
+                fileName: 'File Name',
+                fileSize: 'File Size',
+                calculating: 'Calculating hash...',
+                hashResults: 'Hash Results',
+                bits: 'bits',
+                noFile: 'Please upload a file first',
+                selectFile: 'Select File',
+                selectAnotherFile: 'Select Another File',
+            },
             // UUID
             uuid: {
                 title: 'UUID Generator',
@@ -1848,6 +1918,24 @@ const translations: Record<Language, Translations> = {
             },
             jsonToObjc: {
                 title: 'JSON to ObjectiveC',
+                input: 'Input JSON',
+                placeholder: 'Enter JSON object...',
+                outputPlaceholder: 'ObjectiveC code will appear here',
+            },
+            jsonToXml: {
+                title: 'JSON to XML',
+                input: 'Input JSON',
+                output: 'Output XML',
+                placeholder: 'Enter JSON data...',
+                outputPlaceholder: 'XML data will appear here',
+                rootElement: 'Root Element Name',
+            },
+            xmlToJson: {
+                title: 'XML to JSON',
+                input: 'Input XML',
+                output: 'Output JSON',
+                placeholder: 'Enter XML data...',
+                outputPlaceholder: 'JSON data will appear here',
             },
             lottiePreview: {
                 title: 'Lottie Preview',
