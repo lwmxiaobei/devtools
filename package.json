@@ -6,12 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "submit-sitemap": "node scripts/submit-sitemap.js",
+    "submit-url": "node scripts/submit-url.js",
+    "check-indexing": "node scripts/check-indexing.js",
+    "check-sitemap": "node scripts/check-sitemap-status.js"
   },
   "dependencies": {
     "@types/qrcode": "^1.5.6",
+    "@vercel/analytics": "^1.6.1",
     "crypto-js": "^4.2.0",
     "figlet": "^1.9.4",
+    "googleapis": "^168.0.0",
     "jspdf": "^4.0.0",
     "jsqr": "^1.4.0",
     "jszip": "^3.10.1",

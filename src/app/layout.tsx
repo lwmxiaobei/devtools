@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageContext";
 import { Footer } from "@/components/Footer";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
-
+import { Analytics } from "@vercel/analytics/next"
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devtools.example.com';
 
 export const viewport: Viewport = {
@@ -174,6 +174,7 @@ export default function RootLayout({
             </div>
           </ThemeProvider>
         </LanguageProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -648,6 +648,15 @@ const translations: Record<Language, Translations> = {
             },
             jsonToSchema: {
                 title: 'JSON 转 JSON Schema',
+                input: '输入 JSON',
+                output: '输出 JSON Schema',
+                placeholder: '请输入 JSON 对象或数组...',
+                outputPlaceholder: 'JSON Schema 将显示在这里',
+                aboutTitle: '关于 JSON Schema',
+                aboutItem1: '自动推断数据类型（string、number、integer、boolean、null、object、array）',
+                aboutItem2: '检测常见格式（日期时间、邮箱、URL）',
+                aboutItem3: '自动生成 required 字段列表',
+                aboutItem4: '使用 JSON Schema Draft-07 规范',
             },
             jsonToObjc: {
                 title: 'JSON 转 ObjectiveC',
@@ -1915,6 +1924,15 @@ const translations: Record<Language, Translations> = {
             },
             jsonToSchema: {
                 title: 'JSON to JSON Schema',
+                input: 'Input JSON',
+                output: 'Output JSON Schema',
+                placeholder: 'Enter JSON object or array...',
+                outputPlaceholder: 'JSON Schema will appear here',
+                aboutTitle: 'About JSON Schema',
+                aboutItem1: 'Auto-infer data types (string, number, integer, boolean, null, object, array)',
+                aboutItem2: 'Detect common formats (date-time, email, URL)',
+                aboutItem3: 'Auto-generate required fields list',
+                aboutItem4: 'Uses JSON Schema Draft-07 specification',
             },
             jsonToObjc: {
                 title: 'JSON to ObjectiveC',

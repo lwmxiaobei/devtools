@@ -177,10 +177,12 @@ export default function JsonToSqlPage() {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
-                        <button className="action-btn primary" onClick={convert} style={{ margin: '16px' }}>
-                            <Play size={18} />
-                            {t('toolPages.common.convert')}
-                        </button>
+                        <div style={{ padding: '16px' }}>
+                            <button className="action-btn primary" onClick={convert}>
+                                <Play size={18} />
+                                {t('toolPages.common.convert')}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="editor-panel">

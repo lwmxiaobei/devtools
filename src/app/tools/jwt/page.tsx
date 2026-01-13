@@ -157,9 +157,11 @@ export default function JwtPage() {
                                 value={token}
                                 onChange={(e) => setToken(e.target.value)}
                             />
-                            <button className="action-btn primary" onClick={handleDecode} style={{ margin: '16px' }}>
-                                {t('toolPages.jwt.decodeToken')}
-                            </button>
+                            <div style={{ padding: '16px' }}>
+                                <button className="action-btn primary" onClick={handleDecode}>
+                                    {t('toolPages.jwt.decodeToken')}
+                                </button>
+                            </div>
                         </div>
 
                         <div className="editor-panel">
@@ -279,9 +281,11 @@ export default function JwtPage() {
                                     }}
                                 />
                             </div>
-                            <button className="action-btn primary" onClick={handleEncode} style={{ margin: '0 16px 16px' }}>
-                                {t('toolPages.jwt.confirmGenerate')}
-                            </button>
+                            <div style={{ padding: '0 16px 16px' }}>
+                                <button className="action-btn primary" onClick={handleEncode}>
+                                    {t('toolPages.jwt.confirmGenerate')}
+                                </button>
+                            </div>
                         </div>
 
                         <div className="editor-panel">
