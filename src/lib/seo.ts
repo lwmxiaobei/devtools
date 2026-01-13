@@ -156,6 +156,25 @@ export const toolSeoConfigs: Record<string, string[]> = {
     'image-to-svg': ['图片转SVG', '位图转矢量', 'PNG转SVG', '图片矢量化'],
     'pdf-to-image': ['PDF转图片', 'PDF转JPG', 'PDF转PNG', 'PDF提取图片'],
     'image-to-pdf': ['图片转PDF', 'JPG转PDF', 'PNG转PDF', '多图合并PDF'],
+    'string-concat': ['字符串拼接', '文本拼接', '多行拼接', '字符串合并', '文本合并'],
+    'fullwidth-halfwidth': ['全角半角转换', '全角转半角', '半角转全角', '全半角互转', '英文全角'],
+    'html-strip': ['去除HTML标签', '移除HTML', 'HTML转纯文本', '去除格式', '提取纯文本'],
+    'html-escape': ['HTML转义', 'HTML编码', 'HTML解码', 'HTML实体转换', '特殊字符编码'],
+    'chinese-pinyin': ['汉字转拼音', '拼音转换', '中文拼音', '声调拼音', '拼音生成'],
+    'chinese-convert': ['简繁转换', '繁体转简体', '简体转繁体', '火星文转换', '中文转换'],
+    'vertical-text': ['竖排文字', '文字竖排', '横排转竖排', '竖版文字', '古风排版'],
+    'colorful-text': ['彩色文字', '渐变文字', '彩虹文字', '文字特效', '炫彩文字'],
+    'text-spacing': ['文字间隔', '字符间隔', '加空格', '文本间距', '字符分隔'],
+    'ascii-art': ['ASCII艺术字', 'ASCII画', '字符画', '文字艺术', 'FIGlet'],
+    'number-sum': ['数值求和', '数字求和', '多行求和', '数值统计', '求和计算'],
+    'text-shuffle': ['文本打乱', '随机排序', '打乱顺序', '文本随机', '行随机排序'],
+    'char-count': ['字符统计', '字符频率', '字符计数', '字母频率', '文字统计'],
+    'string-count': ['字符串统计', '关键词统计', '字符串计数', '文本搜索', '出现次数'],
+    'password-generator': ['密码生成', '随机密码', '安全密码', '强密码生成', '密码工具'],
+    'file-hash': ['文件哈希', '文件MD5', '文件SHA', '文件校验', '文件摘要'],
+    'gemini-watermark': ['去Gemini水印', 'Gemini水印', 'AI水印去除', '图片去水印'],
+    'json-to-xml': ['JSON转XML', 'JSON to XML', 'JSON格式转换', 'XML转换'],
+    'xml-to-json': ['XML转JSON', 'XML to JSON', 'XML格式转换', 'JSON转换'],
 };
 
 /**
@@ -203,6 +222,24 @@ export const toolSeoConfigsEn: Record<string, string[]> = {
     'pdf-to-image': ['PDF to image', 'PDF to JPG', 'PDF to PNG', 'extract images from PDF'],
     'image-to-pdf': ['image to PDF', 'JPG to PDF', 'PNG to PDF', 'merge images to PDF'],
     'gemini-watermark': ['remove Gemini watermark', 'Gemini watermark remover', 'AI image watermark removal'],
+    'string-concat': ['string concatenation', 'join strings', 'merge text', 'text concat', 'combine strings'],
+    'fullwidth-halfwidth': ['fullwidth halfwidth converter', 'full half width', 'width converter', 'character width'],
+    'html-strip': ['strip HTML tags', 'remove HTML', 'HTML to plain text', 'extract text', 'remove formatting'],
+    'html-escape': ['HTML escape', 'HTML encode', 'HTML decode', 'HTML entities', 'escape special characters'],
+    'chinese-pinyin': ['Chinese to Pinyin', 'Pinyin converter', 'Hanzi to Pinyin', 'Pinyin generator', 'tone marks'],
+    'chinese-convert': ['Chinese converter', 'Traditional to Simplified', 'Simplified to Traditional', 'Chinese text converter'],
+    'vertical-text': ['vertical text', 'text direction', 'vertical writing', 'text layout', 'vertical display'],
+    'colorful-text': ['colorful text', 'gradient text', 'rainbow text', 'text effects', 'color text generator'],
+    'text-spacing': ['text spacing', 'character spacing', 'add spaces', 'text separator', 'character separator'],
+    'ascii-art': ['ASCII art', 'text art', 'FIGlet', 'character art', 'ASCII generator'],
+    'number-sum': ['number sum', 'sum calculator', 'add numbers', 'total calculator', 'number addition'],
+    'text-shuffle': ['shuffle text', 'randomize text', 'text randomizer', 'random order', 'line shuffler'],
+    'char-count': ['character count', 'letter frequency', 'char frequency', 'character statistics', 'text analysis'],
+    'string-count': ['string count', 'word count', 'keyword count', 'text search', 'occurrence counter'],
+    'password-generator': ['password generator', 'random password', 'secure password', 'strong password', 'password tool'],
+    'file-hash': ['file hash', 'file MD5', 'file SHA', 'file checksum', 'file digest'],
+    'json-to-xml': ['JSON to XML', 'convert JSON to XML', 'JSON XML converter', 'format converter'],
+    'xml-to-json': ['XML to JSON', 'convert XML to JSON', 'XML JSON converter', 'format converter'],
 };
 
 /**
@@ -250,6 +287,24 @@ export const toolNamesEn: Record<string, { name: string; description: string }> 
     'pdf-to-image': { name: 'PDF to Image', description: 'Convert PDF file to images' },
     'image-to-pdf': { name: 'Image to PDF', description: 'Convert images to PDF file' },
     'gemini-watermark': { name: 'Remove Gemini Watermark', description: 'Remove watermark from Gemini AI generated images' },
+    'string-concat': { name: 'String Concat', description: 'Concatenate multiple text strings' },
+    'fullwidth-halfwidth': { name: 'Fullwidth Halfwidth Converter', description: 'Convert between fullwidth and halfwidth characters' },
+    'html-strip': { name: 'Strip HTML Tags', description: 'Remove HTML tags and keep plain text' },
+    'html-escape': { name: 'HTML Escape', description: 'Encode and decode HTML special characters' },
+    'chinese-pinyin': { name: 'Chinese to Pinyin', description: 'Convert Chinese characters to Pinyin with tones' },
+    'chinese-convert': { name: 'Chinese Converter', description: 'Convert between Simplified and Traditional Chinese' },
+    'vertical-text': { name: 'Vertical Text', description: 'Convert horizontal text to vertical layout' },
+    'colorful-text': { name: 'Colorful Text', description: 'Generate colorful gradient text effects' },
+    'text-spacing': { name: 'Text Spacing', description: 'Add spacing between text characters' },
+    'ascii-art': { name: 'ASCII Art', description: 'Convert text to ASCII art font' },
+    'number-sum': { name: 'Number Sum', description: 'Calculate sum of multi-line numbers' },
+    'text-shuffle': { name: 'Text Shuffle', description: 'Randomly shuffle text lines or characters' },
+    'char-count': { name: 'Character Count', description: 'Count character frequency in text' },
+    'string-count': { name: 'String Count', description: 'Count string occurrence in text' },
+    'password-generator': { name: 'Password Generator', description: 'Generate secure random passwords' },
+    'file-hash': { name: 'File Hash', description: 'Calculate MD5/SHA1/SHA256/SHA512 hash of files' },
+    'json-to-xml': { name: 'JSON to XML', description: 'Convert JSON data to XML format' },
+    'xml-to-json': { name: 'XML to JSON', description: 'Convert XML data to JSON format' },
 };
 
 /**
@@ -258,8 +313,84 @@ export const toolNamesEn: Record<string, { name: string; description: string }> 
  * @returns Next.js Metadata 对象
  */
 export function getToolMetadata(toolId: string): Metadata {
-    return generateToolMetadata({
-        toolId,
-        additionalKeywords: toolSeoConfigs[toolId] || [],
-    });
+    const tool = tools.find(t => t.id === toolId);
+
+    if (!tool) {
+        return {
+            title: 'LocalTools.cc - 本地开发者工具',
+            description: '本地开发者工具',
+        };
+    }
+
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devtools.example.com';
+
+    // 获取中英文工具名称和描述
+    const toolNameZh = tool.name;
+    const toolDescZh = tool.description;
+    const toolNameEn = toolNamesEn[toolId]?.name || toolNameZh;
+    const toolDescEn = toolNamesEn[toolId]?.description || toolDescZh;
+
+    // 生成双语标题和描述
+    const title = `${toolNameZh} | ${toolNameEn} - 在线工具 Online Tool`;
+    const description = `${toolDescZh}。${toolDescEn}. 数据本地处理，不离开浏览器，安全可靠。Data processed locally in browser, secure and reliable.`;
+
+    // 合并中英文关键词
+    const keywordsZh = [
+        toolNameZh,
+        `在线${toolNameZh}`,
+        `${toolNameZh}工具`,
+        toolDescZh,
+        '开发者工具',
+        '在线工具',
+        ...(toolSeoConfigs[toolId] || []),
+    ];
+
+    const keywordsEn = [
+        toolNameEn,
+        `online ${toolNameEn}`,
+        `${toolNameEn} tool`,
+        toolDescEn,
+        'developer tools',
+        'online tools',
+        ...(toolSeoConfigsEn[toolId] || []),
+    ];
+
+    // 去重合并
+    const allKeywords = [...new Set([...keywordsZh, ...keywordsEn])];
+
+    return {
+        title,
+        description,
+        keywords: allKeywords,
+        openGraph: {
+            type: 'website',
+            locale: 'zh_CN',
+            alternateLocale: ['en_US'],
+            url: `${siteUrl}${tool.path}`,
+            siteName: 'LocalTools.cc - 本地开发者工具集合 | Local Developer Tools',
+            title,
+            description,
+            images: [
+                {
+                    url: '/og-image.png',
+                    width: 1200,
+                    height: 630,
+                    alt: title,
+                },
+            ],
+        },
+        twitter: {
+            card: 'summary_large_image',
+            title,
+            description,
+            images: ['/og-image.png'],
+        },
+        alternates: {
+            canonical: `${siteUrl}${tool.path}`,
+            languages: {
+                'zh-CN': `${siteUrl}${tool.path}`,
+                'en': `${siteUrl}${tool.path}`,
+            },
+        },
+    };
 }
