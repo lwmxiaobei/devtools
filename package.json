@@ -13,10 +13,12 @@
     "check-sitemap": "node scripts/check-sitemap-status.js"
   },
   "dependencies": {
+    "@types/gif.js": "^0.2.5",
     "@types/qrcode": "^1.5.6",
     "@vercel/analytics": "^1.6.1",
     "crypto-js": "^4.2.0",
     "figlet": "^1.9.4",
+    "gif.js": "^0.2.0",
     "googleapis": "^168.0.0",
     "jspdf": "^4.0.0",
     "jsqr": "^1.4.0",

@@ -1,4 +1,4 @@
-import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck, Type, AlignJustify, Languages, Sparkles, Space, Calculator, Shuffle, BarChart3, RemoveFormatting, CodeXml, CaseSensitive } from 'lucide-react';
+import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck, Type, AlignJustify, Languages, Sparkles, Space, Calculator, Shuffle, BarChart3, RemoveFormatting, CodeXml, CaseSensitive, Film } from 'lucide-react';
 
 
 export interface Tool {
@@ -555,6 +555,15 @@ export const tools: Tool[] = [
         iconType: 'image',
         category: 'image',
         path: '/tools/image-to-pdf',
+    },
+    {
+        id: 'image-to-gif',
+        name: '图片转GIF',
+        description: '将多张图片合成GIF动画',
+        icon: Film,
+        iconType: 'image',
+        category: 'image',
+        path: '/tools/image-to-gif',
     },
 
 ];
