@@ -104,6 +104,10 @@ const translations: Record<Language, Translations> = {
                 name: 'JSON编辑器',
                 description: '可视化编辑JSON',
             },
+            'json-diff': {
+                name: 'JSON比较',
+                description: '对比两个JSON之间的差异',
+            },
             'jwt': {
                 name: 'JWT加解密',
                 description: 'JWT Token编码解码',
@@ -147,6 +151,14 @@ const translations: Record<Language, Translations> = {
             'xml-to-json': {
                 name: 'XML转JSON',
                 description: '将XML数据转换为JSON格式',
+            },
+            'json-to-go': {
+                name: 'JSON转Go结构体',
+                description: 'JSON转Go struct定义',
+            },
+            'json-to-ts': {
+                name: 'JSON转TypeScript',
+                description: 'JSON转TypeScript接口定义',
             },
             'lottie-preview': {
                 name: 'Lottie动画预览',
@@ -542,6 +554,17 @@ const translations: Record<Language, Translations> = {
                 fieldName: '字段名',
                 fieldValue: '字段值',
             },
+            // JSON Diff
+            jsonDiff: {
+                title: 'JSON 比较',
+                originalJson: '原始 JSON',
+                modifiedJson: '修改后 JSON',
+                originalPlaceholder: '请输入原始 JSON...',
+                modifiedPlaceholder: '请输入修改后的 JSON...',
+                diffResult: '差异结果',
+                totalChanges: '共发现变更',
+                noDifferences: '两个JSON完全相同',
+            },
             // JWT
             jwt: {
                 title: 'JWT 加解密',
@@ -667,6 +690,20 @@ const translations: Record<Language, Translations> = {
                 input: '输入 JSON',
                 placeholder: '请输入 JSON 对象...',
                 outputPlaceholder: 'ObjectiveC 代码将显示在这里',
+            },
+            jsonToGo: {
+                title: 'JSON 转 Go 结构体',
+                input: '输入 JSON',
+                output: '输出 Go 代码',
+                placeholder: '请输入 JSON 对象...',
+                outputPlaceholder: 'Go struct 代码将显示在这里',
+            },
+            jsonToTs: {
+                title: 'JSON 转 TypeScript',
+                input: '输入 JSON',
+                output: '输出 TS 类型',
+                placeholder: '请输入 JSON 对象...',
+                outputPlaceholder: 'TypeScript 类型定义将显示在这里',
             },
             jsonToXml: {
                 title: 'JSON 转 XML',
@@ -1787,6 +1824,17 @@ const translations: Record<Language, Translations> = {
                 jsonError: 'JSON format error',
                 formatError: 'Format error',
             },
+            // JSON Minify
+            jsonMinify: {
+                title: 'JSON Minify',
+                inputJson: 'Input JSON',
+                minifiedResult: 'Minified Result',
+                inputPlaceholder: 'Enter JSON, e.g.: {"name": "John", "age": 25}',
+                outputPlaceholder: 'Minified JSON will appear here',
+                originalSize: 'Original Size',
+                minifiedSize: 'Minified Size',
+                saved: 'Saved',
+            },
             // JSON Compress
             jsonCompress: {
                 title: 'JSON Compress & Escape',
@@ -1846,6 +1894,17 @@ const translations: Record<Language, Translations> = {
                 addField: 'Add Field',
                 fieldName: 'Field Name',
                 fieldValue: 'Field Value',
+            },
+            // JSON Diff
+            jsonDiff: {
+                title: 'JSON Diff',
+                originalJson: 'Original JSON',
+                modifiedJson: 'Modified JSON',
+                originalPlaceholder: 'Enter original JSON...',
+                modifiedPlaceholder: 'Enter modified JSON...',
+                diffResult: 'Diff Result',
+                totalChanges: 'Total Changes',
+                noDifferences: 'Both JSON are identical',
             },
             // JWT
             jwt: {
@@ -1972,6 +2031,20 @@ const translations: Record<Language, Translations> = {
                 input: 'Input JSON',
                 placeholder: 'Enter JSON object...',
                 outputPlaceholder: 'ObjectiveC code will appear here',
+            },
+            jsonToGo: {
+                title: 'JSON to Go Struct',
+                input: 'Input JSON',
+                output: 'Output Go Code',
+                placeholder: 'Enter JSON object...',
+                outputPlaceholder: 'Go struct code will appear here',
+            },
+            jsonToTs: {
+                title: 'JSON to TypeScript',
+                input: 'Input JSON',
+                output: 'Output TS Type',
+                placeholder: 'Enter JSON object...',
+                outputPlaceholder: 'TypeScript type definition will appear here',
             },
             jsonToXml: {
                 title: 'JSON to XML',

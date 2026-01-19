@@ -1,4 +1,4 @@
-import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck, Type, AlignJustify, Languages, Sparkles, Space, Calculator, Shuffle, BarChart3, RemoveFormatting, CodeXml, CaseSensitive, Film } from 'lucide-react';
+import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck, Type, AlignJustify, Languages, Sparkles, Space, Calculator, Shuffle, BarChart3, RemoveFormatting, CodeXml, CaseSensitive, Film, GitCompare } from 'lucide-react';
 
 
 export interface Tool {
@@ -87,6 +87,15 @@ export const tools: Tool[] = [
         path: '/tools/json-editor',
     },
     {
+        id: 'json-diff',
+        name: 'JSON比较',
+        description: '对比两个JSON之间的差异',
+        icon: GitCompare,
+        iconType: 'json',
+        category: 'json',
+        path: '/tools/json-diff',
+    },
+    {
         id: 'jwt',
         name: 'JWT加解密',
         description: 'JWT Token编码解码',
@@ -148,6 +157,24 @@ export const tools: Tool[] = [
         iconType: 'json',
         category: 'json',
         path: '/tools/json-to-python',
+    },
+    {
+        id: 'json-to-go',
+        name: 'JSON转Go结构体',
+        description: 'JSON转Go struct定义',
+        icon: FileCode,
+        iconType: 'json',
+        category: 'json',
+        path: '/tools/json-to-go',
+    },
+    {
+        id: 'json-to-ts',
+        name: 'JSON转TypeScript',
+        description: 'JSON转TypeScript接口定义',
+        icon: FileCode,
+        iconType: 'json',
+        category: 'json',
+        path: '/tools/json-to-ts',
     },
     {
         id: 'json-to-schema',

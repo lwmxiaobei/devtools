@@ -7,10 +7,14 @@
  * npm run check-sitemap
  */
 
-const { google } = require('googleapis');
-const path = require('path');
-const fs = require('fs');
-const https = require('https');
+import { google } from 'googleapis';
+import path from 'path';
+import fs from 'fs';
+import https from 'https';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 配置
 const SITE_URL = 'sc-domain:localtools.cc';

@@ -8,9 +8,13 @@
  * npm run submit-url -- /tools/new-tool
  */
 
-const { google } = require('googleapis');
-const path = require('path');
-const fs = require('fs');
+import { google } from 'googleapis';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 配置
 const BASE_URL = 'https://www.localtools.cc';

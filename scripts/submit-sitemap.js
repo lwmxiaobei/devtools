@@ -11,9 +11,13 @@
  * npm run submit-sitemap
  */
 
-const { google } = require('googleapis');
-const path = require('path');
-const fs = require('fs');
+import { google } from 'googleapis';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 配置
 // 域名资源使用 sc-domain: 前缀，URL 前缀资源使用完整 URL

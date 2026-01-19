@@ -611,6 +611,10 @@ button {
   padding: 32px 24px;
 }
 
+.tool-page:has(.editor-container.horizontal) {
+  max-width: 1600px;
+}
+
 .tool-header {
   display: flex;
   align-items: center;
@@ -650,9 +654,25 @@ button {
   margin-bottom: 24px;
 }
 
+.editor-container.horizontal {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+}
+
 @media (max-width: 900px) {
   .editor-container {
     grid-template-columns: 1fr;
+  }
+
+  .editor-container.horizontal {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .editor-container.horizontal {
+    grid-template-columns: 1fr !important;
   }
 }
 
@@ -729,6 +749,21 @@ button {
 
 .editor-textarea::placeholder {
   color: var(--text-muted);
+}
+
+.editor-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--bg-tertiary);
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.editor-footer .action-btn {
+  padding: 8px 16px;
+  font-size: 0.85rem;
 }
 
 /* Action Row */
@@ -1380,6 +1415,8 @@ button {
   top: 100%;
   left: 0;
   min-width: 200px;
+  max-height: calc(100vh - 150px);
+  overflow-y: auto;
   background: var(--bg-secondary);
   border: 1px solid var(--border);
   border-radius: var(--radius);
@@ -1387,6 +1424,23 @@ button {
   padding: 8px 0;
   z-index: 100;
   animation: dropdownFadeIn 0.15s ease;
+}
+
+.tool-menu-dropdown::-webkit-scrollbar {
+  width: 6px;
+}
+
+.tool-menu-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.tool-menu-dropdown::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+.tool-menu-dropdown::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
 }
 
 @keyframes dropdownFadeIn {

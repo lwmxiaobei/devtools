@@ -86,7 +86,7 @@ export default function JsonCompressPage() {
                     <h1 className="tool-title">{t('toolPages.jsonCompress.title')}</h1>
                 </div>
 
-                <div className="editor-container">
+                <div className="editor-container horizontal">
                     <div className="editor-panel">
                         <div className="editor-header">
                             <span className="editor-title">{t('toolPages.jsonCompress.inputJson')}</span>
@@ -103,6 +103,19 @@ export default function JsonCompressPage() {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
+                        <div className="editor-footer">
+                            <button className="action-btn primary" onClick={compressJson}>
+                                <Minimize2 size={16} />
+                                {t('toolPages.jsonCompress.compress')}
+                            </button>
+                            <button className="action-btn secondary" onClick={escapeJson}>
+                                {t('toolPages.jsonCompress.escape')}
+                            </button>
+                            <button className="action-btn secondary" onClick={unescapeJson}>
+                                <Maximize2 size={16} />
+                                {t('toolPages.jsonCompress.unescape')}
+                            </button>
+                        </div>
                     </div>
 
                     <div className="editor-panel">
@@ -133,20 +146,6 @@ export default function JsonCompressPage() {
                             </div>
                         )}
                     </div>
-                </div>
-
-                <div className="action-row">
-                    <button className="action-btn primary" onClick={compressJson}>
-                        <Minimize2 size={18} />
-                        {t('toolPages.jsonCompress.compress')}
-                    </button>
-                    <button className="action-btn secondary" onClick={escapeJson}>
-                        {t('toolPages.jsonCompress.escape')}
-                    </button>
-                    <button className="action-btn secondary" onClick={unescapeJson}>
-                        <Maximize2 size={18} />
-                        {t('toolPages.jsonCompress.unescape')}
-                    </button>
                 </div>
             </div>
             <Toast message={toast.message} show={toast.show} onClose={hideToast} />
