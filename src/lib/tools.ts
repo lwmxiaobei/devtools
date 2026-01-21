@@ -1,4 +1,4 @@
-import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck, Type, AlignJustify, Languages, Sparkles, Space, Calculator, Shuffle, BarChart3, RemoveFormatting, CodeXml, CaseSensitive, Film, GitCompare } from 'lucide-react';
+import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck, Type, AlignJustify, Languages, Sparkles, Space, Calculator, Shuffle, BarChart3, RemoveFormatting, CodeXml, CaseSensitive, Film, GitCompare, FileScan, FileCode2, Regex } from 'lucide-react';
 
 
 export interface Tool {
@@ -212,6 +212,15 @@ export const tools: Tool[] = [
         category: 'json',
         path: '/tools/xml-to-json',
     },
+    {
+        id: 'yaml-json',
+        name: 'YAML转JSON',
+        description: 'YAML和JSON格式互转',
+        icon: FileCode2,
+        iconType: 'json',
+        category: 'json',
+        path: '/tools/yaml-json',
+    },
 
     {
         id: 'base64',
@@ -361,7 +370,7 @@ export const tools: Tool[] = [
         id: 'crc',
         name: 'CRC校验',
         description: 'CRC16/CRC32校验码计算',
-        icon: Hash,
+        icon: ShieldCheck,
         iconType: 'encode',
         category: 'encode',
         path: '/tools/crc',
@@ -374,6 +383,15 @@ export const tools: Tool[] = [
         iconType: 'time',
         category: 'time',
         path: '/tools/timestamp',
+    },
+    {
+        id: 'cron-parser',
+        name: 'Cron解析',
+        description: 'Cron表达式解析与可视化',
+        icon: Clock,
+        iconType: 'time',
+        category: 'time',
+        path: '/tools/cron-parser',
     },
     {
         id: 'code-formatter',
@@ -398,7 +416,7 @@ export const tools: Tool[] = [
         id: 'file-hash',
         name: '文件哈希',
         description: '计算文件的MD5/SHA1/SHA256/SHA512哈希值',
-        icon: Hash,
+        icon: FileScan,
         iconType: 'encode',
         category: 'encode',
         path: '/tools/file-hash',
@@ -546,6 +564,15 @@ export const tools: Tool[] = [
         iconType: 'text',
         category: 'text',
         path: '/tools/string-count',
+    },
+    {
+        id: 'regex-tester',
+        name: '正则表达式校验',
+        description: '正则表达式测试、匹配与常用模板',
+        icon: Regex,
+        iconType: 'text',
+        category: 'text',
+        path: '/tools/regex-tester',
     },
     {
         id: 'gemini-watermark',

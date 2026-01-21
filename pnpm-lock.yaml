@@ -29,6 +29,9 @@ importers:
       googleapis:
         specifier: ^168.0.0
         version: 168.0.0
+      js-yaml:
+        specifier: ^4.1.0
+        version: 4.1.1
       jsencrypt:
         specifier: ^3.5.4
         version: 3.5.4
@@ -75,6 +78,9 @@ importers:
       '@types/figlet':
         specifier: ^1.7.0
         version: 1.7.0
+      '@types/js-yaml':
+        specifier: ^4.0.9
+        version: 4.0.9
       '@types/node':
         specifier: ^20
         version: 20.19.28
@@ -684,6 +690,9 @@ packages:
 
   '@types/gif.js@0.2.5':
     resolution: {integrity: sha512-OdDQYh9v7td9ztjaooBSqjUBAyAuui2xwDDmQcyRLd6c9T0iWgkebAoCBEdEEBoZG3ekJE/6UnH63Dzq0S3bvw==}
+
+  '@types/js-yaml@4.0.9':
+    resolution: {integrity: sha512-k4MGaQl5TGo/iipqb2UDG2UwjXziSWkh0uysQelTlJpX1qGlpUZYm8PnO4DxG1qBomtJUdYJ6qR6xdIah10JLg==}
 
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
@@ -3018,6 +3027,8 @@ snapshots:
   '@types/gif.js@0.2.5':
     dependencies:
       '@types/events': 3.0.3
+
+  '@types/js-yaml@4.0.9': {}
 
   '@types/json-schema@7.0.15': {}
 

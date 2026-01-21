@@ -192,6 +192,7 @@ export const toolSeoConfigs: Record<string, string[]> = {
     'gemini-watermark': ['去Gemini水印', 'Gemini水印', 'AI水印去除', '图片去水印'],
     'json-to-xml': ['JSON转XML', 'JSON to XML', 'JSON格式转换', 'XML转换'],
     'xml-to-json': ['XML转JSON', 'XML to JSON', 'XML格式转换', 'JSON转换'],
+    'yaml-json': ['YAML转JSON', 'JSON转YAML', 'YAML转换', 'JSON转换', 'YAML格式化', 'JSON格式化'],
 };
 
 /**
@@ -274,6 +275,7 @@ export const toolSeoConfigsEn: Record<string, string[]> = {
     'file-hash': ['file hash', 'file MD5', 'file SHA', 'file checksum', 'file digest'],
     'json-to-xml': ['JSON to XML', 'convert JSON to XML', 'JSON XML converter', 'format converter'],
     'xml-to-json': ['XML to JSON', 'convert XML to JSON', 'XML JSON converter', 'format converter'],
+    'yaml-json': ['YAML to JSON', 'JSON to YAML', 'YAML JSON converter', 'format converter', 'YAML formatter'],
 };
 
 /**
@@ -352,6 +354,7 @@ export const toolNamesEn: Record<string, { name: string; description: string }> 
     'file-hash': { name: 'File Hash', description: 'Calculate MD5/SHA1/SHA256/SHA512 hash of files' },
     'json-to-xml': { name: 'JSON to XML', description: 'Convert JSON data to XML format' },
     'xml-to-json': { name: 'XML to JSON', description: 'Convert XML data to JSON format' },
+    'yaml-json': { name: 'YAML to JSON', description: 'Convert between YAML and JSON formats' },
 };
 
 /**
