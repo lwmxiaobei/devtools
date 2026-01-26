@@ -195,10 +195,10 @@ export default function AESPage() {
                     </button>
                 </div>
 
-                <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-                    gap: '16px', 
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                    gap: '16px',
                     marginBottom: '16px',
                     padding: '16px',
                     background: 'var(--bg-secondary)',
@@ -272,11 +272,11 @@ export default function AESPage() {
                     </div>
                 </div>
 
-                <div style={{ 
-                    display: 'grid', 
-                    gridTemplateColumns: needsIV ? '1fr 1fr' : '1fr', 
-                    gap: '16px', 
-                    marginBottom: '16px' 
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: needsIV ? '1fr 1fr' : '1fr',
+                    gap: '16px',
+                    marginBottom: '16px'
                 }}>
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '8px' }}>
@@ -389,27 +389,6 @@ export default function AESPage() {
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                         />
-                    </div>
-
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0 16px' }}>
-                        <button
-                            className="action-btn primary"
-                            onClick={handleProcess}
-                            disabled={!input || !key || (needsIV && !iv)}
-                            style={{ minWidth: '120px' }}
-                        >
-                            {mode === 'encrypt' ? (
-                                <>
-                                    <Lock size={18} />
-                                    {t('toolPages.aes.encrypt')}
-                                </>
-                            ) : (
-                                <>
-                                    <Unlock size={18} />
-                                    {t('toolPages.aes.decrypt')}
-                                </>
-                            )}
-                        </button>
                     </div>
 
                     <div className="editor-panel">
