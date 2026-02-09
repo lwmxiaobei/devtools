@@ -29,6 +29,9 @@ importers:
       googleapis:
         specifier: ^168.0.0
         version: 168.0.0
+      html2canvas:
+        specifier: ^1.4.1
+        version: 1.4.1
       js-yaml:
         specifier: ^4.1.0
         version: 4.1.1
@@ -3327,8 +3330,7 @@ snapshots:
 
   balanced-match@1.0.2: {}
 
-  base64-arraybuffer@1.0.2:
-    optional: true
+  base64-arraybuffer@1.0.2: {}
 
   base64-js@1.5.1: {}
 
@@ -3435,7 +3437,6 @@ snapshots:
   css-line-break@2.1.0:
     dependencies:
       utrie: 1.0.2
-    optional: true
 
   csstype@3.2.3: {}
 
@@ -4074,7 +4075,6 @@ snapshots:
     dependencies:
       css-line-break: 2.1.0
       text-segmentation: 1.0.3
-    optional: true
 
   https-proxy-agent@7.0.6:
     dependencies:
@@ -4934,7 +4934,6 @@ snapshots:
   text-segmentation@1.0.3:
     dependencies:
       utrie: 1.0.2
-    optional: true
 
   tinyglobby@0.2.15:
     dependencies:
@@ -5058,7 +5057,6 @@ snapshots:
   utrie@1.0.2:
     dependencies:
       base64-arraybuffer: 1.0.2
-    optional: true
 
   web-streams-polyfill@3.3.3: {}
 
