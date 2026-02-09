@@ -727,5 +727,14 @@ export const tools: Tool[] = [
         category: 'image',
         path: '/tools/image-to-gif',
     },
+    {
+        id: 'html-to-image',
+        name: 'HTML转图片',
+        description: '将HTML代码渲染为图片',
+        icon: FileImage,
+        iconType: 'image',
+        category: 'image',
+        path: '/tools/html-to-image',
+    },
 
 ];
