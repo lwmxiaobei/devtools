@@ -4,7 +4,7 @@
  * 用于快速通知 Google 索引新增或更新的页面
  *
  * 使用方式：
- * npm run submit-url -- https://www.localtools.cc/tools/new-tool
+ * npm run submit-url -- https://localtools.cc/tools/new-tool
  * npm run submit-url -- /tools/new-tool
  */
 
@@ -17,7 +17,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // 配置
-const BASE_URL = 'https://www.localtools.cc';
+const BASE_URL = 'https://localtools.cc';
 const KEY_FILE_PATH = path.join(__dirname, '..', 'google-service-account.json');
 
 async function main() {
@@ -27,7 +27,7 @@ async function main() {
     if (!targetUrl) {
         console.log('❌ 请提供要提交的 URL');
         console.log('\n使用方式：');
-        console.log('  npm run submit-url -- https://www.localtools.cc/tools/new-tool');
+        console.log('  npm run submit-url -- https://localtools.cc/tools/new-tool');
         console.log('  npm run submit-url -- /tools/new-tool');
         console.log('\n批量提交多个 URL：');
         console.log('  npm run submit-url -- /tools/tool1 /tools/tool2 /tools/tool3');

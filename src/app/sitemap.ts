@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/site';
 import { tools } from '@/lib/tools';
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devtools.example.com';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const now = new Date();
@@ -9,20 +8,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Homepage
     const routes: MetadataRoute.Sitemap = [
         {
-            url: siteUrl,
+            url: SITE_URL,
             lastModified: now,
             changeFrequency: 'weekly',
             priority: 1.0,
         },
         // Privacy and Terms pages
         {
-            url: `${siteUrl}/privacy`,
+            url: `${SITE_URL}/privacy`,
             lastModified: now,
             changeFrequency: 'monthly',
             priority: 0.5,
         },
         {
-            url: `${siteUrl}/terms`,
+            url: `${SITE_URL}/terms`,
             lastModified: now,
             changeFrequency: 'monthly',
             priority: 0.5,
@@ -32,7 +31,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // All tool pages
     tools.forEach((tool) => {
         routes.push({
-            url: `${siteUrl}${tool.path}`,
+            url: `${SITE_URL}${tool.path}`,
             lastModified: now,
             changeFrequency: 'monthly',
             priority: 0.8,

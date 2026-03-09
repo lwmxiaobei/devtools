@@ -1,8 +1,7 @@
 import { Metadata } from 'next';
+import { SITE_URL } from './site';
 import { tools } from './tools';
 import { Language } from './i18n';
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devtools.example.com';
 
 interface ToolSeoConfig {
     toolId: string;
@@ -83,7 +82,7 @@ export function generateToolMetadata(config: ToolSeoConfig): Metadata {
             type: 'website',
             locale: locale,
             alternateLocale: language === 'zh' ? ['en_US'] : ['zh_CN'],
-            url: `${siteUrl}${tool.path}`,
+            url: `${SITE_URL}${tool.path}`,
             siteName,
             title,
             description,
@@ -103,10 +102,10 @@ export function generateToolMetadata(config: ToolSeoConfig): Metadata {
             images: ['/og-image.png'],
         },
         alternates: {
-            canonical: `${siteUrl}${tool.path}`,
+            canonical: `${SITE_URL}${tool.path}`,
             languages: {
-                'zh-CN': `${siteUrl}${tool.path}`,
-                'en': `${siteUrl}${tool.path}`,
+                'zh-CN': `${SITE_URL}${tool.path}`,
+                'en': `${SITE_URL}${tool.path}`,
             },
         },
     };
@@ -375,8 +374,6 @@ export function getToolMetadata(toolId: string): Metadata {
         };
     }
 
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devtools.example.com';
-
     // 获取中英文工具名称和描述
     const toolNameZh = tool.name;
     const toolDescZh = tool.description;
@@ -419,7 +416,7 @@ export function getToolMetadata(toolId: string): Metadata {
             type: 'website',
             locale: 'zh_CN',
             alternateLocale: ['en_US'],
-            url: `${siteUrl}${tool.path}`,
+            url: `${SITE_URL}${tool.path}`,
             siteName: 'LocalTools.cc - 本地开发者工具集合 | Local Developer Tools',
             title,
             description,
@@ -439,10 +436,10 @@ export function getToolMetadata(toolId: string): Metadata {
             images: ['/og-image.png'],
         },
         alternates: {
-            canonical: `${siteUrl}${tool.path}`,
+            canonical: `${SITE_URL}${tool.path}`,
             languages: {
-                'zh-CN': `${siteUrl}${tool.path}`,
-                'en': `${siteUrl}${tool.path}`,
+                'zh-CN': `${SITE_URL}${tool.path}`,
+                'en': `${SITE_URL}${tool.path}`,
             },
         },
     };

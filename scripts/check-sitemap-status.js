@@ -18,7 +18,8 @@ const __dirname = path.dirname(__filename);
 
 // 配置
 const SITE_URL = 'sc-domain:localtools.cc';
-const SITEMAP_URL = 'https://www.localtools.cc/sitemap.xml';
+const SITEMAP_URL = 'https://localtools.cc/sitemap.xml';
+const PUBLIC_SITE_URL = 'https://localtools.cc';
 const KEY_FILE_PATH = path.join(__dirname, '..', 'google-service-account.json');
 
 // 从 URL 获取内容
@@ -109,7 +110,7 @@ async function main() {
         console.log('📝 Sitemap 中的所有 URL：');
         console.log('─'.repeat(60));
         sitemapUrls.forEach((url, index) => {
-            const shortUrl = url.replace('https://www.localtools.cc', '');
+            const shortUrl = url.replace(PUBLIC_SITE_URL, '');
             console.log(`   ${String(index + 1).padStart(3)}. ${shortUrl || '/'}`);
         });
 

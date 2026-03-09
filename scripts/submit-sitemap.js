@@ -22,7 +22,7 @@ const __dirname = path.dirname(__filename);
 // 配置
 // 域名资源使用 sc-domain: 前缀，URL 前缀资源使用完整 URL
 const SITE_URL = 'sc-domain:localtools.cc';  // 域名资源格式
-const SITEMAP_URL = 'https://www.localtools.cc/sitemap.xml';
+const SITEMAP_URL = 'https://localtools.cc/sitemap.xml';
 const KEY_FILE_PATH = path.join(__dirname, '..', 'google-service-account.json');
 
 async function main() {

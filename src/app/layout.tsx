@@ -4,8 +4,8 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageContext";
 import { Footer } from "@/components/Footer";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
+import { SITE_URL } from "@/lib/site";
 import { Analytics } from "@vercel/analytics/next"
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://devtools.example.com';
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "LocalTools.cc - 本地开发者工具集合",
     template: "%s | LocalTools.cc",
@@ -61,7 +61,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "zh_CN",
-    url: siteUrl,
+    url: SITE_URL,
     siteName: "LocalTools.cc - 本地开发者工具集合",
     title: "LocalTools.cc - 本地开发者工具集合",
     description: "一站式本地开发者工具箱：JSON格式化、Base64编解码、时间戳转换、UUID生成器等40+常用开发工具，数据本地处理更安全。",
@@ -81,10 +81,10 @@ export const metadata: Metadata = {
     images: ["/og-image.png"],
   },
   alternates: {
-    canonical: siteUrl,
+    canonical: SITE_URL,
     languages: {
-      'zh-CN': siteUrl,
-      'en': siteUrl,
+      'zh-CN': SITE_URL,
+      'en': SITE_URL,
     },
   },
   category: "technology",
@@ -119,9 +119,9 @@ export default function RootLayout({
           }}
         />
         {/* Language alternates for SEO */}
-        <link rel="alternate" hrefLang="zh-CN" href={siteUrl} />
-        <link rel="alternate" hrefLang="en" href={siteUrl} />
-        <link rel="alternate" hrefLang="x-default" href={siteUrl} />
+        <link rel="alternate" hrefLang="zh-CN" href={SITE_URL} />
+        <link rel="alternate" hrefLang="en" href={SITE_URL} />
+        <link rel="alternate" hrefLang="x-default" href={SITE_URL} />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -144,7 +144,7 @@ export default function RootLayout({
               "name": "LocalTools.cc",
               "alternateName": ["本地开发者工具集合", "Local Developer Tools"],
               "description": "Local developer tools including JSON formatter, Base64 encoder, timestamp converter - your data never leaves the browser.",
-              "url": siteUrl,
+              "url": SITE_URL,
               "applicationCategory": "DeveloperApplication",
               "operatingSystem": "Any",
               "offers": {
