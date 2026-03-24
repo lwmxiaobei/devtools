@@ -1,4 +1,4 @@
-import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck, Type, AlignJustify, Languages, Sparkles, Space, Calculator, Shuffle, BarChart3, RemoveFormatting, CodeXml, CaseSensitive, Film, GitCompare, FileScan, FileCode2, Regex } from 'lucide-react';
+import { LucideIcon, Braces, Lock, Clock, Code, Image, Link, Hash, FileJson, Binary, Key, Fingerprint, FileCode, Palette, FileText, RotateCw, Grid3x3, ArrowUpDown, Search, FileJson2, Eye, Edit, KeyRound, Scan, Database, FileType, FileType2, Play, Minimize2, Crop, FlipHorizontal, RotateCcw, Maximize2, Droplets, User, QrCode, ScanLine, FileImage, ShieldCheck, Type, AlignJustify, Languages, Sparkles, Space, Calculator, Shuffle, BarChart3, RemoveFormatting, CodeXml, CaseSensitive, Film, GitCompare, FileScan, FileCode2, Regex, Table } from 'lucide-react';
 
 
 export interface Tool {
@@ -221,6 +221,15 @@ export const tools: Tool[] = [
         category: 'json',
         path: '/tools/yaml-json',
     },
+    {
+        id: 'csv-json',
+        name: 'CSV转JSON',
+        description: 'CSV与JSON格式互转',
+        icon: Table,
+        iconType: 'json',
+        category: 'json',
+        path: '/tools/csv-json',
+    },
 
     {
         id: 'base64',
@@ -401,6 +410,15 @@ export const tools: Tool[] = [
         iconType: 'format',
         category: 'format',
         path: '/tools/code-formatter',
+    },
+    {
+        id: 'markdown-preview',
+        name: 'Markdown预览',
+        description: '实时Markdown渲染预览',
+        icon: FileText,
+        iconType: 'format',
+        category: 'format',
+        path: '/tools/markdown-preview',
     },
 
     {
