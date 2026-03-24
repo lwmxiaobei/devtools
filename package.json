@@ -27,6 +27,7 @@
     "jsqr": "^1.4.0",
     "jszip": "^3.10.1",
     "lucide-react": "^0.562.0",
+    "marked": "^17.0.5",
     "next": "16.1.1",
     "opencc-js": "^1.0.5",
     "pdfjs-dist": "^5.4.530",

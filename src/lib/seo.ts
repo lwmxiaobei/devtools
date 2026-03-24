@@ -193,6 +193,8 @@ export const toolSeoConfigs: Record<string, string[]> = {
     'json-to-xml': ['JSON转XML', 'JSON to XML', 'JSON格式转换', 'XML转换'],
     'xml-to-json': ['XML转JSON', 'XML to JSON', 'XML格式转换', 'JSON转换'],
     'yaml-json': ['YAML转JSON', 'JSON转YAML', 'YAML转换', 'JSON转换', 'YAML格式化', 'JSON格式化'],
+    'csv-json': ['CSV转JSON', 'JSON转CSV', 'CSV解析', 'CSV格式转换', 'CSV JSON互转'],
+    'markdown-preview': ['Markdown预览', 'Markdown渲染', 'MD预览', 'Markdown转HTML', 'Markdown编辑器'],
 };
 
 /**
@@ -277,6 +279,8 @@ export const toolSeoConfigsEn: Record<string, string[]> = {
     'json-to-xml': ['JSON to XML', 'convert JSON to XML', 'JSON XML converter', 'format converter'],
     'xml-to-json': ['XML to JSON', 'convert XML to JSON', 'XML JSON converter', 'format converter'],
     'yaml-json': ['YAML to JSON', 'JSON to YAML', 'YAML JSON converter', 'format converter', 'YAML formatter'],
+    'csv-json': ['CSV to JSON', 'JSON to CSV', 'CSV parser', 'CSV format converter', 'CSV JSON converter'],
+    'markdown-preview': ['Markdown preview', 'Markdown render', 'MD preview', 'Markdown to HTML', 'Markdown editor'],
 };
 
 /**
@@ -357,6 +361,8 @@ export const toolNamesEn: Record<string, { name: string; description: string }> 
     'json-to-xml': { name: 'JSON to XML', description: 'Convert JSON data to XML format' },
     'xml-to-json': { name: 'XML to JSON', description: 'Convert XML data to JSON format' },
     'yaml-json': { name: 'YAML to JSON', description: 'Convert between YAML and JSON formats' },
+    'csv-json': { name: 'CSV to JSON', description: 'Convert between CSV and JSON formats' },
+    'markdown-preview': { name: 'Markdown Preview', description: 'Real-time Markdown rendering preview' },
 };
 
 /**
