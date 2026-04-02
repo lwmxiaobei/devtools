@@ -1,22 +1,183 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Copy, Trash2, Wand2, Minimize2, Hash } from 'lucide-react';
+import { ArrowLeft, Copy, Trash2, Wand2, Minimize2, Hash, ChevronsUpDown, ChevronRight, ChevronDown } from 'lucide-react';
 import Header from '@/components/Header';
 import ToolMenu from '@/components/ToolMenu';
 import Toast, { useToast } from '@/components/Toast';
 import { useLanguage } from '@/components/LanguageContext';
 import { getTranslation } from '@/lib/i18n';
 
+// 收集所有可折叠路径
+function collectPaths(value: unknown, path: string, paths: Set<string>) {
+    if (value !== null && typeof value === 'object') {
+        paths.add(path);
+        if (Array.isArray(value)) {
+            value.forEach((item, index) => collectPaths(item, `${path}[${index}]`, paths));
+        } else {
+            Object.entries(value as Record<string, unknown>).forEach(([k, v]) => collectPaths(v, `${path}.${k}`, paths));
+        }
+    }
+}
+
+// 计算一个值格式化后占的行数
+function countLines(value: unknown, indent: number): number {
+    if (value === null || typeof value !== 'object') return 1;
+    if (Array.isArray(value)) {
+        if (value.length === 0) return 1;
+        let lines = 2; // [ and ]
+        value.forEach(item => { lines += countLines(item, indent + 1); });
+        return lines;
+    }
+    const entries = Object.entries(value as Record<string, unknown>);
+    if (entries.length === 0) return 1;
+    let lines = 2; // { and }
+    entries.forEach(([, v]) => { lines += countLines(v, indent + 1); });
+    return lines;
+}
+
+interface CollapsibleJsonProps {
+    value: unknown;
+    keyName?: string | null;
+    depth: number;
+    collapsedPaths: Set<string>;
+    togglePath: (path: string) => void;
+    path: string;
+    isLast: boolean;
+}
+
+function CollapsibleJson({ value, keyName, depth, collapsedPaths, togglePath, path, isLast }: CollapsibleJsonProps) {
+    const indent = '  '.repeat(depth);
+    const isObject = value !== null && typeof value === 'object';
+    const isArray = Array.isArray(value);
+    const isCollapsed = collapsedPaths.has(path);
+    const comma = isLast ? '' : ',';
+    const prefix = keyName != null ? `${indent}"${keyName}": ` : indent;
+
+    // 基本值
+    if (!isObject) {
+        let display: string;
+        if (typeof value === 'string') display = `"${value}"`;
+        else if (value === null) display = 'null';
+        else display = String(value);
+        return <div>{prefix}{display}{comma}</div>;
+    }
+
+    const openBracket = isArray ? '[' : '{';
+    const closeBracket = isArray ? ']' : '}';
+    const entries = isArray ? value : Object.entries(value as Record<string, unknown>);
+    const count = isArray ? value.length : (entries as [string, unknown][]).length;
+
+    // 空对象/数组
+    if (count === 0) {
+        return <div>{prefix}{openBracket}{closeBracket}{comma}</div>;
+    }
+
+    // 折叠状态
+    if (isCollapsed) {
+        const summary = isArray ? `${count} items` : `${count} keys`;
+        return (
+            <div style={{ position: 'relative' }}>
+                <span
+                    onClick={() => togglePath(path)}
+                    style={{
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        borderRadius: '3px',
+                    }}
+                >
+                    <ChevronRight size={12} style={{ marginRight: '2px', flexShrink: 0, color: 'var(--text-muted)' }} />
+                    {prefix}{openBracket}
+                    <span style={{ color: 'var(--text-muted)', fontStyle: 'italic' }}> {summary} </span>
+                    {closeBracket}{comma}
+                </span>
+            </div>
+        );
+    }
+
+    // 展开状态
+    return (
+        <>
+            <div style={{ position: 'relative' }}>
+                <span
+                    onClick={() => togglePath(path)}
+                    style={{
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        borderRadius: '3px',
+                    }}
+                >
+                    <ChevronDown size={12} style={{ marginRight: '2px', flexShrink: 0, color: 'var(--text-muted)' }} />
+                    {prefix}{openBracket}
+                </span>
+            </div>
+            {isArray
+                ? (value as unknown[]).map((item, index) => (
+                    <CollapsibleJson
+                        key={index}
+                        value={item}
+                        depth={depth + 1}
+                        collapsedPaths={collapsedPaths}
+                        togglePath={togglePath}
+                        path={`${path}[${index}]`}
+                        isLast={index === value.length - 1}
+                    />
+                ))
+                : (entries as [string, unknown][]).map(([k, v], index) => (
+                    <CollapsibleJson
+                        key={k}
+                        value={v}
+                        keyName={k}
+                        depth={depth + 1}
+                        collapsedPaths={collapsedPaths}
+                        togglePath={togglePath}
+                        path={`${path}.${k}`}
+                        isLast={index === (entries as [string, unknown][]).length - 1}
+                    />
+                ))
+            }
+            <div>{indent}{closeBracket}{comma}</div>
+        </>
+    );
+}
+
+// 计算可见行数（考虑折叠）
+function countVisibleLines(value: unknown, collapsedPaths: Set<string>, path: string): number {
+    if (value === null || typeof value !== 'object') return 1;
+    const isArray = Array.isArray(value);
+    const entries = isArray ? value : Object.entries(value as Record<string, unknown>);
+    const count = isArray ? value.length : (entries as [string, unknown][]).length;
+
+    if (count === 0) return 1;
+    if (collapsedPaths.has(path)) return 1;
+
+    let lines = 2; // open + close brackets
+    if (isArray) {
+        (value as unknown[]).forEach((item, index) => {
+            lines += countVisibleLines(item, collapsedPaths, `${path}[${index}]`);
+        });
+    } else {
+        (entries as [string, unknown][]).forEach(([k, v]) => {
+            lines += countVisibleLines(v, collapsedPaths, `${path}.${k}`);
+        });
+    }
+    return lines;
+}
+
 export default function JsonFormatterPage() {
     const [input, setInput] = useState('');
     const [output, setOutput] = useState('');
+    const [parsedData, setParsedData] = useState<unknown>(null);
     const [error, setError] = useState('');
     const [mode, setMode] = useState<'format' | 'compress'>('format');
     const [showLineNumbers, setShowLineNumbers] = useState(true);
+    const [collapsedPaths, setCollapsedPaths] = useState<Set<string>>(new Set());
     const { toast, showToast, hideToast } = useToast();
     const { language } = useLanguage();
+    const outputWrapperRef = useRef<HTMLDivElement>(null);
 
     const t = (key: string) => getTranslation(language, key);
 
@@ -24,12 +185,15 @@ export default function JsonFormatterPage() {
     useEffect(() => {
         if (!input.trim()) {
             setOutput('');
+            setParsedData(null);
             setError('');
+            setCollapsedPaths(new Set());
             return;
         }
 
         try {
             const parsed = JSON.parse(input);
+            setParsedData(parsed);
             if (mode === 'format') {
                 setOutput(JSON.stringify(parsed, null, 2));
             } else {
@@ -39,8 +203,32 @@ export default function JsonFormatterPage() {
         } catch (e) {
             setError(`${t('toolPages.jsonFormatter.jsonError')}: ${(e as Error).message}`);
             setOutput('');
+            setParsedData(null);
         }
     }, [input, mode]);
+
+    const togglePath = useCallback((path: string) => {
+        setCollapsedPaths(prev => {
+            const next = new Set(prev);
+            if (next.has(path)) {
+                next.delete(path);
+            } else {
+                next.add(path);
+            }
+            return next;
+        });
+    }, []);
+
+    const expandAll = useCallback(() => {
+        setCollapsedPaths(new Set());
+    }, []);
+
+    const collapseAll = useCallback(() => {
+        if (parsedData === null || typeof parsedData !== 'object') return;
+        const paths = new Set<string>();
+        collectPaths(parsedData, '$', paths);
+        setCollapsedPaths(paths);
+    }, [parsedData]);
 
     const copyToClipboard = async () => {
         if (output) {
@@ -52,8 +240,16 @@ export default function JsonFormatterPage() {
     const clearAll = () => {
         setInput('');
         setOutput('');
+        setParsedData(null);
         setError('');
+        setCollapsedPaths(new Set());
     };
+
+    const visibleLineCount = parsedData !== null && typeof parsedData === 'object' && mode === 'format'
+        ? countVisibleLines(parsedData, collapsedPaths, '$')
+        : output ? output.split('\n').length : 0;
+
+    const useCollapsible = mode === 'format' && parsedData !== null && typeof parsedData === 'object';
 
     return (
         <>
@@ -160,6 +356,26 @@ export default function JsonFormatterPage() {
                         <div className="editor-header">
                             <span className="editor-title">{t('toolPages.jsonFormatter.outputResult')}</span>
                             <div className="editor-actions">
+                                {useCollapsible && (
+                                    <>
+                                        <button
+                                            className="editor-btn"
+                                            onClick={expandAll}
+                                            title={t('toolPages.jsonFormatter.expandAll')}
+                                        >
+                                            <ChevronsUpDown size={14} />
+                                            {t('toolPages.jsonFormatter.expandAll')}
+                                        </button>
+                                        <button
+                                            className="editor-btn"
+                                            onClick={collapseAll}
+                                            title={t('toolPages.jsonFormatter.collapseAll')}
+                                        >
+                                            <ChevronsUpDown size={14} style={{ transform: 'rotate(90deg)' }} />
+                                            {t('toolPages.jsonFormatter.collapseAll')}
+                                        </button>
+                                    </>
+                                )}
                                 <button
                                     className={`editor-btn ${showLineNumbers ? 'active' : ''}`}
                                     onClick={() => setShowLineNumbers(!showLineNumbers)}
@@ -180,6 +396,7 @@ export default function JsonFormatterPage() {
                             </div>
                         </div>
                         <div
+                            ref={outputWrapperRef}
                             className="editor-output-wrapper"
                             style={{
                                 flex: 1,
@@ -189,7 +406,7 @@ export default function JsonFormatterPage() {
                                 background: 'var(--bg-primary)',
                             }}
                         >
-                            {showLineNumbers && output && (
+                            {showLineNumbers && (output || useCollapsible) && (
                                 <div
                                     className="line-numbers"
                                     style={{
@@ -207,7 +424,7 @@ export default function JsonFormatterPage() {
                                         flexShrink: 0,
                                     }}
                                 >
-                                    {output.split('\n').map((_, index) => (
+                                    {Array.from({ length: visibleLineCount }, (_, index) => (
                                         <div key={index}>{index + 1}</div>
                                     ))}
                                 </div>
@@ -226,7 +443,18 @@ export default function JsonFormatterPage() {
                                     background: 'transparent',
                                 }}
                             >
-                                {output || <span style={{ color: 'var(--text-muted)' }}>{t('toolPages.jsonFormatter.emptyResult')}</span>}
+                                {useCollapsible ? (
+                                    <CollapsibleJson
+                                        value={parsedData}
+                                        depth={0}
+                                        collapsedPaths={collapsedPaths}
+                                        togglePath={togglePath}
+                                        path="$"
+                                        isLast={true}
+                                    />
+                                ) : (
+                                    output || <span style={{ color: 'var(--text-muted)' }}>{t('toolPages.jsonFormatter.emptyResult')}</span>
+                                )}
                             </pre>
                         </div>
                         {error && (

@@ -777,6 +777,8 @@ const translations: Record<Language, Translations> = {
                 emptyResult: '格式化或压缩后的结果将显示在这里',
                 jsonError: 'JSON格式错误',
                 formatError: '格式化错误',
+                expandAll: '展开全部',
+                collapseAll: '折叠全部',
             },
             // JSON Compress
             jsonCompress: {
@@ -2510,6 +2512,8 @@ const translations: Record<Language, Translations> = {
                 emptyResult: 'Formatted or compressed result will appear here',
                 jsonError: 'JSON format error',
                 formatError: 'Format error',
+                expandAll: 'Expand All',
+                collapseAll: 'Collapse All',
             },
             // JSON Minify
             jsonMinify: {
