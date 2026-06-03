@@ -12,15 +12,15 @@ import { getTranslation } from '@/lib/i18n';
 
 marked.setOptions({ breaks: true });
 
-const SAMPLE_MARKDOWN = `# Markdown 预览工具
+const SAMPLE_MARKDOWN = `## Markdown 预览工具
 
-## 功能特性
+### 功能特性
 
 - **实时渲染** Markdown 内容
 - 支持 \`代码\` 高亮
 - 支持表格、列表、引用等标准语法
 
-## 代码块示例
+### 代码块示例
 
 \`\`\`javascript
 function hello(name) {
@@ -28,7 +28,7 @@ function hello(name) {
 }
 \`\`\`
 
-## 表格示例
+### 表格示例
 
 | 名称 | 类型 | 说明 |
 |------|------|------|

@@ -5,7 +5,7 @@ import { LanguageProvider } from "@/components/LanguageContext";
 import { Footer } from "@/components/Footer";
 import { ServiceWorkerRegistration } from "@/components/ServiceWorkerRegistration";
 import { SITE_URL } from "@/lib/site";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -82,17 +82,9 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: SITE_URL,
-    languages: {
-      'zh-CN': SITE_URL,
-      'en': SITE_URL,
-    },
   },
   category: "technology",
   classification: "Developer Tools",
-  other: {
-    "google-site-verification": "your-google-verification-code",
-    "baidu-site-verification": "your-baidu-verification-code",
-  },
 };
 
 export default function RootLayout({
@@ -118,11 +110,6 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Language alternates for SEO */}
-        <link rel="alternate" hrefLang="zh-CN" href={SITE_URL} />
-        <link rel="alternate" hrefLang="en" href={SITE_URL} />
-        <link rel="alternate" hrefLang="x-default" href={SITE_URL} />
-
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -154,12 +141,7 @@ export default function RootLayout({
               },
               "inLanguage": ["zh-CN", "en"],
               "browserRequirements": "Requires JavaScript. Requires HTML5.",
-              "softwareVersion": "1.0",
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "ratingCount": "100"
-              }
+              "softwareVersion": "1.0"
             })
           }}
         />

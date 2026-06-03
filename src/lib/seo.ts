@@ -103,10 +103,6 @@ export function generateToolMetadata(config: ToolSeoConfig): Metadata {
         },
         alternates: {
             canonical: `${SITE_URL}${tool.path}`,
-            languages: {
-                'zh-CN': `${SITE_URL}${tool.path}`,
-                'en': `${SITE_URL}${tool.path}`,
-            },
         },
     };
 }
@@ -116,8 +112,8 @@ export function generateToolMetadata(config: ToolSeoConfig): Metadata {
  */
 export const toolSeoConfigs: Record<string, string[]> = {
     'json-formatter': ['JSON美化', 'JSON验证', 'JSON格式化工具', 'JSON pretty print', 'JSON beautify'],
-    'json-minify': ['JSON压缩', 'JSON最小化', 'JSON minify', 'JSON压缩工具', 'JSON compact'],
     'json-compress': ['JSON压缩', 'JSON转义', 'JSON反转义', 'JSON minify', 'JSON字符串处理'],
+    'json-minify': ['JSON压缩', 'JSON最小化', 'JSON minify', 'JSON压缩工具', 'JSON compact'],
     'json-sort': ['JSON键名排序', 'JSON对象排序', 'JSON属性排序'],
     'jsonpath': ['JSONPath查询', 'JSON数据提取', 'JSON路径查询'],
     'json5': ['JSON5解析', 'JSON5验证', 'JSON5转JSON'],
@@ -153,6 +149,7 @@ export const toolSeoConfigs: Record<string, string[]> = {
     'md5': ['MD5加密', 'MD5哈希', 'MD5在线计算', 'MD5 hash'],
     'uuid': ['UUID生成', 'GUID生成', '随机UUID', 'UUID v4'],
     'timestamp': ['时间戳转换', 'Unix时间戳', '时间戳计算', '日期转时间戳'],
+    'cron-parser': ['Cron表达式', 'Cron解析', '定时任务表达式', 'Crontab解析', 'Cron可视化'],
     'code-formatter': ['代码格式化', 'JavaScript格式化', 'CSS格式化', 'HTML格式化', 'SQL格式化'],
     'color-converter': ['颜色转换', 'HEX转RGB', 'RGB转HSL', '颜色代码转换'],
     'hash': ['哈希计算', 'SHA1', 'SHA256', 'SHA512', '哈希值生成'],
@@ -187,6 +184,7 @@ export const toolSeoConfigs: Record<string, string[]> = {
     'text-shuffle': ['文本打乱', '随机排序', '打乱顺序', '文本随机', '行随机排序'],
     'char-count': ['字符统计', '字符频率', '字符计数', '字母频率', '文字统计'],
     'string-count': ['字符串统计', '关键词统计', '字符串计数', '文本搜索', '出现次数'],
+    'regex-tester': ['正则表达式测试', '正则校验', 'Regex tester', '正则匹配', '正则模板'],
     'password-generator': ['密码生成', '随机密码', '安全密码', '强密码生成', '密码工具'],
     'file-hash': ['文件哈希', '文件MD5', '文件SHA', '文件校验', '文件摘要'],
     'gemini-watermark': ['去Gemini水印', 'Gemini水印', 'AI水印去除', '图片去水印'],
@@ -202,8 +200,8 @@ export const toolSeoConfigs: Record<string, string[]> = {
  */
 export const toolSeoConfigsEn: Record<string, string[]> = {
     'json-formatter': ['JSON beautify', 'JSON validator', 'JSON formatter tool', 'JSON pretty print', 'format JSON online'],
-    'json-minify': ['JSON minify', 'JSON compress', 'minify JSON', 'compress JSON', 'JSON compact'],
     'json-compress': ['JSON compress', 'JSON minify', 'JSON escape', 'JSON unescape', 'minify JSON'],
+    'json-minify': ['JSON minify', 'JSON compress', 'minify JSON', 'compress JSON', 'JSON compact'],
     'json-sort': ['JSON sort keys', 'sort JSON object', 'JSON key sorter'],
     'jsonpath': ['JSONPath query', 'JSON data extraction', 'JSONPath expression'],
     'json5': ['JSON5 parser', 'JSON5 validator', 'JSON5 to JSON'],
@@ -239,6 +237,7 @@ export const toolSeoConfigsEn: Record<string, string[]> = {
     'md5': ['MD5 hash', 'MD5 encryption', 'calculate MD5', 'MD5 generator'],
     'uuid': ['UUID generator', 'GUID generator', 'random UUID', 'UUID v4'],
     'timestamp': ['timestamp converter', 'Unix timestamp', 'epoch converter', 'date to timestamp'],
+    'cron-parser': ['Cron expression', 'Cron parser', 'Crontab parser', 'schedule expression', 'Cron visualizer'],
     'code-formatter': ['code formatter', 'JavaScript formatter', 'CSS formatter', 'HTML formatter', 'SQL formatter'],
     'color-converter': ['color converter', 'HEX to RGB', 'RGB to HSL', 'color code converter'],
     'hash': ['hash calculator', 'SHA1', 'SHA256', 'SHA512', 'hash generator'],
@@ -274,6 +273,7 @@ export const toolSeoConfigsEn: Record<string, string[]> = {
     'text-shuffle': ['shuffle text', 'randomize text', 'text randomizer', 'random order', 'line shuffler'],
     'char-count': ['character count', 'letter frequency', 'char frequency', 'character statistics', 'text analysis'],
     'string-count': ['string count', 'word count', 'keyword count', 'text search', 'occurrence counter'],
+    'regex-tester': ['regex tester', 'regular expression tester', 'regex match', 'regex validator', 'regex templates'],
     'password-generator': ['password generator', 'random password', 'secure password', 'strong password', 'password tool'],
     'file-hash': ['file hash', 'file MD5', 'file SHA', 'file checksum', 'file digest'],
     'json-to-xml': ['JSON to XML', 'convert JSON to XML', 'JSON XML converter', 'format converter'],
@@ -289,11 +289,13 @@ export const toolSeoConfigsEn: Record<string, string[]> = {
 export const toolNamesEn: Record<string, { name: string; description: string }> = {
     'json-formatter': { name: 'JSON Formatter', description: 'Online JSON formatter, validator, and compressor' },
     'json-compress': { name: 'JSON Compress', description: 'JSON string compression, escape and unescape' },
+    'json-minify': { name: 'JSON Minify', description: 'Minify JSON and calculate saved file size' },
     'json-sort': { name: 'JSON Sort', description: 'Sort JSON objects by key names' },
     'jsonpath': { name: 'JSONPath', description: 'JSON data extraction and query' },
     'json5': { name: 'JSON5', description: 'JSON5 parser and validator' },
     'json-viewer': { name: 'JSON Viewer', description: 'Tree structure JSON viewer' },
     'json-editor': { name: 'JSON Editor', description: 'Visual JSON editor' },
+    'json-diff': { name: 'JSON Diff', description: 'Compare differences between two JSON documents' },
     'jwt': { name: 'JWT Encode/Decode', description: 'JWT Token encoder and decoder' },
     'jwt-decode': { name: 'JWT Decode Pro', description: 'Precise JWT parser' },
     'json-to-sql': { name: 'JSON to SQL', description: 'Convert JSON data to SQL statements' },
@@ -301,6 +303,8 @@ export const toolNamesEn: Record<string, { name: string; description: string }> 
     'sql-to-java': { name: 'SQL to Java', description: 'Convert SQL table to Java entity class' },
     'json-to-java': { name: 'JSON to Java', description: 'Convert JSON to Java POJO class' },
     'json-to-python': { name: 'JSON to Python', description: 'Convert JSON to Python dataclass' },
+    'json-to-go': { name: 'JSON to Go', description: 'Convert JSON to Go struct definition' },
+    'json-to-ts': { name: 'JSON to TypeScript', description: 'Convert JSON to TypeScript interface' },
     'json-to-schema': { name: 'JSON to Schema', description: 'Generate JSON Schema from JSON' },
     'json-to-objc': { name: 'JSON to Objective-C', description: 'Convert JSON to OC model class' },
     'lottie-preview': { name: 'Lottie Preview', description: 'Preview Lottie JSON animations' },
@@ -321,6 +325,7 @@ export const toolNamesEn: Record<string, { name: string; description: string }> 
     'md5': { name: 'MD5 Hash', description: 'MD5 hash calculator tool' },
     'uuid': { name: 'UUID Generator', description: 'Online UUID/GUID generator' },
     'timestamp': { name: 'Unix Timestamp', description: 'Timestamp and datetime converter' },
+    'cron-parser': { name: 'Cron Parser', description: 'Parse and visualize Cron expressions' },
     'code-formatter': { name: 'Code Formatter', description: 'JS/CSS/HTML/SQL code formatter' },
     'color-converter': { name: 'Color Converter', description: 'HEX/RGB/HSL color format converter' },
     'hash': { name: 'Hash Calculator', description: 'SHA1/SHA256/SHA512 hash calculator' },
@@ -356,6 +361,7 @@ export const toolNamesEn: Record<string, { name: string; description: string }> 
     'text-shuffle': { name: 'Text Shuffle', description: 'Randomly shuffle text lines or characters' },
     'char-count': { name: 'Character Count', description: 'Count character frequency in text' },
     'string-count': { name: 'String Count', description: 'Count string occurrence in text' },
+    'regex-tester': { name: 'Regex Tester', description: 'Test regular expressions with common templates' },
     'password-generator': { name: 'Password Generator', description: 'Generate secure random passwords' },
     'file-hash': { name: 'File Hash', description: 'Calculate MD5/SHA1/SHA256/SHA512 hash of files' },
     'json-to-xml': { name: 'JSON to XML', description: 'Convert JSON data to XML format' },
@@ -443,10 +449,6 @@ export function getToolMetadata(toolId: string): Metadata {
         },
         alternates: {
             canonical: `${SITE_URL}${tool.path}`,
-            languages: {
-                'zh-CN': `${SITE_URL}${tool.path}`,
-                'en': `${SITE_URL}${tool.path}`,
-            },
         },
     };
 }

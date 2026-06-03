@@ -84,6 +84,10 @@ const translations: Record<Language, Translations> = {
                 name: 'JSON压缩转义',
                 description: 'JSON字符串压缩、转义和反转义',
             },
+            'json-minify': {
+                name: 'JSON压缩',
+                description: '移除JSON空白字符并统计压缩比例',
+            },
             'json-sort': {
                 name: 'JSON排序',
                 description: '按键名对JSON对象进行排序',
@@ -789,6 +793,17 @@ const translations: Record<Language, Translations> = {
                 compress: '压缩',
                 escape: '转义',
                 unescape: '反转义',
+            },
+            // JSON Minify
+            jsonMinify: {
+                title: 'JSON 压缩',
+                inputJson: '输入 JSON',
+                minifiedResult: '压缩结果',
+                inputPlaceholder: '请输入 JSON，例如：{"name": "张三", "age": 25}',
+                outputPlaceholder: '压缩后的 JSON 将显示在这里',
+                originalSize: '原始大小',
+                minifiedSize: '压缩后大小',
+                saved: '节省',
             },
             // JSON Sort
             jsonSort: {
@@ -1818,6 +1833,10 @@ const translations: Record<Language, Translations> = {
             'json-compress': {
                 name: 'JSON Compress',
                 description: 'JSON string compression, escape and unescape',
+            },
+            'json-minify': {
+                name: 'JSON Minify',
+                description: 'Minify JSON and calculate saved file size',
             },
             'json-sort': {
                 name: 'JSON Sort',

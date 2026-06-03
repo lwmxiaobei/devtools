@@ -42,6 +42,15 @@ export const tools: Tool[] = [
         path: '/tools/json-compress',
     },
     {
+        id: 'json-minify',
+        name: 'JSON压缩',
+        description: '移除JSON空白字符并统计压缩比例',
+        icon: Minimize2,
+        iconType: 'json',
+        category: 'json',
+        path: '/tools/json-minify',
+    },
+    {
         id: 'json-sort',
         name: 'JSON排序',
         description: '按键名对JSON对象进行排序',

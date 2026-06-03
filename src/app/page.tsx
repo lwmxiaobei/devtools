@@ -24,6 +24,7 @@ export default function Home() {
     <>
       <Header searchQuery={searchQuery} onSearchChange={setSearchQuery} />
       <main className="main">
+        <h1 className="sr-only">LocalTools.cc 本地开发者工具集合</h1>
         <div className="category-tabs">
           {categories.map((category) => {
             const Icon = category.icon;
